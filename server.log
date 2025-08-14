@@ -1,0 +1,90 @@
+2025-08-14 16:02:07,872 - INFO - ==================================================
+2025-08-14 16:02:07,872 - INFO - Instagram Telegram Bot Server
+2025-08-14 16:02:07,872 - INFO - ==================================================
+2025-08-14 16:02:07,944 - INFO - ✅ All dependencies are available
+2025-08-14 16:02:07,944 - INFO - 🚀 Starting Instagram Telegram Bot...
+2025-08-14 16:02:07,944 - INFO - 📱 Bot is starting...
+2025-08-14 16:02:07,976 - INFO - ✅ Bot started successfully!
+2025-08-14 16:02:07,976 - INFO - 🤖 Bot is now running and listening for messages...
+2025-08-14 16:02:07,976 - INFO - 📋 Use /start in Telegram to begin
+2025-08-14 16:02:08,230 - ERROR - Infinity polling exception: A request to the Telegram API was unsuccessful. Error code: 401. Description: Unauthorized
+2025-08-14 16:02:08,232 - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1110, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 logger_level=logger_level, allowed_updates=allowed_updates, restart_on_change=False,
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1195, in polling
+    logger.info('Starting your bot with username: [@%s]', self.user.username)
+                                                          ^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 306, in user
+    self._user = self.get_me()
+                 ~~~~~~~~~~~^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1382, in get_me
+    apihelper.get_me(self.token)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 202, in get_me
+    return _make_request(token, method_url)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 401. Description: Unauthorized
+
+2025-08-14 16:02:11,316 - ERROR - Infinity polling exception: A request to the Telegram API was unsuccessful. Error code: 401. Description: Unauthorized
+2025-08-14 16:02:11,316 - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1110, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 logger_level=logger_level, allowed_updates=allowed_updates, restart_on_change=False,
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1195, in polling
+    logger.info('Starting your bot with username: [@%s]', self.user.username)
+                                                          ^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 306, in user
+    self._user = self.get_me()
+                 ~~~~~~~~~~~^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1382, in get_me
+    apihelper.get_me(self.token)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 202, in get_me
+    return _make_request(token, method_url)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 401. Description: Unauthorized
+
+2025-08-14 16:02:14,399 - ERROR - Infinity polling exception: A request to the Telegram API was unsuccessful. Error code: 401. Description: Unauthorized
+2025-08-14 16:02:14,399 - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1110, in infinity_polling
+    self.polling(non_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 logger_level=logger_level, allowed_updates=allowed_updates, restart_on_change=False,
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1195, in polling
+    logger.info('Starting your bot with username: [@%s]', self.user.username)
+                                                          ^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 306, in user
+    self._user = self.get_me()
+                 ~~~~~~~~~~~^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1382, in get_me
+    apihelper.get_me(self.token)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 202, in get_me
+    return _make_request(token, method_url)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 401. Description: Unauthorized
+
