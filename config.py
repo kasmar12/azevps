@@ -116,7 +116,8 @@ DEFAULT_LANGUAGE = 'tr'
 
 # Admin ID-ləri (burada admin ID-lərini əlavə edin)
 ADMIN_IDS = [
-    # Buraya admin ID-lərini əlavə edin
+    123456789,  # Buraya öz admin ID-nizi yazın
+    # Əlavə admin ID-lər üçün yeni sətir əlavə edin
 ]
 
 # Bot parametrləri

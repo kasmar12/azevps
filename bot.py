@@ -9,7 +9,8 @@ from config import (
     MESSAGES, 
     DEFAULT_LANGUAGE,
     ADMIN_IDS,
-    BOT_SETTINGS
+    BOT_SETTINGS,
+    TIKTOK_API_URL
 )
 from tiktok_downloader import TikTokDownloader
 from database import DatabaseManager
@@ -270,14 +271,22 @@ async def language_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Admin panel"""
+    """Admin panel - /admin komandası ilə"""
     user_id = update.effective_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
+    # Admin ID yoxlaması
     if user_id not in ADMIN_IDS:
-        await update.message.reply_text(MESSAGES[lang]['not_admin'])
+        await update.message.reply_text(
+            f"❌ **Admin deyilsiniz!**\n\n"
+            f"👤 **Sizin ID:** `{user_id}`\n"
+            f"🔑 **Admin ID-lər:** {ADMIN_IDS}\n\n"
+            f"💡 Admin olmaq üçün config.py faylında ADMIN_IDS siyahısına ID-nizi əlavə edin.",
+            parse_mode='Markdown'
+        )
         return
     
+    # Admin panel menyusu
     keyboard = [
         [InlineKeyboardButton("📊 Statistika (SQL)", callback_data="admin_stats")],
         [InlineKeyboardButton("📢 Toplu mesaj", callback_data="admin_broadcast")],
@@ -287,9 +296,20 @@ async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     reply_markup = InlineKeyboardMarkup(keyboard)
     
+    admin_text = f"🔧 **Admin Panel** - Xoş gəlmisiniz!\n\n"
+    admin_text += f"👤 **Admin ID:** `{user_id}`\n"
+    admin_text += f"🌍 **Dil:** {SUPPORTED_LANGUAGES[lang]['display_name']}\n"
+    admin_text += f"🕐 **Vaxt:** {datetime.now().strftime('%d.%m.%Y %H:%M')}\n\n"
+    admin_text += f"📋 **Mövcud funksiyalar:**\n"
+    admin_text += f"• 📊 Statistika (SQL veritabanı)\n"
+    admin_text += f"• 📢 Toplu mesaj göndərmə\n"
+    admin_text += f"• 👥 Qrup idarəetməsi\n"
+    admin_text += f"• ⚙️ Bot parametrləri"
+    
     await update.message.reply_text(
-        MESSAGES[lang]['admin_panel'],
-        reply_markup=reply_markup
+        admin_text,
+        reply_markup=reply_markup,
+        parse_mode='Markdown'
     )
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -380,6 +400,20 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await query.edit_message_text(groups_text, parse_mode='Markdown')
             else:
                 await query.edit_message_text("👥 Heç bir qrup statistikası tapılmadı.")
+        
+        elif admin_action == "settings":
+            # Bot parametrləri
+            settings_text = f"⚙️ **Bot Parametrləri:**\n\n"
+            settings_text += f"🔑 **Admin ID-lər:** {ADMIN_IDS}\n"
+            settings_text += f"🌍 **Dəstəklənən dillər:** {len(SUPPORTED_LANGUAGES)}\n"
+            settings_text += f"📁 **Maksimum fayl ölçüsü:** {BOT_SETTINGS['max_file_size'] // (1024*1024)} MB\n"
+            settings_text += f"⏱️ **Yükləmə timeout:** {BOT_SETTINGS['download_timeout']} saniyə\n"
+            settings_text += f"📥 **Gündə maksimum yükləmə:** {BOT_SETTINGS['max_downloads_per_user']}\n\n"
+            settings_text += f"💾 **Veritabanı:** SQLite\n"
+            settings_text += f"🔧 **API:** {TIKTOK_API_URL}\n\n"
+            settings_text += f"📝 **Parametrləri dəyişmək üçün config.py faylını redaktə edin.**"
+            
+            await query.edit_message_text(settings_text, parse_mode='Markdown')
 
 async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Broadcast mesaj handler"""
