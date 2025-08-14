@@ -12,6 +12,7 @@ from config import (
     BOT_SETTINGS
 )
 from tiktok_downloader import TikTokDownloader
+from database import DatabaseManager
 
 # Logging konfiqurasiyası
 logging.basicConfig(
@@ -22,6 +23,9 @@ logger = logging.getLogger(__name__)
 
 # TikTok downloader
 tiktok_downloader = TikTokDownloader()
+
+# Database manager
+db_manager = DatabaseManager()
 
 # İstifadəçi dil tərcihləri
 user_languages = {}
@@ -53,6 +57,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             'username': username
         }
         logger.info(f"New user stats created for {user_id}")
+    
+    # SQL veritabanına istifadəçi əlavə et
+    db_manager.add_user(
+        user_id=user_id,
+        username=username,
+        first_name=update.effective_user.first_name,
+        last_name=update.effective_user.last_name,
+        language_code=DEFAULT_LANGUAGE
+    )
+    
+    # İstifadəçi aktivliyini yenilə
+    db_manager.update_user_activity(user_id)
     
     lang = user_languages[user_id]
     welcome_message = MESSAGES[lang]['welcome']
@@ -136,6 +152,10 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_stats[user_id]['total_downloads'] += 1
         user_stats[user_id]['last_download'] = datetime.now()
         
+        # SQL veritabanında yükləmə sayını artır
+        db_manager.increment_user_downloads(user_id)
+        db_manager.update_user_activity(user_id)
+        
         # Qrup statistikasını yenilə
         if chat_type in ['group', 'supergroup']:
             if 'group_stats' not in user_stats[user_id]:
@@ -210,6 +230,10 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
         user_stats[user_id]['total_downloads'] += 1
         user_stats[user_id]['last_download'] = datetime.now()
         
+        # SQL veritabanında yükləmə sayını artır
+        db_manager.increment_user_downloads(user_id)
+        db_manager.update_user_activity(user_id)
+        
         # Qrup statistikasını yenilə
         if chat_type in ['group', 'supergroup']:
             if 'group_stats' not in user_stats[user_id]:
@@ -255,7 +279,7 @@ async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     
     keyboard = [
-        [InlineKeyboardButton("📊 Statistika", callback_data="admin_stats")],
+        [InlineKeyboardButton("📊 Statistika (SQL)", callback_data="admin_stats")],
         [InlineKeyboardButton("📢 Toplu mesaj", callback_data="admin_broadcast")],
         [InlineKeyboardButton("👥 Qrup idarəetməsi", callback_data="admin_groups")],
         [InlineKeyboardButton("⚙️ Parametrlər", callback_data="admin_settings")]
@@ -281,6 +305,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         new_lang = data.split("_")[1]
         user_languages[user_id] = new_lang
         
+        # SQL veritabanında dil dəyişdir
+        db_manager.update_user_language(user_id, new_lang)
+        
         # Dil dəyişdirildi mesajı + Qrupa əlavə et buttonu
         keyboard = [
             [InlineKeyboardButton("👥 Qrupa Əlavə Et", url="https://t.me/TikTokDownloaderBot?startgroup=true")],
@@ -304,12 +331,16 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         admin_action = data.split("_")[1]
         
         if admin_action == "stats":
-            total_users = len(user_stats)
-            total_downloads = sum(stats['total_downloads'] for stats in user_stats.values())
+            # SQL veritabanından statistikaları al
+            db_stats = db_manager.get_detailed_stats()
             
-            stats_text = f"📊 **Bot Statistika:**\n\n"
-            stats_text += f"👥 **İstifadəçilər:** {total_users}\n"
-            stats_text += f"📥 **Ümumi yükləmələr:** {total_downloads}\n"
+            stats_text = f"📊 **Bot Statistika (SQL):**\n\n"
+            stats_text += f"👥 **Ümumi istifadəçilər:** {db_stats.get('total_users', 0)}\n"
+            stats_text += f"🟢 **Aktiv istifadəçilər (7 gün):** {db_stats.get('active_users_7d', 0)}\n"
+            stats_text += f"🟢 **Aktiv istifadəçilər (30 gün):** {db_stats.get('active_users_30d', 0)}\n"
+            stats_text += f"🆕 **Bu gün yeni istifadəçilər:** {db_stats.get('new_users_today', 0)}\n"
+            stats_text += f"📥 **Bu gün yükləmələr:** {db_stats.get('total_downloads_today', 0)}\n"
+            stats_text += f"💾 **Veritabanı ölçüsü:** {db_stats.get('database_size', 'Unknown')}\n"
             stats_text += f"🌍 **Dəstəklənən dillər:** {len(SUPPORTED_LANGUAGES)}"
             
             await query.edit_message_text(stats_text, parse_mode='Markdown')
@@ -464,7 +495,7 @@ def main():
         application.add_error_handler(error_handler)
         
         logger.info("Bütün handler-lər əlavə edildi")
-        logger.info("TikTok Video Downloader Bot başladıldı...")
+        logger.info("TikTok Video Downloader Bot (SQL) başladıldı...")
         
         # Botu işə sal
         application.run_polling(
