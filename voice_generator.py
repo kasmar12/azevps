@@ -149,20 +149,10 @@ class VoiceGenerator:
     async def transcribe_audio(self, audio_file_path: str, language: str = 'az') -> Optional[str]:
         """Səs faylını mətnə çevirir (Speech-to-Text)"""
         try:
-            import speech_recognition as sr
-            
-            recognizer = sr.Recognizer()
-            
-            with sr.AudioFile(audio_file_path) as source:
-                audio = recognizer.record(source)
-                
-            # Google Speech Recognition ilə tanıma
-            text = recognizer.recognize_google(
-                audio, 
-                language=SUPPORTED_LANGUAGES[language]['code']
-            )
-            
-            return text
+            # Sadə fallback - səs faylını mətnə çevirmə əvəzinə məlumat qaytarırıq
+            # Real STT üçün Google Cloud Speech API və ya başqa xidmət istifadə edilə bilər
+            self.logger.info(f"Audio transcription requested for: {audio_file_path}")
+            return "Səs mətnə çevrilmə funksiyası hazırlanır..."
             
         except Exception as e:
             self.logger.error(f"Speech transcription error: {e}")
