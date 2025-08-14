@@ -111,16 +111,10 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
-        # Video faylını göndər - sadələşdirilmiş caption
+        # Video faylını göndər - caption yoxdur
         with open(result['file_path'], 'rb') as video_file:
-            caption = f"🎵 **{result['title']}**\n\n"
-            caption += f"👤 **Yazar:** {result['author']}\n"
-            caption += f"⏱️ **Müddət:** {result['duration']}s"
-            
             await update.message.reply_video(
-                video=video_file,
-                caption=caption,
-                parse_mode='Markdown'
+                video=video_file
             )
         
         # Müvəqqəti faylı sil
@@ -173,16 +167,10 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
                 await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
-        # Video faylını göndər - sadələşdirilmiş caption
+        # Video faylını göndər - caption yoxdur
         with open(result['file_path'], 'rb') as video_file:
-            caption = f"🎵 **{result['title']}**\n\n"
-            caption += f"👤 **Yazar:** {result['author']}\n"
-            caption += f"⏱️ **Müddət:** {result['duration']}s"
-            
             await update.message.reply_video(
-                video=video_file,
-                caption=caption,
-                parse_mode='Markdown'
+                video=video_file
             )
         
         # Müvəqqəti faylı sil
