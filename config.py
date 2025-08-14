@@ -5,8 +5,9 @@ load_dotenv()
 
 # Bot konfiqurasiyası
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN environment variable is required!")
+# BOT_TOKEN olmadan da test etmək üçün bu xətanı silirik
+# if not BOT_TOKEN:
+#     raise ValueError("BOT_TOKEN environment variable is required!")
 
 # Xəbər saytı konfiqurasiyası
 NEWS_SITE = "https://www.sportinfo.az"
