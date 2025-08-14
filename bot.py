@@ -81,6 +81,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Video yükləmə əmri"""
     user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    chat_type = update.effective_chat.type
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
     # Linki al
@@ -134,6 +136,17 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_stats[user_id]['total_downloads'] += 1
         user_stats[user_id]['last_download'] = datetime.now()
         
+        # Qrup statistikasını yenilə
+        if chat_type in ['group', 'supergroup']:
+            if 'group_stats' not in user_stats[user_id]:
+                user_stats[user_id]['group_stats'] = {}
+            if chat_id not in user_stats[user_id]['group_stats']:
+                user_stats[user_id]['group_stats'][chat_id] = {
+                    'chat_title': update.effective_chat.title,
+                    'downloads': 0
+                }
+            user_stats[user_id]['group_stats'][chat_id]['downloads'] += 1
+        
     except Exception as e:
         logger.error(f"Download error: {e}")
         await processing_msg.edit_text(MESSAGES[lang]['error'])
@@ -141,6 +154,8 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """URL mesajlarını idarə edir - sadəcə link göndərməklə yükləmə"""
     user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    chat_type = update.effective_chat.type
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
     url = update.message.text.strip()
@@ -149,7 +164,12 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if not tiktok_downloader.is_valid_tiktok_url(url):
         return  # Digər mesajlar üçün
     
-    logger.info(f"TikTok link detected from user {user_id}: {url}")
+    # Qrup və ya kanal olduqda log
+    if chat_type in ['group', 'supergroup']:
+        chat_title = update.effective_chat.title
+        logger.info(f"TikTok link detected in {chat_type} '{chat_title}' ({chat_id}) from user {user_id}: {url}")
+    else:
+        logger.info(f"TikTok link detected from user {user_id}: {url}")
     
     # Processing mesajı
     processing_msg = await update.message.reply_text(MESSAGES[lang]['processing'])
@@ -189,6 +209,17 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
         user_stats[user_id]['downloads'] += 1
         user_stats[user_id]['total_downloads'] += 1
         user_stats[user_id]['last_download'] = datetime.now()
+        
+        # Qrup statistikasını yenilə
+        if chat_type in ['group', 'supergroup']:
+            if 'group_stats' not in user_stats[user_id]:
+                user_stats[user_id]['group_stats'] = {}
+            if chat_id not in user_stats[user_id]['group_stats']:
+                user_stats[user_id]['group_stats'][chat_id] = {
+                    'chat_title': update.effective_chat.title,
+                    'downloads': 0
+                }
+            user_stats[user_id]['group_stats'][chat_id]['downloads'] += 1
         
     except Exception as e:
         logger.error(f"Download error: {e}")
@@ -276,6 +307,37 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.edit_message_text(MESSAGES[lang]['enter_message'])
             context.user_data['waiting_for_broadcast'] = True
             return WAITING_FOR_BROADCAST_MESSAGE
+        
+        elif admin_action == "groups":
+            # Qrup statistikası
+            total_groups = 0
+            total_group_downloads = 0
+            groups_info = []
+            
+            for user_id, user_stat in user_stats.items():
+                if 'group_stats' in user_stat:
+                    for chat_id, group_stat in user_stat['group_stats'].items():
+                        total_groups += 1
+                        total_group_downloads += group_stat['downloads']
+                        groups_info.append({
+                            'title': group_stat['chat_title'],
+                            'downloads': group_stat['downloads']
+                        })
+            
+            if total_groups > 0:
+                groups_text = f"👥 **Qrup Statistika:**\n\n"
+                groups_text += f"📊 **Ümumi qruplar:** {total_groups}\n"
+                groups_text += f"📥 **Qrupda yükləmələr:** {total_group_downloads}\n\n"
+                
+                # Top 5 qruplar
+                top_groups = sorted(groups_info, key=lambda x: x['downloads'], reverse=True)[:5]
+                groups_text += "🏆 **Top 5 Qruplar:**\n"
+                for i, group in enumerate(top_groups, 1):
+                    groups_text += f"{i}. {group['title']} - {group['downloads']} yükləmə\n"
+                
+                await query.edit_message_text(groups_text, parse_mode='Markdown')
+            else:
+                await query.edit_message_text("👥 Heç bir qrup statistikası tapılmadı.")
 
 async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Broadcast mesaj handler"""
@@ -321,6 +383,8 @@ async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT
 async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Status əmri"""
     user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    chat_type = update.effective_chat.type
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
     if user_id not in user_stats:
@@ -337,7 +401,13 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         last_download = stats['last_download'].strftime("%d.%m.%Y %H:%M")
         status_text += f"🕐 **Son yükləmə:** {last_download}\n"
     
-    status_text += f"🌍 **Dil:** {SUPPORTED_LANGUAGES[lang]['display_name']}"
+    # Qrup statistikası
+    if chat_type in ['group', 'supergroup'] and 'group_stats' in stats and chat_id in stats['group_stats']:
+        group_stats = stats['group_stats'][chat_id]
+        status_text += f"\n👥 **Qrup:** {group_stats['chat_title']}\n"
+        status_text += f"📥 **Qrupda yükləmələr:** {group_stats['downloads']}"
+    
+    status_text += f"\n🌍 **Dil:** {SUPPORTED_LANGUAGES[lang]['display_name']}"
     
     await update.message.reply_text(status_text, parse_mode='Markdown')
 
