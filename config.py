@@ -33,7 +33,7 @@ SUPPORTED_LANGUAGES = {
 VOICE_CHARACTERS = {
     'az': {
         'male': 'az-AZ-BabekNeural',
-        'female': 'az-AZ-HeddaNeural'
+        'female': 'az-AZ-BanuNeural'
     },
     'tr': {
         'male': 'tr-TR-AhmetNeural',

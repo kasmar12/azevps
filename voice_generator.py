@@ -50,48 +50,58 @@ class VoiceGenerator:
             language = settings['language']
             voice_type = settings['voice_type']
             
-            # Gemini-yə səs yaratma əmri
-            prompt = f"""
-            Create a natural speech audio for the following text in {SUPPORTED_LANGUAGES[language]['display_name']}:
+            self.logger.info(f"Generating speech for text: '{text}' with language: {language}, voice: {voice_type}")
             
-            Text: "{text}"
+            # Əvvəlcə Edge TTS ilə səs yarat (daha etibarlı)
+            try:
+                audio_file = await self._generate_fallback_speech(text, settings)
+                if audio_file:
+                    self.logger.info(f"Speech generated successfully: {audio_file}")
+                    return audio_file
+            except Exception as edge_error:
+                self.logger.error(f"Edge TTS error: {edge_error}")
             
-            Requirements:
-            - Language: {SUPPORTED_LANGUAGES[language]['code']}
-            - Voice: {VOICE_CHARACTERS[language][voice_type]}
-            - Speed: {VOICE_SETTINGS['speed'][settings['speed']]}
-            - Pitch: {VOICE_SETTINGS['pitch'][settings['pitch']]}
-            - Volume: {VOICE_SETTINGS['volume'][settings['volume']]}
-            
-            Generate high-quality, natural-sounding speech that matches the specified parameters.
-            """
-            
-            # Gemini ilə səs yaratma
-            response = self.model.generate_content(
-                prompt,
-                generation_config=genai.types.GenerationConfig(
-                    response_mime_type="audio/mp3",
-                    response_audio_format="mp3"
-                )
-            )
-            
-            if response.audio:
-                # Səs faylını yadda saxla
-                audio_file = self._save_audio_file(response.audio, user_id)
-                return audio_file
-            else:
-                # Fallback: Edge TTS istifadə et
-                return await self._generate_fallback_speech(text, settings)
+            # Gemini-yə səs yaratma əmri (experimental)
+            try:
+                prompt = f"""
+                Create a natural speech audio for the following text in {SUPPORTED_LANGUAGES[language]['display_name']}:
+                
+                Text: "{text}"
+                
+                Requirements:
+                - Language: {SUPPORTED_LANGUAGES[language]['code']}
+                - Voice: {VOICE_CHARACTERS[language][voice_type]}
+                - Speed: {VOICE_SETTINGS['speed'][settings['speed']]}
+                - Pitch: {VOICE_SETTINGS['pitch'][settings['pitch']]}
+                - Volume: {VOICE_SETTINGS['volume'][settings['volume']]}
+                
+                Generate high-quality, natural-sounding speech that matches the specified parameters.
+                """
+                
+                # Gemini ilə səs yaratma (text response)
+                response = self.model.generate_content(prompt)
+                
+                # Gemini 2.5 Flash hələ audio generation dəstəkləmir
+                # Sadəcə text response qaytarır
+                self.logger.info(f"Gemini response: {response.text[:100]}...")
+                return None
+                
+                if response.audio:
+                    # Səs faylını yadda saxla
+                    audio_file = self._save_audio_file(response.audio, user_id)
+                    self.logger.info(f"Gemini speech generated successfully: {audio_file}")
+                    return audio_file
+                else:
+                    self.logger.warning("Gemini response has no audio data")
+                    return None
+                    
+            except Exception as gemini_error:
+                self.logger.error(f"Gemini speech generation error: {gemini_error}")
+                return None
                 
         except Exception as e:
-            self.logger.error(f"Gemini speech generation error: {e}")
-            # Fallback: Edge TTS
-            try:
-                settings = self.get_user_settings(user_id)
-                return await self._generate_fallback_speech(text, settings)
-            except Exception as fallback_error:
-                self.logger.error(f"Fallback speech generation error: {fallback_error}")
-                return None
+            self.logger.error(f"General speech generation error: {e}")
+            return None
                 
     async def _generate_fallback_speech(self, text: str, settings: Dict[str, Any]) -> Optional[str]:
         """Edge TTS ilə fallback səs yaratma"""
@@ -102,19 +112,12 @@ class VoiceGenerator:
             voice_type = settings['voice_type']
             voice_name = VOICE_CHARACTERS[language][voice_type]
             
-            # Səs parametrləri
-            rate = f"{int((VOICE_SETTINGS['speed'][settings['speed']] - 1) * 100)}%"
-            pitch = f"{int(VOICE_SETTINGS['pitch'][settings['pitch']] * 10)}%"
-            volume = f"{int((VOICE_SETTINGS['volume'][settings['volume']] - 1) * 100)}%"
+            self.logger.info(f"Using Edge TTS with voice: {voice_name}")
             
-            # Edge TTS ilə səs yaratma
-            communicate = edge_tts.Communicate(
-                text, 
-                voice_name,
-                rate=rate,
-                pitch=pitch,
-                volume=volume
-            )
+            self.logger.info("Using default voice parameters")
+            
+            # Edge TTS ilə səs yaratma (parametrsiz)
+            communicate = edge_tts.Communicate(text, voice_name)
             
             # Səs faylını yadda saxla
             temp_file = tempfile.NamedTemporaryFile(
@@ -122,11 +125,22 @@ class VoiceGenerator:
                 suffix=f".{AUDIO_SETTINGS['format']}"
             )
             
+            self.logger.info(f"Saving audio to: {temp_file.name}")
             await communicate.save(temp_file.name)
-            return temp_file.name
+            
+            # Faylın mövcudluğunu yoxla
+            if os.path.exists(temp_file.name):
+                file_size = os.path.getsize(temp_file.name)
+                self.logger.info(f"Audio file created successfully. Size: {file_size} bytes")
+                return temp_file.name
+            else:
+                self.logger.error("Audio file was not created")
+                return None
             
         except Exception as e:
             self.logger.error(f"Edge TTS fallback error: {e}")
+            import traceback
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
             return None
             
     def _save_audio_file(self, audio_data: bytes, user_id: int) -> str:
