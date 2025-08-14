@@ -134,63 +134,87 @@ class TikTokDownloader:
                 self.logger.error(f"Full response: {data}")
                 return None
             
-            # Video URL-ni al (logosuz)
-            video_url = video_data.get('play') or video_data.get('hdplay') or video_data.get('wmplay')
+            # Video URL-ni al (logosuz) - fərqli keyfiyyətləri yoxla
+            video_url = None
+            url_priority = ['hdplay', 'play', 'wmplay']  # Əvvəlcə HD, sonra normal, sonra watermark
+            
+            for url_type in url_priority:
+                if video_data.get(url_type):
+                    video_url = video_data.get(url_type)
+                    self.logger.info(f"Using {url_type} URL: {video_url}")
+                    break
             
             if not video_url:
                 self.logger.error("No video URL found")
-                self.logger.error(f"Available video data: {video_data}")
+                self.logger.error(f"Available video data keys: {list(video_data.keys())}")
                 return None
-            
-            self.logger.info(f"Video URL found: {video_url}")
             
             # Video faylını yüklə
             self.logger.info("Starting video download...")
             
-            # Video yükləmə üçün headers
+            # Video yükləmə üçün headers - sadələşdirilmiş
             video_headers = {
                 'User-Agent': TIKTOK_SETTINGS['user_agent'],
                 'Accept': '*/*',
                 'Accept-Language': 'en-US,en;q=0.9',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Referer': 'https://www.tikwm.com/',
-                'Origin': 'https://www.tikwm.com',
-                'Sec-Fetch-Dest': 'video',
-                'Sec-Fetch-Mode': 'no-cors',
-                'Sec-Fetch-Site': 'cross-site'
+                'Accept-Encoding': 'gzip, deflate, br'
             }
             
-            video_response = self.session.get(
-                video_url,
-                timeout=TIKTOK_SETTINGS['timeout'],
-                stream=True,
-                headers=video_headers
-            )
-            
-            if video_response.status_code != 200:
-                self.logger.error(f"Video download failed: {video_response.status_code}")
-                self.logger.error(f"Video response headers: {dict(video_response.headers)}")
+            try:
+                # Video yükləmə cəhdi
+                video_response = self.session.get(
+                    video_url,
+                    timeout=TIKTOK_SETTINGS['timeout'],
+                    stream=True,
+                    headers=video_headers,
+                    allow_redirects=True
+                )
+                
+                self.logger.info(f"Video response status: {video_response.status_code}")
+                self.logger.info(f"Video response headers: {dict(video_response.headers)}")
+                
+                if video_response.status_code != 200:
+                    self.logger.error(f"Video download failed: {video_response.status_code}")
+                    # Yenidən cəhd et
+                    video_response = self.session.get(
+                        video_url,
+                        timeout=TIKTOK_SETTINGS['timeout'],
+                        stream=True,
+                        headers=video_headers,
+                        allow_redirects=True
+                    )
+                    if video_response.status_code != 200:
+                        self.logger.error(f"Retry failed: {video_response.status_code}")
+                        return None
+                
+                # Müvəqqəti fayl yarat
+                temp_file = tempfile.NamedTemporaryFile(
+                    delete=False,
+                    suffix='.mp4'
+                )
+                
+                # Video məlumatlarını fayla yaz
+                file_size = 0
+                chunk_count = 0
+                
+                for chunk in video_response.iter_content(chunk_size=8192):
+                    if chunk:
+                        temp_file.write(chunk)
+                        file_size += len(chunk)
+                        chunk_count += 1
+                        if chunk_count % 100 == 0:
+                            self.logger.info(f"Downloaded {chunk_count} chunks, size: {file_size} bytes")
+                
+                temp_file.close()
+                self.logger.info(f"Download completed. Total chunks: {chunk_count}, Size: {file_size} bytes")
+                
+            except Exception as download_error:
+                self.logger.error(f"Video download error: {download_error}")
+                if 'temp_file' in locals():
+                    temp_file.close()
+                    if os.path.exists(temp_file.name):
+                        os.unlink(temp_file.name)
                 return None
-            
-            # Müvəqqəti fayl yarat
-            temp_file = tempfile.NamedTemporaryFile(
-                delete=False,
-                suffix='.mp4'
-            )
-            
-            # Video məlumatlarını fayla yaz
-            file_size = 0
-            chunk_count = 0
-            for chunk in video_response.iter_content(chunk_size=8192):
-                if chunk:
-                    temp_file.write(chunk)
-                    file_size += len(chunk)
-                    chunk_count += 1
-                    if chunk_count % 100 == 0:
-                        self.logger.info(f"Downloaded {chunk_count} chunks, size: {file_size} bytes")
-            
-            temp_file.close()
-            self.logger.info(f"Download completed. Total chunks: {chunk_count}, Size: {file_size} bytes")
             
             # Fayl ölçüsünü yoxla
             if file_size > 50 * 1024 * 1024:  # 50MB limit
