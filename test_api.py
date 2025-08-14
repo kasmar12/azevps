@@ -9,8 +9,8 @@ import json
 def test_tiktok_api():
     """Test TikTok API directly"""
     
-    # Test URL (bu URL-i real TikTok linki ilə əvəz edin)
-    test_url = "https://www.tiktok.com/@example/video/1234567890"
+    # Test URL (real TikTok linki)
+    test_url = "https://vt.tiktok.com/ZSSKFK6RK/"
     
     print(f"Testing TikTok API with URL: {test_url}")
     

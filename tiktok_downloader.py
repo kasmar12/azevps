@@ -154,10 +154,22 @@ class TikTokDownloader:
             
             # Video faylını yüklə
             self.logger.info("Starting video download...")
+            
+            # Video yükləmə üçün headers
+            video_headers = {
+                'User-Agent': TIKTOK_SETTINGS['user_agent'],
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Referer': 'https://www.tikwm.com/',
+                'Origin': 'https://www.tikwm.com'
+            }
+            
             video_response = self.session.get(
                 video_url,
                 timeout=TIKTOK_SETTINGS['timeout'],
-                stream=True
+                stream=True,
+                headers=video_headers
             )
             
             if video_response.status_code != 200:
