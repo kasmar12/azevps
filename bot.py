@@ -3,6 +3,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
 from config import BOT_TOKEN, NEWS_CATEGORIES, MESSAGES, DEFAULT_LANGUAGE, NEWS_UPDATE_INTERVAL, MAX_NEWS_PER_REQUEST
 from news_scraper import NewsScraper
+from news_monitor import NewsMonitor
 import asyncio
 from datetime import datetime
 
@@ -19,13 +20,24 @@ news_scraper = NewsScraper()
 # İstifadəçi dil tərcihləri
 user_languages = {}
 
+# Bildirişə abunə olan istifadəçilər
+subscribed_users = set()
+
+# Global bot instance (monitor üçün)
+bot_instance = None
+monitor_instance = None
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Start əmri"""
     user_id = update.effective_user.id
     user_languages[user_id] = DEFAULT_LANGUAGE
     
     welcome_message = MESSAGES[DEFAULT_LANGUAGE]['welcome']
-    await update.message.reply_text(welcome_message)
+    welcome_message += "\n\n🔔 **Avtomatik bildirişlər:**\n"
+    welcome_message += "Bot hər 10 dəqiqədə yeni xəbərləri yoxlayır və sizə göndərir.\n"
+    welcome_message += "Bildirişləri açmaq üçün: /subscribe"
+    
+    await update.message.reply_text(welcome_message, parse_mode='Markdown')
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Kömək əmri"""
@@ -33,7 +45,81 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
     help_text = MESSAGES[lang]['help']
+    help_text += "\n\n🔔 **Bildiriş əmrləri:**\n"
+    help_text += "/subscribe - Yeni xəbər bildirişləri al\n"
+    help_text += "/unsubscribe - Bildirişləri dayandır\n"
+    help_text += "/status - Monitor statusunu yoxla"
+    
     await update.message.reply_text(help_text)
+
+async def subscribe_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Bildirişlərə abunə olmaq"""
+    user_id = update.effective_user.id
+    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
+    
+    if user_id in subscribed_users:
+        message = "✅ Siz artıq bildirişlərə abunəsiniz!"
+    else:
+        subscribed_users.add(user_id)
+        # Monitor sisteminə abunə olan istifadəçiləri ötür
+        if monitor_instance:
+            monitor_instance.set_subscribed_users(subscribed_users)
+        
+        message = "🔔 Bildirişlərə uğurla abunə oldunuz!\n\n"
+        message += "Artıq yeni xəbərlər avtomatik olaraq sizə göndəriləcək.\n"
+        message += "Bildirişləri dayandırmaq üçün: /unsubscribe"
+    
+    await update.message.reply_text(message)
+
+async def unsubscribe_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Bildirişlərdən abunəliyi ləğv etmək"""
+    user_id = update.effective_user.id
+    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
+    
+    if user_id in subscribed_users:
+        subscribed_users.remove(user_id)
+        # Monitor sisteminə abunə olan istifadəçiləri ötür
+        if monitor_instance:
+            monitor_instance.set_subscribed_users(subscribed_users)
+        
+        message = "🔕 Bildirişlər dayandırıldı.\n\n"
+        message += "Yenidən bildiriş almaq üçün: /subscribe"
+    else:
+        message = "ℹ️ Siz bildirişlərə abunə deyilsiniz."
+    
+    await update.message.reply_text(message)
+
+async def get_monitor_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Monitor statusunu göstərir"""
+    user_id = update.effective_user.id
+    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
+    
+    if not monitor_instance:
+        await update.message.reply_text("❌ Monitor sistemi işləmir.")
+        return
+    
+    try:
+        # Monitor statusunu al
+        status = await monitor_instance.get_monitor_status()
+        
+        status_message = "📊 **Monitor Statusu**\n\n"
+        status_message += f"🔄 **Monitor:** {'✅ Aktiv' if status['is_monitoring'] else '❌ Dayanıq'}\n"
+        status_message += f"📰 **İşlənmiş xəbər:** {status['processed_news_count']}\n"
+        status_message += f"👥 **Abunə olan istifadəçi:** {status['subscribed_users_count']}\n"
+        status_message += f"⏰ **Son yoxlama:** {status['last_check']}\n"
+        status_message += f"🕐 **Yoxlama vaxtı:** {status['check_interval']}\n\n"
+        
+        # İstifadəçi statusu
+        if user_id in subscribed_users:
+            status_message += "🔔 **Sizin status:** Bildirişlər aktiv"
+        else:
+            status_message += "🔕 **Sizin status:** Bildirişlər dayanıq"
+        
+        await update.message.reply_text(status_message, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Status xətası: {e}")
+        await update.message.reply_text("❌ Status alınarkən xəta baş verdi.")
 
 async def get_latest_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Son xəbərləri göstərir"""
@@ -276,8 +362,15 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     """Əsas funksiya"""
+    global bot_instance, monitor_instance
+    
     # Bot tətbiqini yarat
     application = Application.builder().token(BOT_TOKEN).build()
+    bot_instance = application.bot
+    
+    # Monitor sistemi yarat
+    monitor_instance = NewsMonitor(bot_instance)
+    application.monitor = monitor_instance
     
     # Command handlerləri
     application.add_handler(CommandHandler("start", start))
@@ -288,6 +381,11 @@ def main():
     application.add_handler(CommandHandler("settings", get_settings))
     application.add_handler(CommandHandler("language", change_language))
     
+    # Bildiriş əmrləri
+    application.add_handler(CommandHandler("subscribe", subscribe_notifications))
+    application.add_handler(CommandHandler("unsubscribe", unsubscribe_notifications))
+    application.add_handler(CommandHandler("status", get_monitor_status))
+    
     # Callback query handler
     application.add_handler(CallbackQueryHandler(category_callback, pattern=r'^cat_'))
     application.add_handler(CallbackQueryHandler(language_callback, pattern=r'^lang_'))
@@ -295,9 +393,21 @@ def main():
     # Xəta handler
     application.add_error_handler(error_handler)
     
+    # Monitoru başlat
+    monitor_instance.start_monitoring()
+    
     # Botu başlat
     logger.info("Futbol Xəbər Botu başladıldı...")
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    logger.info("Xəbər monitoru aktivdir - hər 10 dəqiqədə yoxlayır")
+    
+    try:
+        application.run_polling(allowed_updates=Update.ALL_TYPES)
+    except KeyboardInterrupt:
+        logger.info("Bot dayandırılır...")
+        monitor_instance.stop_monitoring()
+    except Exception as e:
+        logger.error(f"Bot xətası: {e}")
+        monitor_instance.stop_monitoring()
 
 if __name__ == '__main__':
     main()
