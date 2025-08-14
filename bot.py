@@ -280,7 +280,18 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data.startswith("lang_"):
         new_lang = data.split("_")[1]
         user_languages[user_id] = new_lang
-        await query.edit_message_text(MESSAGES[new_lang]['language_changed'])
+        
+        # Dil dəyişdirildi mesajı + Qrupa əlavə et buttonu
+        keyboard = [
+            [InlineKeyboardButton("👥 Qrupa Əlavə Et", url="https://t.me/TikTokDownloaderBot?startgroup=true")],
+            [InlineKeyboardButton("🔙 Ana Menyua Qayıt", callback_data="back_main")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(
+            f"{MESSAGES[new_lang]['language_changed']}\n\n👥 **Qrupa əlavə etmək üçün aşağıdakı buttonu istifadə edin:**",
+            reply_markup=reply_markup
+        )
     
     elif data == "back_main":
         await query.edit_message_text("🔙 Ana menyuya qayıtdınız.")
