@@ -35,18 +35,34 @@ WAITING_FOR_BROADCAST_MESSAGE = 1
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Start əmri"""
     user_id = update.effective_user.id
-    user_languages[user_id] = DEFAULT_LANGUAGE
+    username = update.effective_user.username or "Unknown"
+    
+    logger.info(f"Start command from user {user_id} (@{username})")
+    
+    # İstifadəçi dil tərcihini yoxla
+    if user_id not in user_languages:
+        user_languages[user_id] = DEFAULT_LANGUAGE
+        logger.info(f"New user {user_id} added with language {DEFAULT_LANGUAGE}")
     
     # İstifadəçi statistikasını başlat
     if user_id not in user_stats:
         user_stats[user_id] = {
             'downloads': 0,
             'last_download': None,
-            'total_downloads': 0
+            'total_downloads': 0,
+            'username': username
         }
+        logger.info(f"New user stats created for {user_id}")
     
-    welcome_message = MESSAGES[DEFAULT_LANGUAGE]['welcome']
-    await update.message.reply_text(welcome_message, parse_mode='Markdown')
+    lang = user_languages[user_id]
+    welcome_message = MESSAGES[lang]['welcome']
+    
+    try:
+        await update.message.reply_text(welcome_message, parse_mode='Markdown')
+        logger.info(f"Welcome message sent to user {user_id}")
+    except Exception as e:
+        logger.error(f"Error sending welcome message to {user_id}: {e}")
+        await update.message.reply_text("Xoş gəlmisiniz! Bot işləyir.")
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Kömək əmri"""
@@ -332,45 +348,55 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     """Əsas funksiya"""
-    application = Application.builder().token(BOT_TOKEN).build()
-    
-    # Conversation handler for admin broadcast
-    conv_handler = ConversationHandler(
-        entry_points=[CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast$')],
-        states={
-            WAITING_FOR_BROADCAST_MESSAGE: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_broadcast_message)]
-        },
-        fallbacks=[CommandHandler("cancel", lambda u, c: ConversationHandler.END)]
-    )
-    
-    # Əmrlər
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CommandHandler("download", download_video))
-    application.add_handler(CommandHandler("language", language_menu))
-    application.add_handler(CommandHandler("admin", admin_panel))
-    application.add_handler(CommandHandler("status", status_command))
-    
-    # URL mesajları
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_url_message))
-    
-    # Callback query
-    application.add_handler(CallbackQueryHandler(button_callback))
-    
-    # Conversation handler
-    application.add_handler(conv_handler)
-    
-    # Xəta handler
-    application.add_error_handler(error_handler)
-    
-    logger.info("TikTok Video Downloader Bot başladıldı...")
+    logger.info("Bot başladılır...")
     
     try:
-        application.run_polling(allowed_updates=Update.ALL_TYPES)
+        application = Application.builder().token(BOT_TOKEN).build()
+        logger.info("Application yaradıldı")
+        
+        # Conversation handler for admin broadcast
+        conv_handler = ConversationHandler(
+            entry_points=[CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast$')],
+            states={
+                WAITING_FOR_BROADCAST_MESSAGE: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_broadcast_message)]
+            },
+            fallbacks=[CommandHandler("cancel", lambda u, c: ConversationHandler.END)]
+        )
+        
+        # Əmrlər
+        application.add_handler(CommandHandler("start", start))
+        application.add_handler(CommandHandler("help", help_command))
+        application.add_handler(CommandHandler("download", download_video))
+        application.add_handler(CommandHandler("language", language_menu))
+        application.add_handler(CommandHandler("admin", admin_panel))
+        application.add_handler(CommandHandler("status", status_command))
+        
+        # URL mesajları
+        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_url_message))
+        
+        # Callback query
+        application.add_handler(CallbackQueryHandler(button_callback))
+        
+        # Conversation handler
+        application.add_handler(conv_handler)
+        
+        # Xəta handler
+        application.add_error_handler(error_handler)
+        
+        logger.info("Bütün handler-lər əlavə edildi")
+        logger.info("TikTok Video Downloader Bot başladıldı...")
+        
+        # Botu işə sal
+        application.run_polling(
+            allowed_updates=Update.ALL_TYPES,
+            drop_pending_updates=True  # Köhnə mesajları görmə
+        )
+        
     except KeyboardInterrupt:
         logger.info("Bot dayandırılır...")
     except Exception as e:
         logger.error(f"Bot xətası: {e}")
+        raise
 
 if __name__ == '__main__':
     main()
