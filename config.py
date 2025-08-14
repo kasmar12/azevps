@@ -128,7 +128,11 @@ BOT_SETTINGS = {
 
 # TikTok API parametrləri
 TIKTOK_SETTINGS = {
-    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    'timeout': 30,
-    'retry_count': 3
+    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'timeout': 60,  # Daha uzun timeout
+    'retry_count': 3,
+    'api_endpoints': {
+        'download': 'https://www.tikwm.com/api/',
+        'info': 'https://www.tikwm.com/api/'
+    }
 }

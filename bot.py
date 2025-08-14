@@ -100,8 +100,15 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
-        if isinstance(result, dict) and result.get('error') == 'file_too_large':
-            await processing_msg.edit_text(MESSAGES[lang]['file_too_large'])
+        if isinstance(result, dict) and result.get('error'):
+            error_type = result.get('error')
+            if error_type == 'file_too_large':
+                await processing_msg.edit_text(MESSAGES[lang]['file_too_large'])
+            elif error_type == 'api_error':
+                error_msg = result.get('message', 'API xətası')
+                await processing_msg.edit_text(f"❌ API Xətası: {error_msg}")
+            else:
+                await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
         # Video faylını göndər
@@ -158,8 +165,15 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
             await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
-        if isinstance(result, dict) and result.get('error') == 'file_too_large':
-            await processing_msg.edit_text(MESSAGES[lang]['file_too_large'])
+        if isinstance(result, dict) and result.get('error'):
+            error_type = result.get('error')
+            if error_type == 'file_too_large':
+                await processing_msg.edit_text(MESSAGES[lang]['file_too_large'])
+            elif error_type == 'api_error':
+                error_msg = result.get('message', 'API xətası')
+                await processing_msg.edit_text(f"❌ API Xətası: {error_msg}")
+            else:
+                await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
         # Video faylını göndər
@@ -197,24 +211,25 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
 async def language_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Dil seçimi menyusu"""
     keyboard = []
+    
     for lang_code, lang_info in SUPPORTED_LANGUAGES.items():
         keyboard.append([
             InlineKeyboardButton(
-                lang_info['name'], 
+                lang_info['name'],
                 callback_data=f"lang_{lang_code}"
             )
         ])
     
     keyboard.append([InlineKeyboardButton("🔙 Geri", callback_data="back_main")])
-    
     reply_markup = InlineKeyboardMarkup(keyboard)
+    
     await update.message.reply_text(
         "🌍 **Dil seçin / Dil seçin / Select language / Выберите язык:**",
         reply_markup=reply_markup
     )
 
 async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Admin paneli"""
+    """Admin panel"""
     user_id = update.effective_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
@@ -230,29 +245,29 @@ async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     
     reply_markup = InlineKeyboardMarkup(keyboard)
+    
     await update.message.reply_text(
         MESSAGES[lang]['admin_panel'],
         reply_markup=reply_markup
     )
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Düymə callback-ləri"""
+    """Button callback handler"""
     query = update.callback_query
     await query.answer()
     
     user_id = query.from_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
     data = query.data
     
     if data.startswith("lang_"):
         new_lang = data.split("_")[1]
         user_languages[user_id] = new_lang
         await query.edit_message_text(MESSAGES[new_lang]['language_changed'])
-        
+    
     elif data == "back_main":
         await query.edit_message_text("🔙 Ana menyuya qayıtdınız.")
-        
+    
     elif data.startswith("admin_"):
         if user_id not in ADMIN_IDS:
             await query.edit_message_text(MESSAGES[lang]['not_admin'])
@@ -261,7 +276,6 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         admin_action = data.split("_")[1]
         
         if admin_action == "stats":
-            # Statistika göstər
             total_users = len(user_stats)
             total_downloads = sum(stats['total_downloads'] for stats in user_stats.values())
             
@@ -271,14 +285,14 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             stats_text += f"🌍 **Dəstəklənən dillər:** {len(SUPPORTED_LANGUAGES)}"
             
             await query.edit_message_text(stats_text, parse_mode='Markdown')
-            
+        
         elif admin_action == "broadcast":
             await query.edit_message_text(MESSAGES[lang]['enter_message'])
             context.user_data['waiting_for_broadcast'] = True
             return WAITING_FOR_BROADCAST_MESSAGE
 
 async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Toplu mesaj göndərmə"""
+    """Broadcast mesaj handler"""
     user_id = update.effective_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
@@ -295,7 +309,6 @@ async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT
         context.user_data.pop('waiting_for_broadcast', None)
         return ConversationHandler.END
     
-    # Bütün istifadəçilərə mesaj göndər
     sent_count = 0
     failed_count = 0
     
@@ -320,7 +333,7 @@ async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT
     return ConversationHandler.END
 
 async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Bot statusu"""
+    """Status əmri"""
     user_id = update.effective_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
@@ -343,7 +356,7 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(status_text, parse_mode='Markdown')
 
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Xətaları idarə edir"""
+    """Error handler"""
     logger.error(f"Update {update} caused error {context.error}")
 
 def main():

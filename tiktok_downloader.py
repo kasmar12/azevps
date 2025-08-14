@@ -70,37 +70,55 @@ class TikTokDownloader:
                 'hd': '1'  # Yüksək keyfiyyət
             }
             
+            self.logger.info(f"Sending API request to: {TIKTOK_API_URL}")
+            self.logger.info(f"API data: {api_data}")
+            
             response = self.session.post(
-                f"{TIKTOK_API_URL}",
+                TIKTOK_API_URL,
                 data=api_data,
                 timeout=TIKTOK_SETTINGS['timeout']
             )
             
+            self.logger.info(f"API response status: {response.status_code}")
+            
             if response.status_code != 200:
                 self.logger.error(f"API request failed: {response.status_code}")
+                self.logger.error(f"Response text: {response.text[:200]}")
                 return None
             
-            data = response.json()
+            try:
+                data = response.json()
+                self.logger.info(f"API response: {data}")
+            except Exception as json_error:
+                self.logger.error(f"JSON parse error: {json_error}")
+                self.logger.error(f"Response text: {response.text[:200]}")
+                return None
             
             if data.get('code') != 0:
-                self.logger.error(f"API error: {data.get('msg', 'Unknown error')}")
-                return None
+                error_msg = data.get('msg', 'Unknown error')
+                self.logger.error(f"API error: {error_msg}")
+                return {'error': 'api_error', 'message': error_msg}
             
             # Video məlumatlarını al
             video_data = data.get('data', {})
             
             if not video_data:
                 self.logger.error("No video data received")
+                self.logger.error(f"Full response: {data}")
                 return None
             
             # Video URL-ni al (logosuz)
-            video_url = video_data.get('play') or video_data.get('hdplay')
+            video_url = video_data.get('play') or video_data.get('hdplay') or video_data.get('wmplay')
             
             if not video_url:
                 self.logger.error("No video URL found")
+                self.logger.error(f"Available video data: {video_data}")
                 return None
             
+            self.logger.info(f"Video URL found: {video_url}")
+            
             # Video faylını yüklə
+            self.logger.info("Starting video download...")
             video_response = self.session.get(
                 video_url,
                 timeout=TIKTOK_SETTINGS['timeout'],
@@ -109,6 +127,7 @@ class TikTokDownloader:
             
             if video_response.status_code != 200:
                 self.logger.error(f"Video download failed: {video_response.status_code}")
+                self.logger.error(f"Video response headers: {dict(video_response.headers)}")
                 return None
             
             # Müvəqqəti fayl yarat
@@ -119,18 +138,28 @@ class TikTokDownloader:
             
             # Video məlumatlarını fayla yaz
             file_size = 0
+            chunk_count = 0
             for chunk in video_response.iter_content(chunk_size=8192):
                 if chunk:
                     temp_file.write(chunk)
                     file_size += len(chunk)
+                    chunk_count += 1
+                    if chunk_count % 100 == 0:
+                        self.logger.info(f"Downloaded {chunk_count} chunks, size: {file_size} bytes")
             
             temp_file.close()
+            self.logger.info(f"Download completed. Total chunks: {chunk_count}, Size: {file_size} bytes")
             
             # Fayl ölçüsünü yoxla
             if file_size > 50 * 1024 * 1024:  # 50MB limit
                 os.unlink(temp_file.name)
                 self.logger.error("Video file too large")
                 return {'error': 'file_too_large'}
+            
+            # Faylın mövcudluğunu yoxla
+            if not os.path.exists(temp_file.name):
+                self.logger.error("Temp file not found after download")
+                return None
             
             self.logger.info(f"Video downloaded successfully: {temp_file.name} ({file_size} bytes)")
             
@@ -152,6 +181,8 @@ class TikTokDownloader:
             
         except Exception as e:
             self.logger.error(f"Video download error: {e}")
+            import traceback
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
             return None
     
     def cleanup_file(self, file_path: str):
