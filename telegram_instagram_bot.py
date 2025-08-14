@@ -33,50 +33,184 @@ class InstagramManager:
     def login(self, username: str, password: str) -> Dict:
         """Instagram hesabına giriş"""
         try:
+            print(f"🔐 {username} üçün giriş başladılır...")
+            
+            # Əvvəlcə Instagram ana səhifəsinə get
+            main_response = self.session.get(
+                self.base_url,
+                headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.5',
+                    'Accept-Encoding': 'gzip, deflate',
+                    'DNT': '1',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                }
+            )
+            
+            if main_response.status_code != 200:
+                return {
+                    'success': False,
+                    'message': f'❌ Ana səhifə yüklənə bilmədi: {main_response.status_code}'
+                }
+            
+            # CSRF token tap
+            csrf_token = None
+            if 'csrf_token' in main_response.text:
+                import re
+                csrf_match = re.search(r'"csrf_token":"([^"]+)"', main_response.text)
+                if csrf_match:
+                    csrf_token = csrf_match.group(1)
+                    print(f"🔑 CSRF token tapıldı: {csrf_token[:10]}...")
+            
+            # Login data hazırla
             login_data = {
                 'username': username,
                 'password': password,
                 'enc_password': f'#PWD_INSTAGRAM_BROWSER:0:{int(time.time())}:{password}'
             }
             
+            if csrf_token:
+                login_data['csrfmiddlewaretoken'] = csrf_token
+            
+            # Login headers
+            login_headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Referer': f"{self.base_url}/accounts/login/",
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'X-IG-App-ID': '936619743392459',
+                'X-IG-WWW-Claim': '0',
+            }
+            
+            if csrf_token:
+                login_headers['X-CSRFToken'] = csrf_token
+            
+            print(f"📱 Login sorğusu göndərilir...")
+            
             response = self.session.post(
                 f"{self.base_url}/accounts/login/ajax/",
                 data=login_data,
-                headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Referer': f"{self.base_url}/accounts/login/",
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
+                headers=login_headers
             )
             
+            print(f"📊 Response status: {response.status_code}")
+            
             if response.status_code == 200:
-                data = response.json()
-                if data.get('authenticated'):
-                    self.logged_in_accounts[username] = {
-                        'session': self.session,
-                        'login_time': datetime.now(),
-                        'status': 'active'
-                    }
-                    return {
-                        'success': True,
-                        'message': f'✅ {username} hesabına uğurla giriş edildi'
-                    }
-                else:
+                try:
+                    data = response.json()
+                    print(f"📝 Response data: {data}")
+                    
+                    if data.get('authenticated'):
+                        self.logged_in_accounts[username] = {
+                            'session': self.session,
+                            'login_time': datetime.now(),
+                            'status': 'active'
+                        }
+                        return {
+                            'success': True,
+                            'message': f'✅ {username} hesabına uğurla giriş edildi'
+                        }
+                    else:
+                        error_msg = data.get('message', 'Bilinməyən xəta')
+                        if 'checkpoint' in error_msg.lower():
+                            return {
+                                'success': False,
+                                'message': f'❌ Təhlükəsizlik yoxlaması tələb olunur. Zəhmət olmasa Instagram-da hesabınızı yoxlayın.'
+                            }
+                        elif 'password' in error_msg.lower():
+                            return {
+                                'success': False,
+                                'message': f'❌ Şifrə yanlışdır. Zəhmət olmasa şifrənizi yoxlayın.'
+                            }
+                        else:
+                            return {
+                                'success': False,
+                                'message': f'❌ {username} üçün giriş uğursuz: {error_msg}'
+                            }
+                except Exception as json_error:
+                    print(f"❌ JSON parse xətası: {json_error}")
                     return {
                         'success': False,
-                        'message': f'❌ {username} üçün giriş uğursuz: {data.get("message", "Bilinməyən xəta")}'
+                        'message': f'❌ Response parse edilə bilmədi: {response.text[:100]}'
                     }
+            elif response.status_code == 400:
+                return {
+                    'success': False,
+                    'message': f'❌ Giriş sorğusu düzgün deyil. Instagram API dəyişib ola bilər.'
+                }
+            elif response.status_code == 429:
+                return {
+                    'success': False,
+                    'message': f'❌ Çox tez sorğu göndərilir. Zəhmət olmasa bir az gözləyin.'
+                }
             else:
                 return {
                     'success': False,
-                    'message': f'❌ Giriş sorğusu uğursuz: {response.status_code}'
+                    'message': f'❌ Giriş sorğusu uğursuz: {response.status_code} - {response.text[:100]}'
+                }
+                
+        except Exception as e:
+            print(f"❌ Login xətası: {str(e)}")
+            
+            # Alternativ login metodu cəhdi
+            try:
+                print("🔄 Alternativ login metodu sınanılır...")
+                return self._alternative_login(username, password)
+            except Exception as alt_error:
+                print(f"❌ Alternativ login də uğursuz: {str(alt_error)}")
+                return {
+                    'success': False,
+                    'message': f'❌ Giriş zamanı xəta: {str(e)}'
+                }
+    
+    def _alternative_login(self, username: str, password: str) -> Dict:
+        """Alternativ login metodu"""
+        try:
+            # Daha sadə login cəhdi
+            login_data = {
+                'username': username,
+                'password': password
+            }
+            
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Origin': self.base_url,
+                'Referer': f"{self.base_url}/accounts/login/"
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/accounts/login/",
+                data=login_data,
+                headers=headers,
+                allow_redirects=True
+            )
+            
+            # Redirect yoxla
+            if response.history:
+                print(f"✅ Redirect baş verdi: {len(response.history)}")
+                return {
+                    'success': True,
+                    'message': f'✅ {username} hesabına alternativ üsulla giriş edildi'
+                }
+            else:
+                return {
+                    'success': False,
+                    'message': f'❌ Alternativ login də uğursuz oldu'
                 }
                 
         except Exception as e:
             return {
                 'success': False,
-                'message': f'❌ Giriş zamanı xəta: {str(e)}'
+                'message': f'❌ Alternativ login xətası: {str(e)}'
             }
     
     def get_account_info(self, username: str) -> Dict:
@@ -524,20 +658,31 @@ Bu bot Instagram hesablarınızı idarə etməyə kömək edir.
         
         # Botu başlat
         print("🤖 Telegram Instagram Bot başladıldı...")
-        application.run_polling()
+        print("📱 Bot polling rejimində işləyir...")
+        application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 def main():
     """Əsas funksiya"""
-    # Konfiqurasiya faylından import et
-    from config import Config
-    
-    # Konfiqurasiyanı yoxla
-    if not Config.validate_config():
-        return
-    
-    # Bot yaradın və işə salın
-    bot = TelegramInstagramBot(Config.BOT_TOKEN)
-    bot.run()
+    try:
+        # Konfiqurasiya faylından import et
+        from config import Config
+        
+        # Konfiqurasiyanı yoxla
+        if not Config.validate_config():
+            return
+        
+        print("🤖 Telegram Instagram Bot başladılır...")
+        print(f"📱 Token: {Config.BOT_TOKEN[:10]}...")
+        
+        # Bot yaradın və işə salın
+        bot = TelegramInstagramBot(Config.BOT_TOKEN)
+        print("✅ Bot yaradıldı, işə salınır...")
+        bot.run()
+        
+    except Exception as e:
+        print(f"❌ Xəta baş verdi: {str(e)}")
+        import traceback
+        traceback.print_exc()
 
 if __name__ == "__main__":
     main()

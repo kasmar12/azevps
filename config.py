@@ -12,7 +12,7 @@ class Config:
     """Bot konfiqurasiyası"""
     
     # Telegram Bot Token
-    BOT_TOKEN = os.getenv('BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
+    BOT_TOKEN = os.getenv('BOT_TOKEN', '7493181356:AAFKktGpLSTW_plsAeSLNViih0aYkO-DEW4')
     
     # Instagram API parametrləri
     INSTAGRAM_BASE_URL = "https://www.instagram.com"
@@ -81,7 +81,15 @@ class Config:
             print("   - Və ya config.py faylında düzəldin")
             return False
         
-        if not cls.BOT_TOKEN.startswith('5'):
+        if not cls.BOT_TOKEN or cls.BOT_TOKEN == 'YOUR_BOT_TOKEN_HERE':
+            print("❌ BOT_TOKEN təyin edilməyib!")
+            print("📝 Zəhmət olmasa BOT_TOKEN-i təyin edin:")
+            print("   - Environment variable olaraq: export BOT_TOKEN='your_token'")
+            print("   - Və ya config.py faylında düzəldin")
+            return False
+        
+        # Token formatını yoxla (1234567890:ABCdefGHIjklMNOpqrsTUVwxyz)
+        if ':' not in cls.BOT_TOKEN or len(cls.BOT_TOKEN.split(':')) != 2:
             print("❌ BOT_TOKEN formatı düzgün deyil!")
             print("📝 Telegram Bot Token formatı: 1234567890:ABCdefGHIjklMNOpqrsTUVwxyz")
             return False
