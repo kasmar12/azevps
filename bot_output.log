@@ -1,0 +1,26 @@
+nohup: ignoring input
+🤖 Instagram Automation Bot başladılır...
+👤 Admin ID: 1143980741
+Traceback (most recent call last):
+  File "/workspace/instagram_telegram_bot.py", line 485, in <module>
+    main()
+    ~~~~^^
+  File "/workspace/instagram_telegram_bot.py", line 473, in main
+    bot.polling(none_stop=True)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1195, in polling
+    logger.info('Starting your bot with username: [@%s]', self.user.username)
+                                                          ^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 306, in user
+    self._user = self.get_me()
+                 ~~~~~~~~~~~^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/__init__.py", line 1382, in get_me
+    apihelper.get_me(self.token)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 202, in get_me
+    return _make_request(token, method_url)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/workspace/venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 401. Description: Unauthorized
