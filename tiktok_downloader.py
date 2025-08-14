@@ -114,12 +114,42 @@ class TikTokDownloader:
                 return None
             
             try:
-                data = response.json()
+                # Response encoding və content type yoxla
+                self.logger.info(f"Response encoding: {response.encoding}")
+                self.logger.info(f"Content-Type: {response.headers.get('content-type', 'Unknown')}")
+                self.logger.info(f"Content-Encoding: {response.headers.get('content-encoding', 'None')}")
+                
+                # Compressed cavabı handle et
+                content_encoding = response.headers.get('content-encoding', 'None')
+                if content_encoding in ['gzip', 'br', 'deflate']:
+                    self.logger.info(f"Response is {content_encoding} compressed, using content directly")
+                    # Compressed content-i birbaşa istifadə et
+                    data = response.json()
+                else:
+                    data = response.json()
+                
                 self.logger.info(f"API response: {data}")
             except Exception as json_error:
                 self.logger.error(f"JSON parse error: {json_error}")
-                self.logger.error(f"Response text: {response.text[:200]}")
-                return None
+                self.logger.error(f"Response text (first 500 chars): {response.text[:500]}")
+                self.logger.error(f"Response raw (first 200 bytes): {response.content[:200]}")
+                
+                # Brotli decompression cəhdi
+                if response.headers.get('content-encoding') == 'br':
+                    try:
+                        import brotli
+                        decompressed = brotli.decompress(response.content)
+                        self.logger.info(f"Brotli decompressed: {decompressed[:200]}")
+                        data = json.loads(decompressed)
+                        self.logger.info(f"API response after brotli decompression: {data}")
+                    except ImportError:
+                        self.logger.error("Brotli library not installed")
+                        return None
+                    except Exception as brotli_error:
+                        self.logger.error(f"Brotli decompression error: {brotli_error}")
+                        return None
+                else:
+                    return None
             
             if data.get('code') != 0:
                 error_msg = data.get('msg', 'Unknown error')
@@ -233,15 +263,15 @@ class TikTokDownloader:
                 'file_path': temp_file.name,
                 'file_size': file_size,
                 'title': video_data.get('title', 'TikTok Video'),
-                'author': video_data.get('author', {}).get('nickname', 'Unknown'),
+                'author': video_data.get('author', {}).get('nickname', 'Unknown') if isinstance(video_data.get('author'), dict) else 'Unknown',
                 'duration': video_data.get('duration', 0),
                 'cover': video_data.get('cover', ''),
-                'music': video_data.get('music', {}).get('title', ''),
+                'music': video_data.get('music', '') if isinstance(video_data.get('music'), str) else '',
                 'stats': {
-                    'likes': video_data.get('statistics', {}).get('like_count', 0),
-                    'comments': video_data.get('statistics', {}).get('comment_count', 0),
-                    'shares': video_data.get('statistics', {}).get('share_count', 0),
-                    'views': video_data.get('statistics', {}).get('play_count', 0)
+                    'likes': video_data.get('play_count', 0),
+                    'comments': video_data.get('comment_count', 0),
+                    'shares': video_data.get('share_count', 0),
+                    'views': video_data.get('play_count', 0)
                 }
             }
             

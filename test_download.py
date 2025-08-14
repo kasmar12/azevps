@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TikTok Downloader Test Script
+TikTok Downloader Test Script - Real Link Test
 """
 
 import asyncio
@@ -8,19 +8,22 @@ import logging
 from tiktok_downloader import TikTokDownloader
 
 # Logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 async def test_download():
-    """Test video download"""
+    """Test video download with real TikTok link"""
     downloader = TikTokDownloader()
     
-    # Test URL (bu URL-i real TikTok linki ilə əvəz edin)
-    test_url = "https://www.tiktok.com/@example/video/1234567890"
+    # Real TikTok link
+    test_url = "https://vt.tiktok.com/ZSSKFK6RK/"
     
-    print(f"Testing download with URL: {test_url}")
+    print(f"🚀 Testing TikTok Downloader")
+    print(f"📱 URL: {test_url}")
+    print("=" * 50)
     
     # URL validation
+    print("1️⃣ URL validation...")
     if downloader.is_valid_tiktok_url(test_url):
         print("✅ URL validation passed")
     else:
@@ -28,6 +31,7 @@ async def test_download():
         return
     
     # Try to download
+    print("\n2️⃣ Starting video download...")
     try:
         result = await downloader.download_video(test_url)
         
@@ -39,10 +43,23 @@ async def test_download():
             print(f"❌ Download failed with error: {error_type} - {error_msg}")
         else:
             print("✅ Download successful!")
-            print(f"File: {result['file_path']}")
-            print(f"Size: {result['file_size']} bytes")
-            print(f"Title: {result['title']}")
-            print(f"Author: {result['author']}")
+            print(f"📁 File: {result['file_path']}")
+            print(f"📏 Size: {result['file_size']} bytes")
+            print(f"📝 Title: {result['title']}")
+            print(f"👤 Author: {result['author']}")
+            print(f"⏱️ Duration: {result['duration']}s")
+            
+            # Check if file exists and has content
+            import os
+            if os.path.exists(result['file_path']):
+                actual_size = os.path.getsize(result['file_path'])
+                print(f"📊 Actual file size: {actual_size} bytes")
+                if actual_size > 0:
+                    print("✅ File has content")
+                else:
+                    print("❌ File is empty")
+            else:
+                print("❌ File not found")
             
             # Cleanup
             downloader.cleanup_file(result['file_path'])
@@ -53,8 +70,8 @@ async def test_download():
         traceback.print_exc()
 
 if __name__ == "__main__":
-    print("🚀 TikTok Downloader Test")
-    print("=" * 40)
+    print("🎬 TikTok Downloader Test - Real Link")
+    print("=" * 50)
     
     # Run test
     asyncio.run(test_download())
