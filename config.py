@@ -38,7 +38,7 @@ SUPPORTED_LANGUAGES = {
 # Bot mesajları
 MESSAGES = {
     'tr': {
-        'welcome': '🎵 **TikTok Video İndirici Botuna Hoş Geldiniz!**\n\nBu bot TikTok videolarını logosuz olarak indirir.\n\n📱 **Ana Komutlar:**\n/download <link> - Video indir\n/help - Yardım\n/language - Dil seçimi\n\n💡 **Kullanım:**\nSadəcə TikTok video linkini gönderin və ya /download komutu ilə linki yazın.',
+        'welcome': '🎵 **TikTok Video İndirici Botuna Hoş Geldiniz!**\n\nBu bot TikTok videolarını logosuz olarak indirir.\n\n💡 **Kullanım:**\nSadəcə TikTok video linkini gönderin ve video indirilecek.',
         'help': '❓ **Yardım:**\n\n📥 **Video İndirme:**\n- Sadəcə TikTok video linkini gönderin\n- Və ya /download <link> komutunu istifadə edin\n\n🌍 **Dil:**\n/language - Dil seçimi\n\n📊 **Durum:**\n/status - Bot durumu\n\n❓ /help - Bu mesaj',
         'language_menu': '🌍 **Dil seçin:**',
         'processing': '⏳ Video işleniyor...',
@@ -56,7 +56,7 @@ MESSAGES = {
         'cancel': '❌ İptal edildi.'
     },
     'az': {
-        'welcome': '🎵 **TikTok Video Yükləmə Botuna Xoş Gəlmisiniz!**\n\nBu bot TikTok videolarını logosuz olaraq yükləyir.\n\n📱 **Əsas Əmrlər:**\n/download <link> - Video yüklə\n/help - Kömək\n/language - Dil seçimi\n\n💡 **İstifadə:**\nSadəcə TikTok video linkini göndərin və ya /download əmri ilə linki yazın.',
+        'welcome': '🎵 **TikTok Video Yükləmə Botuna Xoş Gəlmisiniz!**\n\nBu bot TikTok videolarını logosuz olaraq yükləyir.\n\n💡 **İstifadə:**\nSadəcə TikTok video linkini göndərin və video yüklənəcək.',
         'help': '❓ **Kömək:**\n\n📥 **Video Yükləmə:**\n- Sadəcə TikTok video linkini göndərin\n- Və ya /download <link> əmrini istifadə edin\n\n🌍 **Dil:**\n/language - Dil seçimi\n\n📊 **Status:**\n/status - Bot statusu\n\n❓ /help - Bu mesaj',
         'language_menu': '🌍 **Dil seçin:**',
         'processing': '⏳ Video emal olunur...',
@@ -74,7 +74,7 @@ MESSAGES = {
         'cancel': '❌ Ləğv edildi.'
     },
     'en': {
-        'welcome': '🎵 **Welcome to TikTok Video Downloader Bot!**\n\nThis bot downloads TikTok videos without logos.\n\n📱 **Main Commands:**\n/download <link> - Download video\n/help - Help\n/language - Language selection\n\n💡 **Usage:**\nSend TikTok video link or use /download command with link.',
+        'welcome': '🎵 **Welcome to TikTok Video Downloader Bot!**\n\nThis bot downloads TikTok videos without logos.\n\n💡 **Usage:**\nSend TikTok video link and video will be downloaded.',
         'help': '❓ **Help:**\n\n📥 **Video Download:**\n- Send TikTok video link\n- Or use /download <link> command\n\n🌍 **Language:**\n/language - Language selection\n\n📊 **Status:**\n/status - Bot status\n\n❓ /help - This message',
         'language_menu': '🌍 **Select language:**',
         'processing': '⏳ Processing video...',
@@ -92,7 +92,7 @@ MESSAGES = {
         'cancel': '❌ Cancelled.'
     },
     'ru': {
-        'welcome': '🎵 **Добро пожаловать в TikTok Video Downloader Bot!**\n\nЭтот бот скачивает видео TikTok без логотипов.\n\n📱 **Основные команды:**\n/download <ссылка> - Скачать видео\n/help - Помощь\n/language - Выбор языка\n\n💡 **Использование:**\nОтправьте ссылку на видео TikTok или используйте команду /download с ссылкой.',
+        'welcome': '🎵 **Добро пожаловать в TikTok Video Downloader Bot!**\n\nЭтот бот скачивает видео TikTok без логотипов.\n\n💡 **Использование:**\nОтправьте ссылку на видео TikTok и видео будет скачано.',
         'help': '❓ **Помощь:**\n\n📥 **Скачивание видео:**\n- Отправьте ссылку на видео TikTok\n- Или используйте команду /download <ссылка>\n\n🌍 **Язык:**\n/language - Выбор языка\n\n📊 **Статус:**\n/status - Статус бота\n\n❓ /help - Это сообщение',
         'language_menu': '🌍 **Выберите язык:**',
         'processing': '⏳ Обработка видео...',

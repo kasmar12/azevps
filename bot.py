@@ -58,8 +58,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome_message = MESSAGES[lang]['welcome']
     
     try:
+        # Xoş gəldin mesajı
         await update.message.reply_text(welcome_message, parse_mode='Markdown')
         logger.info(f"Welcome message sent to user {user_id}")
+        
+        # Dil seçimi menyusu
+        await language_menu(update, context)
+        logger.info(f"Language menu sent to user {user_id}")
+        
     except Exception as e:
         logger.error(f"Error sending welcome message to {user_id}: {e}")
         await update.message.reply_text("Xoş gəlmisiniz! Bot işləyir.")
