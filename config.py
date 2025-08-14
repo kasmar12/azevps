@@ -2,7 +2,7 @@
 # Bu faylı düzəldərək öz məlumatlarınızı daxil edin
 
 # Telegram Bot Token (@BotFather-dan alınan)
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+BOT_TOKEN = "7493181356:AAF0KRUh2V0AZmkIrhUuCc_Udk2ZhuIxzO8"
 
 # Admin Telegram ID (sizin ID-niz)
 ADMIN_ID = 1143980741

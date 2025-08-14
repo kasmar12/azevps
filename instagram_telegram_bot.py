@@ -13,8 +13,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 # Bot konfiqurasiyası
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
-ADMIN_ID = 1143980741  # Sizin admin ID-niz
+from config import BOT_TOKEN, ADMIN_ID, MESSAGES, DEFAULT_LANGUAGE
 
 # Bot yarat
 bot = telebot.TeleBot(BOT_TOKEN)
