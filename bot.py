@@ -321,6 +321,8 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     data = query.data
     
+    logger.info(f"Button callback: {data} from user {user_id}")
+    
     if data.startswith("lang_"):
         new_lang = data.split("_")[1]
         user_languages[user_id] = new_lang
@@ -343,9 +345,63 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data == "back_main":
         await query.edit_message_text("🔙 Ana menyuya qayıtdınız.")
     
+    # Admin broadcast callback-lər - birbaşa data ilə yoxlama
+    elif data == "admin_broadcast_groups":
+        if user_id not in ADMIN_IDS:
+            await query.edit_message_text("❌ Admin deyilsiniz!")
+            return
+            
+        logger.info(f"Admin {user_id} starting broadcast to groups")
+        await query.edit_message_text(
+            "👥 **Qruplara Mesaj Göndərmə:**\n\n"
+            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
+            "💡 **Qeyd:** Bu mesaj yalnız qruplara göndəriləcək.",
+            parse_mode='Markdown'
+        )
+        context.user_data['broadcast_type'] = 'groups'
+        return WAITING_FOR_BROADCAST_MESSAGE
+    
+    elif data == "admin_broadcast_users":
+        if user_id not in ADMIN_IDS:
+            await query.edit_message_text("❌ Admin deyilsiniz!")
+            return
+            
+        logger.info(f"Admin {user_id} starting broadcast to users")
+        await query.edit_message_text(
+            "👤 **İstifadəçilərə Mesaj Göndərmə:**\n\n"
+            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
+            "💡 **Qeyd:** Bu mesaj yalnız fərdi istifadəçilərə göndəriləcək.",
+            parse_mode='Markdown'
+        )
+        context.user_data['broadcast_type'] = 'users'
+        return WAITING_FOR_BROADCAST_MESSAGE
+    
+    elif data == "admin_broadcast_all":
+        if user_id not in ADMIN_IDS:
+            await query.edit_message_text("❌ Admin deyilsiniz!")
+            return
+            
+        logger.info(f"Admin {user_id} starting broadcast to all")
+        await query.edit_message_text(
+            "🌐 **Hərkəsə Mesaj Göndərmə:**\n\n"
+            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
+            "💡 **Qeyd:** Bu mesaj bütün istifadəçilərə və qruplara göndəriləcək.",
+            parse_mode='Markdown'
+        )
+        context.user_data['broadcast_type'] = 'all'
+        return WAITING_FOR_BROADCAST_MESSAGE
+    
+    elif data == "admin_back":
+        if user_id not in ADMIN_IDS:
+            await query.edit_message_text("❌ Admin deyilsiniz!")
+            return
+            
+        # Ana admin panelə qayıt
+        await admin_panel(update, context)
+    
     elif data.startswith("admin_"):
         if user_id not in ADMIN_IDS:
-            await query.edit_message_text(MESSAGES[lang]['not_admin'])
+            await query.edit_message_text("❌ Admin deyilsiniz!")
             return
         
         admin_action = data.split("_")[1]
@@ -429,45 +485,6 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             settings_text += f"📝 **Parametrləri dəyişmək üçün config.py faylını redaktə edin.**"
             
             await query.edit_message_text(settings_text, parse_mode='Markdown')
-        
-        elif admin_action == "back":
-            # Ana admin panelə qayıt
-            await admin_panel(update, context)
-    
-    # Yeni broadcast callback-lər
-    elif data == "admin_broadcast_groups":
-        await query.edit_message_text(
-            "👥 **Qruplara Mesaj Göndərmə:**\n\n"
-            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
-            "💡 **Qeyd:** Bu mesaj yalnız qruplara göndəriləcək.",
-            parse_mode='Markdown'
-        )
-        context.user_data['broadcast_type'] = 'groups'
-        return WAITING_FOR_BROADCAST_MESSAGE
-    
-    elif data == "admin_broadcast_users":
-        await query.edit_message_text(
-            "👤 **İstifadəçilərə Mesaj Göndərmə:**\n\n"
-            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
-            "💡 **Qeyd:** Bu mesaj yalnız fərdi istifadəçilərə göndəriləcək.",
-            parse_mode='Markdown'
-        )
-        context.user_data['broadcast_type'] = 'users'
-        return WAITING_FOR_BROADCAST_MESSAGE
-    
-    elif data == "admin_broadcast_all":
-        await query.edit_message_text(
-            "🌐 **Hərkəsə Mesaj Göndərmə:**\n\n"
-            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
-            "💡 **Qeyd:** Bu mesaj bütün istifadəçilərə və qruplara göndəriləcək.",
-            parse_mode='Markdown'
-        )
-        context.user_data['broadcast_type'] = 'all'
-        return WAITING_FOR_BROADCAST_MESSAGE
-    
-    elif data == "admin_back":
-        # Ana admin panelə qayıt
-        await admin_panel(update, context)
 
 async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Broadcast mesaj handler"""
