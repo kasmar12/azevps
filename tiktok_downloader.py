@@ -41,6 +41,26 @@ class TikTokDownloader:
     def is_valid_tiktok_url(self, url: str) -> bool:
         """TikTok URL-nin etibarlı olub-olmadığını yoxlayır"""
         try:
+            # URL formatını yoxla
+            if not url or not isinstance(url, str):
+                return False
+            
+            # TikTok pattern-lərini yoxla
+            tiktok_patterns = [
+                r'tiktok\.com/@[\w.-]+/video/\d+',
+                r'tiktok\.com/v/\d+',
+                r'vm\.tiktok\.com/\w+',
+                r'vt\.tiktok\.com/\w+',
+                r'tiktok\.com/t/\w+'
+            ]
+            
+            import re
+            for pattern in tiktok_patterns:
+                if re.search(pattern, url):
+                    self.logger.info(f"Valid TikTok URL pattern found: {pattern}")
+                    return True
+            
+            # Domain yoxlaması
             parsed = urlparse(url)
             valid_domains = [
                 'tiktok.com',
@@ -49,7 +69,12 @@ class TikTokDownloader:
                 'vt.tiktok.com'
             ]
             
-            return parsed.netloc in valid_domains
+            if parsed.netloc in valid_domains:
+                self.logger.info(f"Valid TikTok domain: {parsed.netloc}")
+                return True
+            
+            self.logger.warning(f"Invalid TikTok URL: {url}")
+            return False
             
         except Exception as e:
             self.logger.error(f"URL validation error: {e}")
@@ -73,10 +98,20 @@ class TikTokDownloader:
             self.logger.info(f"Sending API request to: {TIKTOK_API_URL}")
             self.logger.info(f"API data: {api_data}")
             
+            # API sorğusu göndər
             response = self.session.post(
                 TIKTOK_API_URL,
                 data=api_data,
-                timeout=TIKTOK_SETTINGS['timeout']
+                timeout=TIKTOK_SETTINGS['timeout'],
+                headers={
+                    'User-Agent': TIKTOK_SETTINGS['user_agent'],
+                    'Accept': 'application/json, text/plain, */*',
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Origin': 'https://www.tikwm.com',
+                    'Referer': 'https://www.tikwm.com/'
+                }
             )
             
             self.logger.info(f"API response status: {response.status_code}")
