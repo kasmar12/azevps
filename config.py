@@ -116,7 +116,7 @@ DEFAULT_LANGUAGE = 'tr'
 
 # Admin ID-ləri (burada admin ID-lərini əlavə edin)
 ADMIN_IDS = [
-    123456789,  # Buraya öz admin ID-nizi yazın
+    1143980741,  # Admin ID
     # Əlavə admin ID-lər üçün yeni sətir əlavə edin
 ]
 
