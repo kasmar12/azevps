@@ -111,14 +111,11 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
-        # Video faylını göndər
+        # Video faylını göndər - sadələşdirilmiş caption
         with open(result['file_path'], 'rb') as video_file:
             caption = f"🎵 **{result['title']}**\n\n"
             caption += f"👤 **Yazar:** {result['author']}\n"
-            caption += f"⏱️ **Müddət:** {result['duration']}s\n"
-            caption += f"🎵 **Musiqi:** {result['music']}\n\n"
-            caption += f"📊 **Statistika:**\n"
-            caption += f"❤️ {result['stats']['likes']} | 💬 {result['stats']['comments']} | 🔄 {result['stats']['shares']} | 👁️ {result['stats']['views']}"
+            caption += f"⏱️ **Müddət:** {result['duration']}s"
             
             await update.message.reply_video(
                 video=video_file,
@@ -178,14 +175,11 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
                 await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
             return
         
-        # Video faylını göndər
+        # Video faylını göndər - sadələşdirilmiş caption
         with open(result['file_path'], 'rb') as video_file:
             caption = f"🎵 **{result['title']}**\n\n"
             caption += f"👤 **Yazar:** {result['author']}\n"
-            caption += f"⏱️ **Müddət:** {result['duration']}s\n"
-            caption += f"🎵 **Musiqi:** {result['music']}\n\n"
-            caption += f"📊 **Statistika:**\n"
-            caption += f"❤️ {result['stats']['likes']} | 💬 {result['stats']['comments']} | 🔄 {result['stats']['shares']} | 👁️ {result['stats']['views']}"
+            caption += f"⏱️ **Müddət:** {result['duration']}s"
             
             await update.message.reply_video(
                 video=video_file,
