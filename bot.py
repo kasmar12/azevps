@@ -134,8 +134,6 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_stats[user_id]['total_downloads'] += 1
         user_stats[user_id]['last_download'] = datetime.now()
         
-        await update.message.reply_text(MESSAGES[lang]['download_success'])
-        
     except Exception as e:
         logger.error(f"Download error: {e}")
         await processing_msg.edit_text(MESSAGES[lang]['error'])
@@ -197,8 +195,6 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
         user_stats[user_id]['downloads'] += 1
         user_stats[user_id]['total_downloads'] += 1
         user_stats[user_id]['last_download'] = datetime.now()
-        
-        await update.message.reply_text(MESSAGES[lang]['download_success'])
         
     except Exception as e:
         logger.error(f"Download error: {e}")
