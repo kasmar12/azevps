@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 
 # Bot konfiqurasiyası
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+BOT_TOKEN = "7493181356:AAF0KRUh2V0AZmkIrhUuCc_Udk2ZhuIxzO8"
 ADMIN_ID = 1143980741
 
 # Bot yarat
