@@ -29,15 +29,23 @@ SUPPORTED_LANGUAGES = {
     }
 }
 
-# Səs xarakterləri
+# Səs xarakterləri - Real insan adları ilə
 VOICE_CHARACTERS = {
     'az': {
-        'male': 'az-AZ-BabekNeural',
-        'female': 'az-AZ-BanuNeural'
+        'babek': 'az-AZ-BabekNeural',      # Babek - Kişi səsi
+        'banu': 'az-AZ-BanuNeural',        # Banu - Qadın səsi
+        'zephyr': 'az-AZ-BabekNeural',     # Zephyr - Babek səsi ilə
+        'puck': 'az-AZ-BanuNeural',        # Puck - Banu səsi ilə
+        'male': 'az-AZ-BabekNeural',       # Default kişi
+        'female': 'az-AZ-BanuNeural'       # Default qadın
     },
     'tr': {
-        'male': 'tr-TR-AhmetNeural',
-        'female': 'tr-TR-EmelNeural'
+        'ahmet': 'tr-TR-AhmetNeural',      # Ahmet - Kişi səsi
+        'emel': 'tr-TR-EmelNeural',        # Emel - Qadın səsi
+        'zephyr': 'tr-TR-AhmetNeural',     # Zephyr - Ahmet səsi ilə
+        'puck': 'tr-TR-EmelNeural',        # Puck - Emel səsi ilə
+        'male': 'tr-TR-AhmetNeural',       # Default kişi
+        'female': 'tr-TR-EmelNeural'       # Default qadın
     }
 }
 
@@ -65,7 +73,7 @@ MESSAGES = {
     'az': {
         'welcome': '🎵 **Səs Botuna xoş gəlmisiniz!**\n\nBu bot Gemini 2.5 Flash ilə mətnləri səslə oxuyur və səs fayllarını mətnə çevirir.\n\n📱 **Əsas əmrlər:**\n/tts <mətn> - Mətn → Səs\n/stt - Səs → Mətn\n/voice - Səs xarakteri\n/settings - Parametrlər\n/help - Kömək',
         'help': '❓ **Kömək üçün:**\n\n🎤 **Səs əmrləri:**\n/tts <mətn> - Mətnləri səslə oxuyur\n/stt - Səs mesajını mətnə çevirir\n\n🎭 **Səs xarakteri:**\n/voice - Kişi/Qadın səsi seç\n\n⚙️ **Parametrlər:**\n/settings - Səs sürəti, ton, həcmi\n\n🌍 **Dil:**\n/language - Azərbaycan/Türk dili',
-        'voice_menu': '🎭 **Səs xarakteri seçin:**',
+        'voice_menu': '🎭 **Səs xarakteri seçin:**\n\n👨 **Kişi səsləri:**\n- Babek (Azərbaycan)\n- Zephyr (Babek səsi ilə)\n\n👩 **Qadın səsləri:**\n- Banu (Azərbaycan)\n- Puck (Banu səsi ilə)',
         'settings_menu': '⚙️ **Səs parametrləri:**',
         'language_menu': '🌍 **Dil seçin:**',
         'processing': '🔄 Səs yaradılır...',
@@ -79,7 +87,7 @@ MESSAGES = {
     'tr': {
         'welcome': '🎵 **Ses Botuna hoş geldiniz!**\n\nBu bot Gemini 2.5 Flash ile metinleri sesle okur ve ses dosyalarını metne çevirir.\n\n📱 **Ana komutlar:**\n/tts <metin> - Metin → Ses\n/stt - Ses → Metin\n/voice - Ses karakteri\n/settings - Parametreler\n/help - Yardım',
         'help': '❓ **Yardım için:**\n\n🎤 **Ses komutları:**\n/tts <metin> - Metinleri sesle okur\n/stt - Ses mesajını metne çevirir\n\n🎭 **Ses karakteri:**\n/voice - Erkek/Kadın sesi seç\n\n⚙️ **Parametreler:**\n/settings - Ses hızı, ton, hacim\n\n🌍 **Dil:**\n/language - Azerbaycan/Türk dili',
-        'voice_menu': '🎭 **Ses karakteri seçin:**',
+        'voice_menu': '🎭 **Ses karakteri seçin:**\n\n👨 **Erkek sesleri:**\n- Ahmet (Türkçe)\n- Zephyr (Ahmet sesi ile)\n\n👩 **Kadın sesleri:**\n- Emel (Türkçe)\n- Puck (Emel sesi ile)',
         'settings_menu': '⚙️ **Ses parametreleri:**',
         'language_menu': '🌍 **Dil seçin:**',
         'processing': '🔄 Ses oluşturuluyor...',

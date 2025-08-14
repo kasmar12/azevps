@@ -143,17 +143,44 @@ async def voice_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = []
     voices = voice_generator.get_available_voices(lang)
     
+    # Kişi səsləri
+    male_voices = []
+    female_voices = []
+    
     for voice_type, voice_name in voices.items():
-        emoji = "👨" if voice_type == "male" else "👩"
-        display_name = "Kişi" if voice_type == "male" else "Qadın"
-        if lang == "tr":
-            display_name = "Erkek" if voice_type == "male" else "Kadın"
+        if voice_type in ['babek', 'ahmet', 'zephyr', 'male']:
+            male_voices.append((voice_type, voice_name))
+        elif voice_type in ['banu', 'emel', 'puck', 'female']:
+            female_voices.append((voice_type, voice_name))
+    
+    # Kişi səsləri
+    for voice_type, voice_name in male_voices:
+        if voice_type == 'babek':
+            display_name = "👨 Babek"
+        elif voice_type == 'ahmet':
+            display_name = "👨 Ahmet"
+        elif voice_type == 'zephyr':
+            display_name = "👨 Zephyr"
+        else:
+            display_name = "👨 Kişi" if lang == "az" else "👨 Erkek"
         
         keyboard.append([
-            InlineKeyboardButton(
-                f"{emoji} {display_name}", 
-                callback_data=f"voice_{voice_type}"
-            )
+            InlineKeyboardButton(display_name, callback_data=f"voice_{voice_type}")
+        ])
+    
+    # Qadın səsləri
+    for voice_type, voice_name in female_voices:
+        if voice_type == 'banu':
+            display_name = "👩 Banu"
+        elif voice_type == 'emel':
+            display_name = "👩 Emel"
+        elif voice_type == 'puck':
+            display_name = "👩 Puck"
+        else:
+            display_name = "👩 Qadın" if lang == "az" else "👩 Kadın"
+        
+        keyboard.append([
+            InlineKeyboardButton(display_name, callback_data=f"voice_{voice_type}")
         ])
     
     keyboard.append([InlineKeyboardButton("🔙 Geri", callback_data="back_main")])
@@ -225,7 +252,20 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         settings['voice_type'] = voice_type
         voice_generator.set_user_settings(user_id, settings)
         
-        await query.edit_message_text("✅ Səs xarakteri seçildi!")
+        # Səs xarakteri adını tap
+        voice_names = {
+            'babek': 'Babek',
+            'banu': 'Banu',
+            'ahmet': 'Ahmet',
+            'emel': 'Emel',
+            'zephyr': 'Zephyr',
+            'puck': 'Puck',
+            'male': 'Kişi' if lang == "az" else 'Erkek',
+            'female': 'Qadın' if lang == "az" else 'Kadın'
+        }
+        
+        voice_name = voice_names.get(voice_type, voice_type)
+        await query.edit_message_text(f"✅ Səs xarakteri seçildi: **{voice_name}**", parse_mode='Markdown')
         
     elif data.startswith("speed_"):
         speed = data.split("_")[1]
