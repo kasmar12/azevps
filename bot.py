@@ -366,9 +366,24 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.edit_message_text(stats_text, parse_mode='Markdown')
         
         elif admin_action == "broadcast":
-            await query.edit_message_text(MESSAGES[lang]['enter_message'])
-            context.user_data['waiting_for_broadcast'] = True
-            return WAITING_FOR_BROADCAST_MESSAGE
+            # Broadcast seçimi menyusu
+            keyboard = [
+                [InlineKeyboardButton("👥 Qruplara Mesaj", callback_data="admin_broadcast_groups")],
+                [InlineKeyboardButton("👤 İstifadəçilərə Mesaj", callback_data="admin_broadcast_users")],
+                [InlineKeyboardButton("🌐 Hərkəsə Mesaj", callback_data="admin_broadcast_all")],
+                [InlineKeyboardButton("🔙 Geri", callback_data="admin_back")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await query.edit_message_text(
+                "📢 **Toplu Mesaj Göndərmə:**\n\n"
+                "👥 **Qruplara Mesaj** - Yalnız qruplara\n"
+                "👤 **İstifadəçilərə Mesaj** - Yalnız fərdi istifadəçilərə\n"
+                "🌐 **Hərkəsə Mesaj** - Bütün qruplara və istifadəçilərə\n\n"
+                "Seçim edin:",
+                reply_markup=reply_markup,
+                parse_mode='Markdown'
+            )
         
         elif admin_action == "groups":
             # Qrup statistikası
@@ -414,6 +429,45 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             settings_text += f"📝 **Parametrləri dəyişmək üçün config.py faylını redaktə edin.**"
             
             await query.edit_message_text(settings_text, parse_mode='Markdown')
+        
+        elif admin_action == "back":
+            # Ana admin panelə qayıt
+            await admin_panel(update, context)
+        
+        # Yeni broadcast callback-lər
+        elif data == "admin_broadcast_groups":
+            await query.edit_message_text(
+                "👥 **Qruplara Mesaj Göndərmə:**\n\n"
+                "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
+                "💡 **Qeyd:** Bu mesaj yalnız qruplara göndəriləcək.",
+                parse_mode='Markdown'
+            )
+            context.user_data['broadcast_type'] = 'groups'
+            return WAITING_FOR_BROADCAST_MESSAGE
+        
+        elif data == "admin_broadcast_users":
+            await query.edit_message_text(
+                "👤 **İstifadəçilərə Mesaj Göndərmə:**\n\n"
+                "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
+                "💡 **Qeyd:** Bu mesaj yalnız fərdi istifadəçilərə göndəriləcək.",
+                parse_mode='Markdown'
+            )
+            context.user_data['broadcast_type'] = 'users'
+            return WAITING_FOR_BROADCAST_MESSAGE
+        
+        elif data == "admin_broadcast_all":
+            await query.edit_message_text(
+                "🌐 **Hərkəsə Mesaj Göndərmə:**\n\n"
+                "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
+                "💡 **Qeyd:** Bu mesaj bütün istifadəçilərə və qruplara göndəriləcək.",
+                parse_mode='Markdown'
+            )
+            context.user_data['broadcast_type'] = 'all'
+            return WAITING_FOR_BROADCAST_MESSAGE
+        
+        elif data == "admin_back":
+            # Ana admin panelə qayıt
+            await admin_panel(update, context)
 
 async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Broadcast mesaj handler"""
@@ -423,37 +477,107 @@ async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT
     if user_id not in ADMIN_IDS:
         return ConversationHandler.END
     
-    if not context.user_data.get('waiting_for_broadcast'):
+    broadcast_type = context.user_data.get('broadcast_type')
+    if not broadcast_type:
         return ConversationHandler.END
     
     message_text = update.message.text
     
     if message_text.lower() in ['/cancel', 'cancel', 'iptal', 'ləğv']:
         await update.message.reply_text(MESSAGES[lang]['cancel'])
-        context.user_data.pop('waiting_for_broadcast', None)
+        context.user_data.pop('broadcast_type', None)
         return ConversationHandler.END
     
     sent_count = 0
     failed_count = 0
     
-    for user_id in user_stats.keys():
-        try:
-            await context.bot.send_message(
-                chat_id=user_id,
-                text=f"📢 **Admin Mesajı:**\n\n{message_text}",
-                parse_mode='Markdown'
-            )
-            sent_count += 1
-            await asyncio.sleep(0.1)  # Rate limit
-        except Exception as e:
-            logger.error(f"Broadcast error to {user_id}: {e}")
-            failed_count += 1
+    if broadcast_type == 'users':
+        # Yalnız fərdi istifadəçilərə
+        for user_id in user_stats.keys():
+            try:
+                await context.bot.send_message(
+                    chat_id=user_id,
+                    text=f"📢 **Admin Mesajı (İstifadəçilərə):**\n\n{message_text}",
+                    parse_mode='Markdown'
+                )
+                sent_count += 1
+                await asyncio.sleep(0.1)  # Rate limit
+            except Exception as e:
+                logger.error(f"Broadcast to user error: {e}")
+                failed_count += 1
+    
+    elif broadcast_type == 'groups':
+        # Yalnız qruplara
+        group_chats = set()
+        for user_stat in user_stats.values():
+            if 'group_stats' in user_stat:
+                for chat_id in user_stat['group_stats'].keys():
+                    group_chats.add(chat_id)
+        
+        for chat_id in group_chats:
+            try:
+                await context.bot.send_message(
+                    chat_id=chat_id,
+                    text=f"📢 **Admin Mesajı (Qruplara):**\n\n{message_text}",
+                    parse_mode='Markdown'
+                )
+                sent_count += 1
+                await asyncio.sleep(0.1)  # Rate limit
+            except Exception as e:
+                logger.error(f"Broadcast to group error: {e}")
+                failed_count += 1
+    
+    elif broadcast_type == 'all':
+        # Hərkəsə (istifadəçilər + qruplar)
+        # İstifadəçilərə
+        for user_id in user_stats.keys():
+            try:
+                await context.bot.send_message(
+                    chat_id=user_id,
+                    text=f"📢 **Admin Mesajı (Hərkəsə):**\n\n{message_text}",
+                    parse_mode='Markdown'
+                )
+                sent_count += 1
+                await asyncio.sleep(0.1)  # Rate limit
+            except Exception as e:
+                logger.error(f"Broadcast to user error: {e}")
+                failed_count += 1
+        
+        # Qruplara
+        group_chats = set()
+        for user_stat in user_stats.values():
+            if 'group_stats' in user_stat:
+                for chat_id in user_stat['group_stats'].keys():
+                    group_chats.add(chat_id)
+        
+        for chat_id in group_chats:
+            try:
+                await context.bot.send_message(
+                    chat_id=chat_id,
+                    text=f"📢 **Admin Mesajı (Hərkəsə):**\n\n{message_text}",
+                    parse_mode='Markdown'
+                )
+                sent_count += 1
+                await asyncio.sleep(0.1)  # Rate limit
+            except Exception as e:
+                logger.error(f"Broadcast to group error: {e}")
+                failed_count += 1
+    
+    # Nəticə mesajı
+    type_names = {
+        'users': 'İstifadəçilərə',
+        'groups': 'Qruplara',
+        'all': 'Hərkəsə'
+    }
     
     await update.message.reply_text(
-        f"✅ Toplu mesaj göndərildi!\n\n📤 Göndərildi: {sent_count}\n❌ Xəta: {failed_count}"
+        f"✅ **Toplu mesaj göndərildi!**\n\n"
+        f"📤 **Hədəf:** {type_names.get(broadcast_type, 'Bilinmir')}\n"
+        f"📤 **Göndərildi:** {sent_count}\n"
+        f"❌ **Xəta:** {failed_count}"
     )
     
-    context.user_data.pop('waiting_for_broadcast', None)
+    context.user_data.pop('broadcast_type', None)
     return ConversationHandler.END
 
 async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -501,7 +625,11 @@ def main():
         
         # Conversation handler for admin broadcast
         conv_handler = ConversationHandler(
-            entry_points=[CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast$')],
+            entry_points=[
+                CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast_groups$'),
+                CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast_users$'),
+                CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast_all$')
+            ],
             states={
                 WAITING_FOR_BROADCAST_MESSAGE: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_broadcast_message)]
             },
