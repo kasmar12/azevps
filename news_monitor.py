@@ -85,59 +85,37 @@ class NewsMonitor:
             return []
     
     async def send_news_notification(self, news: Dict, user_id: int, lang: str = 'az'):
-        """Yeni xəbər bildirişi göndərir"""
+        """Yeni xəbər bildirişi göndərir (sadə format)"""
         try:
-            # Xəbərin tam məzmununu çək
-            full_content = self.scraper.get_news_content(news['url'])
+            # Sadə format - sadəcə başlıq, şəkil və description
+            message = f"🆕 **YENİ XƏBƏR**\n\n"
+            message += f"📰 **{news['title']}**\n\n"
+            message += f"📝 {news['description']}\n\n"
+            message += f"🌐 [Tam xəbəri oxu]({news['url']})\n"
+            message += f"🏷️ **Kateqoriya:** {news.get('category', 'Ümumi')}"
             
-            if full_content:
-                # Tam məzmunu formatla
-                message = f"🆕 **YENİ XƏBƏR**\n\n"
-                message += f"📰 **{full_content['title']}**\n\n"
-                
-                # Məzmunu qısalt (Telegram limiti üçün)
-                content = full_content['content']
-                if len(content) > 3000:
-                    content = content[:3000] + "..."
-                
-                message += f"📝 {content}\n\n"
-                
-                # Tarix və mənbə
-                if full_content.get('date'):
-                    message += f"⏰ **Tarix:** {full_content['date']}\n"
-                
-                message += f"🌐 **Mənbə:** [Sportinfo.az]({news['url']})\n"
-                message += f"🏷️ **Kateqoriya:** {news.get('category', 'Ümumi')}"
-                
-                # Şəkil varsa, onu da göndər
-                if full_content.get('image'):
-                    try:
-                        await self.bot.send_photo(
-                            chat_id=user_id,
-                            photo=full_content['image'],
-                            caption=message,
-                            parse_mode='Markdown'
-                        )
-                        return
-                    except Exception as e:
-                        self.logger.error(f"Şəkil göndərmə xətası: {e}")
-                
+            # Şəkil varsa, onu da göndər
+            if news.get('image'):
+                try:
+                    await self.bot.send_photo(
+                        chat_id=user_id,
+                        photo=news['image'],
+                        caption=message,
+                        parse_mode='Markdown'
+                    )
+                except Exception as e:
+                    self.logger.error(f"Şəkil göndərmə xətası: {e}")
+                    # Şəkil göndərilə bilməzsə, sadə mətn göndər
+                    await self.bot.send_message(
+                        chat_id=user_id,
+                        text=message,
+                        parse_mode='Markdown'
+                    )
+            else:
                 # Sadə mətn mesajı göndər
                 await self.bot.send_message(
                     chat_id=user_id,
                     text=message,
-                    parse_mode='Markdown'
-                )
-            else:
-                # Tam məzmun çəkilə bilməzsə, qısa format göndər
-                short_message = f"🆕 **YENİ XƏBƏR**\n\n"
-                short_message += f"📰 **{news['title']}**\n\n"
-                short_message += f"🌐 [Tam xəbəri oxu]({news['url']})\n"
-                short_message += f"🏷️ **Kateqoriya:** {news.get('category', 'Ümumi')}"
-                
-                await self.bot.send_message(
-                    chat_id=user_id,
-                    text=short_message,
                     parse_mode='Markdown'
                 )
                 
@@ -185,7 +163,7 @@ class NewsMonitor:
         """Monitoru başladır"""
         if not self.is_monitoring:
             self.is_monitoring = True
-            self.monitor_task = asyncio.create_task(self.monitor_news())
+            # create_task əvəzinə sadə flag istifadə edirik
             self.logger.info("Xəbər monitoru başladıldı!")
     
     def stop_monitoring(self):
@@ -195,6 +173,13 @@ class NewsMonitor:
             if self.monitor_task:
                 self.monitor_task.cancel()
             self.logger.info("Xəbər monitoru dayandırıldı!")
+    
+    async def start_monitoring_async(self):
+        """Async monitoru başladır"""
+        if not self.is_monitoring:
+            self.is_monitoring = True
+            self.monitor_task = asyncio.create_task(self.monitor_news())
+            self.logger.info("Xəbər monitoru başladıldı!")
     
     async def get_monitor_status(self) -> Dict:
         """Monitor statusunu qaytarır"""

@@ -1,11 +1,9 @@
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
-from config import BOT_TOKEN, NEWS_CATEGORIES, MESSAGES, DEFAULT_LANGUAGE, NEWS_UPDATE_INTERVAL, MAX_NEWS_PER_REQUEST
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, filters, ContextTypes
+from config import BOT_TOKEN, NEWS_CATEGORIES, MESSAGES, DEFAULT_LANGUAGE, MAX_NEWS_PER_REQUEST
 from news_scraper import NewsScraper
-from news_monitor import NewsMonitor
 import asyncio
-from datetime import datetime
 
 # Logging konfiqurasiyası
 logging.basicConfig(
@@ -20,122 +18,43 @@ news_scraper = NewsScraper()
 # İstifadəçi dil tərcihləri
 user_languages = {}
 
-# Bildirişə abunə olan istifadəçilər
-subscribed_users = set()
-
-# Global bot instance (monitor üçün)
-bot_instance = None
-monitor_instance = None
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Start əmri"""
     user_id = update.effective_user.id
     user_languages[user_id] = DEFAULT_LANGUAGE
     
-    welcome_message = MESSAGES[DEFAULT_LANGUAGE]['welcome']
-    welcome_message += "\n\n🔔 **Avtomatik bildirişlər:**\n"
-    welcome_message += "Bot hər 10 dəqiqədə yeni xəbərləri yoxlayır və sizə göndərir.\n"
-    welcome_message += "Bildirişləri açmaq üçün: /subscribe"
+    welcome_message = "⚽ Futbol Xəbər Botuna xoş gəlmisiniz!\n\n"
+    welcome_message += "Bu bot Sportinfo.az saytından ən son futbol xəbərlərini gətirir.\n\n"
+    welcome_message += "📱 **Əsas əmrlər:**\n"
+    welcome_message += "/news - Son xəbərlər\n"
+    welcome_message += "/categories - Kateqoriyalar\n"
+    welcome_message += "/search <açar söz> - Xəbər axtar\n"
+    welcome_message += "/help - Kömək"
     
     await update.message.reply_text(welcome_message, parse_mode='Markdown')
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Kömək əmri"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    help_text = MESSAGES[lang]['help']
-    help_text += "\n\n🔔 **Bildiriş əmrləri:**\n"
-    help_text += "/subscribe - Yeni xəbər bildirişləri al\n"
-    help_text += "/unsubscribe - Bildirişləri dayandır\n"
-    help_text += "/status - Monitor statusunu yoxla"
+    help_text = "❓ **Kömək üçün:**\n\n"
+    help_text += "📰 /news - Son xəbərlər\n"
+    help_text += "📂 /categories - Kateqoriyalar\n"
+    help_text += "🔍 /search <açar söz> - Xəbər axtar\n"
+    help_text += "❓ /help - Bu mesaj"
     
     await update.message.reply_text(help_text)
 
-async def subscribe_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Bildirişlərə abunə olmaq"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    if user_id in subscribed_users:
-        message = "✅ Siz artıq bildirişlərə abunəsiniz!"
-    else:
-        subscribed_users.add(user_id)
-        # Monitor sisteminə abunə olan istifadəçiləri ötür
-        if monitor_instance:
-            monitor_instance.set_subscribed_users(subscribed_users)
-        
-        message = "🔔 Bildirişlərə uğurla abunə oldunuz!\n\n"
-        message += "Artıq yeni xəbərlər avtomatik olaraq sizə göndəriləcək.\n"
-        message += "Bildirişləri dayandırmaq üçün: /unsubscribe"
-    
-    await update.message.reply_text(message)
-
-async def unsubscribe_notifications(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Bildirişlərdən abunəliyi ləğv etmək"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    if user_id in subscribed_users:
-        subscribed_users.remove(user_id)
-        # Monitor sisteminə abunə olan istifadəçiləri ötür
-        if monitor_instance:
-            monitor_instance.set_subscribed_users(subscribed_users)
-        
-        message = "🔕 Bildirişlər dayandırıldı.\n\n"
-        message += "Yenidən bildiriş almaq üçün: /subscribe"
-    else:
-        message = "ℹ️ Siz bildirişlərə abunə deyilsiniz."
-    
-    await update.message.reply_text(message)
-
-async def get_monitor_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Monitor statusunu göstərir"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    if not monitor_instance:
-        await update.message.reply_text("❌ Monitor sistemi işləmir.")
-        return
-    
-    try:
-        # Monitor statusunu al
-        status = await monitor_instance.get_monitor_status()
-        
-        status_message = "📊 **Monitor Statusu**\n\n"
-        status_message += f"🔄 **Monitor:** {'✅ Aktiv' if status['is_monitoring'] else '❌ Dayanıq'}\n"
-        status_message += f"📰 **İşlənmiş xəbər:** {status['processed_news_count']}\n"
-        status_message += f"👥 **Abunə olan istifadəçi:** {status['subscribed_users_count']}\n"
-        status_message += f"⏰ **Son yoxlama:** {status['last_check']}\n"
-        status_message += f"🕐 **Yoxlama vaxtı:** {status['check_interval']}\n\n"
-        
-        # İstifadəçi statusu
-        if user_id in subscribed_users:
-            status_message += "🔔 **Sizin status:** Bildirişlər aktiv"
-        else:
-            status_message += "🔕 **Sizin status:** Bildirişlər dayanıq"
-        
-        await update.message.reply_text(status_message, parse_mode='Markdown')
-        
-    except Exception as e:
-        logger.error(f"Status xətası: {e}")
-        await update.message.reply_text("❌ Status alınarkən xəta baş verdi.")
-
 async def get_latest_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Son xəbərləri göstərir"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
     try:
         # Xəbərləri çək
         news_list = news_scraper.get_latest_news(MAX_NEWS_PER_REQUEST)
         
         if not news_list:
-            await update.message.reply_text(MESSAGES[lang]['no_news'])
+            await update.message.reply_text("❌ Heç bir xəbər tapılmadı.")
             return
         
         # Xəbərləri göndər
-        await update.message.reply_text(f"{MESSAGES[lang]['latest_news']}\n")
+        await update.message.reply_text("📰 **Son xəbərlər:**\n")
         
         for i, news in enumerate(news_list, 1):
             # Sadə format - başlıq, şəkil və description
@@ -162,13 +81,10 @@ async def get_latest_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
     except Exception as e:
         logger.error(f"Latest news error: {e}")
-        await update.message.reply_text(MESSAGES[lang]['error'])
+        await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
 
 async def get_categories(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Kateqoriyaları göstərir"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
     # Kateqoriya düymələrini yarat
     keyboard = []
     row = []
@@ -188,7 +104,7 @@ async def get_categories(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     await update.message.reply_text(
-        MESSAGES[lang]['select_category'],
+        "📂 Hansı kateqoriyadan xəbər görmək istəyirsiniz?",
         reply_markup=reply_markup
     )
 
@@ -196,9 +112,6 @@ async def category_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Kateqoriya seçimi callback"""
     query = update.callback_query
     await query.answer()
-    
-    user_id = query.from_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
     category_code = query.data.split('_')[1]
     
@@ -213,11 +126,11 @@ async def category_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             category_name = NEWS_CATEGORIES.get(category_code, category_code)
         
         if not news_list:
-            await query.edit_message_text(MESSAGES[lang]['no_news'])
+            await query.edit_message_text("❌ Bu kateqoriyada xəbər tapılmadı.")
             return
         
         # Xəbərləri göndər
-        await query.edit_message_text(f"{MESSAGES[lang]['category_news'].format(category=category_name)}\n")
+        await query.edit_message_text(f"📰 **{category_name} kateqoriyasından xəbərlər:**\n")
         
         for i, news in enumerate(news_list, 1):
             # Sadə format - başlıq, şəkil və description
@@ -253,13 +166,10 @@ async def category_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
     except Exception as e:
         logger.error(f"Category news error: {e}")
-        await query.edit_message_text(MESSAGES[lang]['error'])
+        await query.edit_message_text("❌ Xəta baş verdi.")
 
 async def search_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Xəbər axtarır"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
     if not context.args:
         await update.message.reply_text("🔍 Axtarış üçün açar söz yazın.\nMəsələn: /search Sabah")
         return
@@ -271,15 +181,11 @@ async def search_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
         news_list = news_scraper.search_news(query, MAX_NEWS_PER_REQUEST)
         
         if not news_list:
-            await update.message.reply_text(
-                MESSAGES[lang]['no_search_results'].format(query=query)
-            )
+            await update.message.reply_text(f"🔍 '{query}' üçün nəticə tapılmadı.")
             return
         
         # Axtarış nəticələrini göndər
-        await update.message.reply_text(
-            f"{MESSAGES[lang]['search_results'].format(query=query)}\n"
-        )
+        await update.message.reply_text(f"🔍 **'{query}' üçün axtarış nəticələri:**\n")
         
         for i, news in enumerate(news_list, 1):
             # Sadə format - başlıq, şəkil və description
@@ -306,52 +212,7 @@ async def search_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
     except Exception as e:
         logger.error(f"Search news error: {e}")
-        await update.message.reply_text(MESSAGES[lang]['error'])
-
-async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Bot parametrlərini göstərir"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    settings_text = MESSAGES[lang]['settings'].format(
-        interval=NEWS_UPDATE_INTERVAL,
-        max_news=MAX_NEWS_PER_REQUEST,
-        site="Sportinfo.az"
-    )
-    
-    await update.message.reply_text(settings_text, parse_mode='Markdown')
-
-async def change_language(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Dil dəyişdirmə əmri"""
-    user_id = update.effective_user.id
-    
-    # Dil seçimi üçün düymələr yarat
-    keyboard = [
-        [InlineKeyboardButton("🇦🇿 Azərbaycan", callback_data="lang_az")],
-        [InlineKeyboardButton("🇬🇧 English", callback_data="lang_en")]
-    ]
-    
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text(
-        "🌍 Hansı dili istifadə etmək istəyirsiniz?",
-        reply_markup=reply_markup
-    )
-
-async def language_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Dil seçimi callback"""
-    query = update.callback_query
-    await query.answer()
-    
-    user_id = query.from_user.id
-    lang_code = query.data.split('_')[1]
-    
-    if lang_code in ['az', 'en']:
-        user_languages[user_id] = lang_code
-        lang_name = "Azərbaycan" if lang_code == 'az' else "English"
-        message = f"✅ Dil dəyişdirildi: {lang_name}"
-        await query.edit_message_text(message)
-    else:
-        await query.edit_message_text("❌ Yanlış dil seçimi!")
+        await update.message.reply_text("❌ Xəta baş verdi.")
 
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Xətaları idarə edir"""
@@ -359,14 +220,8 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     """Əsas funksiya"""
-    global bot_instance, monitor_instance
-    
     # Bot tətbiqini yarat
     application = Application.builder().token(BOT_TOKEN).build()
-    bot_instance = application.bot
-    
-    # Monitor sistemi yarat
-    monitor_instance = NewsMonitor(bot_instance)
     
     # Command handlerləri
     application.add_handler(CommandHandler("start", start))
@@ -374,36 +229,22 @@ def main():
     application.add_handler(CommandHandler("news", get_latest_news))
     application.add_handler(CommandHandler("categories", get_categories))
     application.add_handler(CommandHandler("search", search_news))
-    application.add_handler(CommandHandler("settings", get_settings))
-    application.add_handler(CommandHandler("language", change_language))
-    
-    # Bildiriş əmrləri
-    application.add_handler(CommandHandler("subscribe", subscribe_notifications))
-    application.add_handler(CommandHandler("unsubscribe", unsubscribe_notifications))
-    application.add_handler(CommandHandler("status", get_monitor_status))
     
     # Callback query handler
     application.add_handler(CallbackQueryHandler(category_callback, pattern=r'^cat_'))
-    application.add_handler(CallbackQueryHandler(language_callback, pattern=r'^lang_'))
     
     # Xəta handler
     application.add_error_handler(error_handler)
     
-    # Monitoru başlat
-    # monitor_instance.start_monitoring()  # Bu sətri komment edirik
-    
     # Botu başlat
     logger.info("Futbol Xəbər Botu başladıldı...")
-    logger.info("Xəbər monitoru aktivdir - hər 10 dəqiqədə yoxlayır")
     
     try:
         application.run_polling(allowed_updates=Update.ALL_TYPES)
     except KeyboardInterrupt:
         logger.info("Bot dayandırılır...")
-        monitor_instance.stop_monitoring()
     except Exception as e:
         logger.error(f"Bot xətası: {e}")
-        monitor_instance.stop_monitoring()
 
 if __name__ == '__main__':
     main()

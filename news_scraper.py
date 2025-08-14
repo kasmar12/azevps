@@ -29,7 +29,7 @@ class NewsScraper:
                 carousel_news = main_news.find('div', class_='owl-carousel')
                 if carousel_news:
                     for news_item in carousel_news.find_all('a', target='_blank'):
-                        news_data = self._extract_news_data(news_item)
+                        news_data = self._extract_simple_news_data(news_item)
                         if news_data:
                             news_list.append(news_data)
             
@@ -37,7 +37,7 @@ class NewsScraper:
             top_news = soup.find('div', class_='top-news')
             if top_news:
                 for news_item in top_news.find_all('a', target='_blank'):
-                    news_data = self._extract_news_data(news_item)
+                    news_data = self._extract_simple_news_data(news_item)
                     if news_data and len(news_list) < limit:
                         news_list.append(news_data)
             
@@ -46,7 +46,7 @@ class NewsScraper:
             if latest_news:
                 for news_item in latest_news.find_all('a', href=True):
                     if news_item.get('href') and '.html' in news_item.get('href'):
-                        news_data = self._extract_news_data(news_item)
+                        news_data = self._extract_simple_news_data(news_item)
                         if news_data and len(news_list) < limit:
                             news_list.append(news_data)
             
@@ -70,7 +70,7 @@ class NewsScraper:
             news_links = soup.find_all('a', href=re.compile(rf'/{category}/.*\.html'))
             
             for link in news_links[:limit]:
-                news_data = self._extract_news_data(link)
+                news_data = self._extract_simple_news_data(link)
                 if news_data:
                     news_list.append(news_data)
             
@@ -99,7 +99,7 @@ class NewsScraper:
                     
                 title = link.get_text(strip=True)
                 if query.lower() in title.lower():
-                    news_data = self._extract_news_data(link)
+                    news_data = self._extract_simple_news_data(link)
                     if news_data:
                         news_list.append(news_data)
             
@@ -109,48 +109,8 @@ class NewsScraper:
             self.logger.error(f"News search error: {e}")
             return []
     
-    def get_news_content(self, news_url: str) -> Optional[Dict]:
-        """Tam xəbər məzmununu çəkir"""
-        try:
-            response = self.session.get(news_url, timeout=10)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Xəbər başlığı
-            title = soup.find('h1') or soup.find('h2')
-            title_text = title.get_text(strip=True) if title else ""
-            
-            # Xəbər məzmunu
-            content_div = soup.find('div', class_='content') or soup.find('article') or soup.find('div', class_='text')
-            content_text = ""
-            if content_div:
-                # Bütün mətn elementlərini tap
-                text_elements = content_div.find_all(['p', 'div'])
-                content_text = ' '.join([elem.get_text(strip=True) for elem in text_elements if elem.get_text(strip=True)])
-            
-            # Tarix
-            date_element = soup.find('time') or soup.find('span', class_='date') or soup.find('div', class_='date')
-            date_text = date_element.get_text(strip=True) if date_element else ""
-            
-            # Şəkil
-            image = soup.find('img')
-            image_url = image.get('src') if image else ""
-            
-            return {
-                'title': title_text,
-                'content': content_text,
-                'date': date_text,
-                'image': image_url,
-                'url': news_url
-            }
-            
-        except Exception as e:
-            self.logger.error(f"News content scraping error: {e}")
-            return None
-    
-    def _extract_news_data(self, news_element) -> Optional[Dict]:
-        """Xəbər elementindən məlumatları çıxarır"""
+    def _extract_simple_news_data(self, news_element) -> Optional[Dict]:
+        """Xəbər elementindən sadə məlumatları çıxarır (başlıq, şəkil, description)"""
         try:
             # Link
             href = news_element.get('href')
@@ -176,29 +136,19 @@ class NewsScraper:
             image = news_element.find('img')
             image_url = image.get('src') if image else ""
             
-            # Tarix (əgər varsa)
-            date_element = news_element.find(['time', 'span', 'div'], class_=re.compile(r'date|time'))
-            date = date_element.get_text(strip=True) if date_element else ""
-            
-            # Qısa məzmun (əgər varsa)
-            excerpt_element = news_element.find(['p', 'div'], class_=re.compile(r'excerpt|summary|content'))
-            excerpt = excerpt_element.get_text(strip=True) if excerpt_element else ""
-            
-            # Başlıqdan qısa məzmun yarat
-            if not excerpt and len(title) > 50:
-                excerpt = title[:100] + "..." if len(title) > 100 else title
+            # Description (qısa məzmun) - başlıqdan yaradır
+            description = title[:150] + "..." if len(title) > 150 else title
             
             return {
                 'title': title[:NEWS_FORMAT['title_max_length']],
-                'excerpt': excerpt[:NEWS_FORMAT['excerpt_max_length']] if excerpt else "",
-                'url': url,
+                'description': description,
                 'image': image_url,
-                'date': date,
+                'url': url,
                 'category': self._extract_category_from_url(url)
             }
             
         except Exception as e:
-            self.logger.error(f"News data extraction error: {e}")
+            self.logger.error(f"Simple news data extraction error: {e}")
             return None
     
     def _extract_category_from_url(self, url: str) -> str:
