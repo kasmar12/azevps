@@ -103,15 +103,7 @@ class TikTokDownloader:
                 TIKTOK_API_URL,
                 data=api_data,
                 timeout=TIKTOK_SETTINGS['timeout'],
-                headers={
-                    'User-Agent': TIKTOK_SETTINGS['user_agent'],
-                    'Accept': 'application/json, text/plain, */*',
-                    'Accept-Language': 'en-US,en;q=0.9',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Origin': 'https://www.tikwm.com',
-                    'Referer': 'https://www.tikwm.com/'
-                }
+                headers=TIKTOK_SETTINGS['headers']
             )
             
             self.logger.info(f"API response status: {response.status_code}")
@@ -162,7 +154,10 @@ class TikTokDownloader:
                 'Accept-Language': 'en-US,en;q=0.9',
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Referer': 'https://www.tikwm.com/',
-                'Origin': 'https://www.tikwm.com'
+                'Origin': 'https://www.tikwm.com',
+                'Sec-Fetch-Dest': 'video',
+                'Sec-Fetch-Mode': 'no-cors',
+                'Sec-Fetch-Site': 'cross-site'
             }
             
             video_response = self.session.get(

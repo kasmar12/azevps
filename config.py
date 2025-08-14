@@ -134,5 +134,17 @@ TIKTOK_SETTINGS = {
     'api_endpoints': {
         'download': 'https://www.tikwm.com/api/',
         'info': 'https://www.tikwm.com/api/'
+    },
+    'headers': {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Origin': 'https://www.tikwm.com',
+        'Referer': 'https://www.tikwm.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin'
     }
 }
