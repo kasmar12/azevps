@@ -144,7 +144,7 @@ async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await processing_msg.edit_text(MESSAGES[lang]['error'])
 
 async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """URL mesajlarını idarə edir"""
+    """URL mesajlarını idarə edir - sadəcə link göndərməklə yükləmə"""
     user_id = update.effective_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
@@ -153,6 +153,8 @@ async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
     # URL-ni yoxla
     if not tiktok_downloader.is_valid_tiktok_url(url):
         return  # Digər mesajlar üçün
+    
+    logger.info(f"TikTok link detected from user {user_id}: {url}")
     
     # Processing mesajı
     processing_msg = await update.message.reply_text(MESSAGES[lang]['processing'])
