@@ -336,7 +336,7 @@ class ImageGenerator:
             enhanced_prompt = self.enhance_prompt(prompt, style)
             
             # NovelAI Leak API (tamamilə pulsuz)
-            api_url = "https://api.novelai.net/ai/generate-image"
+            api_url = "https://image.novelai.net/ai/generate-image"
             
             # No authentication needed
             headers = {
