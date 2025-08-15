@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/helpNavId" app:startDestination="@id/helpRequestAccountsFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_select_contact" />
+    <fragment android:label="@string/in_help_request_accounts_nav_title" android:name="az.azerconnect.bakcell.ui.main.services.help.accounts.HelpRequestAccountsFragment" android:id="@id/helpRequestAccountsFragment">
+        <action android:id="@id/action_helpRequestAccountsFragment_to_helpRequestsFragment" app:destination="@id/helpRequestsFragment" />
+    </fragment>
+    <fragment android:label="@string/in_help_request_nav_title" android:name="az.azerconnect.bakcell.ui.main.services.help.requests.HelpRequestsFragment" android:id="@id/helpRequestsFragment">
+        <deepLink app:uri="@string/deep_link_help_requests" />
+        <argument android:name="accountId" app:argType="integer" />
+        <action android:id="@id/action_helpRequestsFragment_to_helpRequestConfirmFragment" app:destination="@id/helpRequestConfirmFragment" />
+        <action android:id="@id/action_helpRequestsFragment_to_helpRequestOperationFragment" app:destination="@id/helpRequestOperationFragment" />
+    </fragment>
+    <fragment android:label="@string/in_help_request_create_nav_title" android:name="az.azerconnect.bakcell.ui.main.services.help.create.HelpRequestCreateFragment" android:id="@id/helpCreateFragment">
+        <argument android:name="accountId" app:argType="integer" />
+        <action android:id="@id/action_helpCreateFragment_to_selectContactFragment" app:destination="@id/selectContactNavId">
+            <argument android:name="contactDto" app:argType="az.azerconnect.data.models.dto.ContactDto" app:nullable="true" />
+        </action>
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.help.requests.confirm.HelpRequestConfirmFragment" android:id="@id/helpRequestConfirmFragment">
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="dto" app:argType="az.azerconnect.data.models.dto.HelpRequestDto" />
+    </dialog>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.help.requests.operation.HelpRequestOperationFragment" android:id="@id/helpRequestOperationFragment">
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="dto" app:argType="az.azerconnect.data.models.dto.HelpRequestDto" />
+    </dialog>
+    <action android:id="@id/action_global_helpCreateFragment" app:destination="@id/helpCreateFragment" />
+</navigation>

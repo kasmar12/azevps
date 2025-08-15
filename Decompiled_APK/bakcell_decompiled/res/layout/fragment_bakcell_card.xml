@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:id="@id/stateView" android:tag="layout/fragment_bakcell_card_0" android:layout_width="fill_parent" android:layout_height="fill_parent" app:sv_child_visibility="gone" app:sv_emptyViewId="@id/onBoardingLayout"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:tag="binding_1" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerView" android:tag="binding_2" android:padding="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:overScrollMode="never" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintTop_toBottomOf="@id/subTitleTxt" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+    <include android:id="@id/onBoardingLayout" android:layout_width="fill_parent" android:layout_height="fill_parent" layout="@layout/fragment_bakcell_card_on_boarding" />
+</az.azerconnect.bakcell.utils.widgets.StateView>

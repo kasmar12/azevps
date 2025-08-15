@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_usage_history_detail" app:startDestination="@id/usageHistoryDetailFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_change_passcode" />
+    <fragment android:label="@string/in_usage_history_detail_title" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.usageHistory.detail.UsageHistoryDetailFragment" android:id="@id/usageHistoryDetailFragment">
+        <deepLink app:uri="@string/deep_link_usage_history_detailed" />
+        <argument android:name="accountId" app:argType="integer" />
+        <action android:id="@id/action_usageHistoryDetailFragment_to_usageHistoryDetailFilterFragment" app:destination="@id/usageHistoryDetailFilterFragment" />
+        <action android:id="@id/action_usageHistoryDetailFragment_to_usageHistoryDescriptionFragment" app:destination="@id/usageHistoryDescriptionFragment" />
+        <action android:id="@id/action_usageHistoryDetailFragment_to_changePasscodeFragment" app:destination="@id/navigation_change_passcode" />
+        <action android:id="@id/action_usageHistoryDetailFragment_to_usageHistoryAttentionDialog" app:destination="@id/usageHistoryAttentionDialog" />
+    </fragment>
+    <fragment android:label="@string/filters" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.usageHistory.detail.filter.UsageHistoryDetailFilterFragment" android:id="@id/usageHistoryDetailFilterFragment">
+        <argument android:name="filterModel" app:argType="az.azerconnect.data.models.dto.UsageHistoryDetailFilterDto" app:nullable="true" />
+    </fragment>
+    <fragment android:label="@string/in_usage_history_desc_title" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.usageHistory.detail.description.UsageHistoryDescriptionFragment" android:id="@id/usageHistoryDescriptionFragment">
+        <argument android:name="dto" app:argType="az.azerconnect.data.models.dto.UsageHistoryDetailDto" app:nullable="true" />
+    </fragment>
+    <fragment android:label="@string/in_change_passcode_nav_title" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.usageHistory.detail.checkpin.UsageHistoryCheckPinCodeFragment" android:id="@id/usageHistoryCheckPinCodeFragment">
+        <action android:id="@id/action_usageHistoryCheckPinCodeFragment_to_sureDialogFragment" app:destination="@id/sureDialogFragment" />
+    </fragment>
+    <dialog android:label="SureDialogFragment" android:name="az.azerconnect.bakcell.ui.global.sureDialog.SureDialogFragment" android:id="@id/sureDialogFragment" />
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.usageHistory.detail.dialog.UsageHistoryAttentionDialog" android:id="@id/usageHistoryAttentionDialog" />
+    <action android:id="@id/action_global_usageHistoryCheckPinCodeFragment" app:destination="@id/usageHistoryCheckPinCodeFragment" />
+</navigation>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/selectContactNavId" app:startDestination="@id/selectContactFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/in_select_contact_nav_title" android:name="az.azerconnect.bakcell.ui.global.selectContact.SelectContactFragment" android:id="@id/selectContactFragment">
+        <argument android:name="contactDto" app:argType="az.azerconnect.data.models.dto.ContactDto" app:nullable="true" />
+        <action android:id="@id/action_selectContactFragment_to_selectContactManualFragment" app:destination="@id/selectContactManualFragment" />
+        <action android:id="@id/action_selectContactFragment_to_permissionDialog" app:destination="@id/permissionDialog" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.permission.PermissionDialogFragment" android:id="@id/permissionDialog">
+        <argument android:name="title" />
+        <argument android:name="subTitle" />
+        <argument android:name="iconType" app:argType="az.azerconnect.data.enums.PermissionIconType" />
+        <argument android:name="permissions" app:argType="string[]" />
+    </dialog>
+    <fragment android:label="@string/in_select_contact_manual_nav_title" android:name="az.azerconnect.bakcell.ui.global.selectContact.manual.SelectContactManualFragment" android:id="@id/selectContactManualFragment" />
+</navigation>

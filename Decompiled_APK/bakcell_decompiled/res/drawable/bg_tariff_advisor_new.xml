@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="204.0dip" android:width="343.0dip" android:viewportWidth="343.0" android:viewportHeight="204.0"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <group>
+        <clip-path android:pathData="M0,8C0,3.58 3.58,0 8,0H335C339.42,0 343,3.58 343,8V196C343,200.42 339.42,204 335,204H8C3.58,204 0,200.42 0,196V8Z" />
+        <path android:fillColor="#ffff0037" android:pathData="M0,8C0,3.58 3.58,0 8,0H335C339.42,0 343,3.58 343,8V196C343,200.42 339.42,204 335,204H8C3.58,204 0,200.42 0,196V8Z" />
+        <path android:fillColor="@drawable/$bg_tariff_advisor_new__0" android:pathData="M294.08,168.51L286.17,141.27C285.67,139.53 286.31,137.66 287.78,136.58L325.26,108.43C326.83,107.29 328.96,107.32 330.5,108.5L367.5,136.58C370.14,138.62 369.58,142.74 366.48,144L299.9,171.32C297.51,172.29 294.79,170.99 294.08,168.51V168.51Z" android:strokeColor="@drawable/$bg_tariff_advisor_new__1" android:strokeWidth="0.441584" />
+        <path android:fillColor="@drawable/$bg_tariff_advisor_new__2" android:pathData="M218.29,122.39L234.95,134.69C236.41,135.77 237.04,137.64 236.53,139.38L198.5,272C197.83,274.28 195.42,275.6 193.12,274.94L110.35,264.17C107.47,263.35 106.26,259.94 108,257.5L212.15,123.36C213.56,121.39 216.33,120.95 218.29,122.39V122.39Z" android:strokeColor="@drawable/$bg_tariff_advisor_new__3" android:strokeWidth="0.441584" />
+        <path android:fillColor="@drawable/$bg_tariff_advisor_new__4" android:pathData="M257.84,155.48L238.58,169.84C237.3,170.79 236.65,172.37 236.88,173.95L250.5,261.5L392.5,253.5L263.03,155.48C261.49,154.34 259.38,154.34 257.84,155.48Z" android:strokeColor="@drawable/$bg_tariff_advisor_new__5" android:strokeWidth="0.441584" />
+        <path android:fillColor="@drawable/$bg_tariff_advisor_new__6" android:pathData="M36,-12L207,116.5C208,117.24 211.5,118 213.5,117.5L243.23,110.53C244.8,110.2 246.05,109.03 246.5,107.5L281.5,-12H36Z" android:strokeColor="@drawable/$bg_tariff_advisor_new__7" android:strokeWidth="0.441584" />
+        <path android:fillColor="@drawable/$bg_tariff_advisor_new__8" android:pathData="M430,8L269,70.5C267.62,71.6 267.05,73.44 267.55,75.13L275.16,100.05C275.8,102.21 278,103.53 280.21,103.06L430,70.5V8Z" android:strokeColor="@drawable/$bg_tariff_advisor_new__9" android:strokeWidth="0.441584" />
+    </group>
+</vector>
