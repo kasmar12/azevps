@@ -10,3 +10,32 @@ nohup: ignoring input
 2025-08-15 10:03:57,147 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/deleteWebhook "HTTP/1.1 200 OK"
 2025-08-15 10:03:57,148 - telegram.ext.Application - INFO - Application started
 2025-08-15 10:04:07,414 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:04:17,508 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:04:27,599 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:04:33,866 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:04:34,239 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 10:04:40,122 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:04:40,437 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 10:04:44,691 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:04:44,785 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 10:04:44,786 - __main__ - INFO - === STYLE SELECTION CALLBACK ===
+2025-08-15 10:04:44,786 - __main__ - INFO - User ID: 1143980741
+2025-08-15 10:04:44,786 - __main__ - INFO - Callback data: style_realistic
+2025-08-15 10:04:44,786 - __main__ - INFO - User data: {'prompt': 'Cat'}
+2025-08-15 10:04:44,786 - __main__ - INFO - Selected style: realistic
+2025-08-15 10:04:44,786 - __main__ - INFO - Style saved to context: realistic
+2025-08-15 10:04:44,786 - __main__ - INFO - Showing size selection menu for style: Realistic
+2025-08-15 10:04:44,891 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 10:04:47,430 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:04:47,548 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 10:04:47,549 - __main__ - INFO - Size selection callback: size_1024x1024 from user 1143980741
+2025-08-15 10:04:47,549 - __main__ - INFO - Size selected: 1024x1024 for user 1143980741
+2025-08-15 10:04:47,663 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 10:04:47,663 - image_generator - INFO - Generating image: Cat | Style: realistic | Size: 1024x1024
+2025-08-15 10:04:47,742 - image_generator - ERROR - NovelAI API error: 401 - {"statusCode":401,"message":"Unauthorized"}
+
+2025-08-15 10:04:48,972 - image_generator - ERROR - Stable Horde API error: 400 - {"errors":{"apikey":"The API Key corresponding to a registered user. Missing required parameter in the HTTP headers"},"message":"Input payload validation failed"}
+
+2025-08-15 10:04:49,001 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 10:04:49,001 - image_generator - ERROR - All image generation methods failed
+2025-08-15 10:04:49,133 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
