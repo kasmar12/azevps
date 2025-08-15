@@ -356,7 +356,7 @@ async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Button callback handler"""
+    """Button callback handler - only for non-conversation buttons"""
     query = update.callback_query
     await query.answer()
     
@@ -364,6 +364,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     data = query.data
     
+    # Only handle language and admin buttons, not conversation buttons
     if data.startswith("lang_"):
         new_lang = data.split("_")[1]
         user_languages[user_id] = new_lang
@@ -406,6 +407,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             settings_text += f"📊 **Gündəlik limit:** {BOT_SETTINGS['max_images_per_user']} şəkil"
             
             await query.edit_message_text(settings_text, parse_mode='Markdown')
+    
+    # Log for debugging
+    logger.info(f"Button callback handled: {data} from user {user_id}")
 
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Error handler"""
