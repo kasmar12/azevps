@@ -479,8 +479,14 @@ def main():
             entry_points=[CommandHandler("create", create_image)],
             states={
                 ENTERING_PROMPT: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_prompt)],
-                SELECTING_STYLE: [CallbackQueryHandler(handle_style_selection)],
-                SELECTING_SIZE: [CallbackQueryHandler(handle_size_selection)]
+                SELECTING_STYLE: [
+                    CallbackQueryHandler(handle_style_selection, pattern=r'^style_.*$'),
+                    CallbackQueryHandler(handle_style_selection, pattern=r'^back_to_prompt$')
+                ],
+                SELECTING_SIZE: [
+                    CallbackQueryHandler(handle_size_selection, pattern=r'^size_.*$'),
+                    CallbackQueryHandler(handle_size_selection, pattern=r'^back_to_style$')
+                ]
             },
             fallbacks=[CommandHandler("cancel", lambda u, c: ConversationHandler.END)]
         )
@@ -493,8 +499,8 @@ def main():
         application.add_handler(CommandHandler("language", language_menu))
         application.add_handler(CommandHandler("admin", admin_panel))
         
-        # Callback query
-        application.add_handler(CallbackQueryHandler(button_callback))
+        # Callback query - ONLY for language and admin buttons
+        application.add_handler(CallbackQueryHandler(button_callback, pattern=r'^(lang_|admin_).*$'))
         
         # Conversation handler
         application.add_handler(conv_handler)
