@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:tag="layout/fragment_logged_in_devices_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Medium.Headline" android:textColor="@color/bkc_color_text_primary" android:id="@id/sectionTxt" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="16.0dip" android:text="@string/in_logged_in_devices_title" app:layout_constraintTop_toTopOf="parent" />
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/devicesRv" android:tag="binding_1" android:paddingTop="12.0dip" android:paddingBottom="16.0dip" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_marginTop="4.0dip" android:overScrollMode="never" android:paddingHorizontal="16.0dip" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@id/sectionTxt" />
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+</az.azerconnect.bakcell.utils.widgets.StateView>

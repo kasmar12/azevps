@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_bakcell_card_top_up" app:startDestination="@id/bakcellCardTopUpFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_web" />
+    <fragment android:label="@string/in_bakcell_card_top_up_nav_title" android:name="az.azerconnect.bakcell.ui.main.bakcellCard.detail.topUp.BakcellCardTopUpFragment" android:id="@id/bakcellCardTopUpFragment">
+        <argument android:name="cardId" />
+        <action android:id="@id/action_bakcellCardTopUpFragment_to_bakcellCardTopUpAmountFragment" app:destination="@id/bakcellCardTopUpAmountFragment" />
+    </fragment>
+    <fragment android:label="{cardNumber}" android:name="az.azerconnect.bakcell.ui.main.bakcellCard.detail.topUp.amount.BakcellCardTopUpAmountFragment" android:id="@id/bakcellCardTopUpAmountFragment">
+        <argument android:name="cardId" />
+        <argument android:name="cardNumber" />
+        <argument android:name="expDate" />
+        <argument android:name="cvv" />
+        <argument android:name="bankName" />
+        <action android:id="@id/action_bakcellCardTopUpAmountFragment_to_operationSuccessFragment" app:destination="@id/operationSuccessFragment" app:popUpTo="@id/navigation_bakcell_card_top_up" />
+        <action android:id="@id/action_bakcellCardTopUpAmountFragment_to_operationErrorFragment" app:destination="@id/operationErrorFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.operation.OperationSuccessFragment" android:id="@id/operationSuccessFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.operation.OperationErrorFragment" android:id="@id/operationErrorFragment" />
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+</navigation>

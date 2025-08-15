@@ -1,0 +1,81 @@
+.class public Lcom/google/android/gms/common/api/internal/LifecycleActivity;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+
+# instance fields
+.field public final a:Landroid/app/Activity;
+
+
+# direct methods
+.method public constructor <init>(Landroid/app/Activity;)V
+    .locals 1
+
+    .line 1
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    const-string v0, "Activity must not be null"
+
+    invoke-static {p1, v0}, Lcom/google/android/gms/common/internal/Preconditions;->checkNotNull(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    iput-object p1, p0, Lcom/google/android/gms/common/api/internal/LifecycleActivity;->a:Landroid/app/Activity;
+
+    return-void
+.end method
+
+.method public constructor <init>(Landroid/content/ContextWrapper;)V
+    .locals 0
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
+
+    .line 2
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    new-instance p1, Ljava/lang/UnsupportedOperationException;
+
+    invoke-direct {p1}, Ljava/lang/UnsupportedOperationException;-><init>()V
+
+    throw p1
+.end method
+
+
+# virtual methods
+.method public final zza()Landroid/app/Activity;
+    .locals 1
+
+    iget-object v0, p0, Lcom/google/android/gms/common/api/internal/LifecycleActivity;->a:Landroid/app/Activity;
+
+    return-object v0
+.end method
+
+.method public final zzb()Landroidx/fragment/app/L;
+    .locals 1
+
+    iget-object v0, p0, Lcom/google/android/gms/common/api/internal/LifecycleActivity;->a:Landroid/app/Activity;
+
+    check-cast v0, Landroidx/fragment/app/L;
+
+    return-object v0
+.end method
+
+.method public final zzc()Z
+    .locals 1
+
+    iget-object v0, p0, Lcom/google/android/gms/common/api/internal/LifecycleActivity;->a:Landroid/app/Activity;
+
+    invoke-static {v0}, Ljava/util/Objects;->nonNull(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    return v0
+.end method
+
+.method public final zzd()Z
+    .locals 1
+
+    iget-object v0, p0, Lcom/google/android/gms/common/api/internal/LifecycleActivity;->a:Landroid/app/Activity;
+
+    instance-of v0, v0, Landroidx/fragment/app/L;
+
+    return v0
+.end method

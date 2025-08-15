@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="28.0dip" android:width="28.0dip" android:viewportWidth="28.0" android:viewportHeight="28.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <group>
+            <clip-path android:pathData="M28 0H0v28h28V0Z" />
+            <group>
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M14 20.56c-3.62 0-6.56-2.94-6.56-6.56 0-3.62 2.94-6.56 6.56-6.56 3.62 0 6.56 2.94 6.56 6.56 0 3.62-2.94 6.56-6.56 6.56Zm0-10.5c-2.17 0-3.94 1.77-3.94 3.94s1.77 3.94 3.94 3.94 3.94-1.77 3.94-3.94-1.77-3.94-3.94-3.94Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M15.31 2.63v3.5L12.7 5.25v-3.5l2.62 0.88Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M15.31 22.75v3.5l-2.62-0.88v-3.5l2.62 0.88Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M25.38 15.31h-3.5l0.87-2.62h3.5l-0.88 2.62Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M5.25 15.31h-3.5l0.88-2.62h3.5L5.25 15.3Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M6.88 5.03L9.36 7.5 6.88 8.74 4.41 6.27l2.47-1.24Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M21.12 19.26l2.47 2.47-2.47 1.24-2.48-2.47 2.48-1.24Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M22.97 6.88L20.5 9.36l-1.24-2.48 2.47-2.47 1.24 2.47Z" />
+                <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M8.74 21.12l-2.47 2.47-1.24-2.47 2.47-2.48 1.24 2.48Z" />
+            </group>
+        </group>
+    </group>
+</vector>

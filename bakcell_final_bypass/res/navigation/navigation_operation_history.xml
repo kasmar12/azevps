@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_operation_history" app:startDestination="@id/operationHistoryFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/in_balance_operation_history" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.operationHistory.OperationHistoryFragment" android:id="@id/operationHistoryFragment">
+        <action android:id="@id/action_operationHistoryFragment_to_operationHistoryFilterFragment" app:destination="@id/operationHistoryFilterFragment" />
+        <action android:id="@id/action_operationHistoryFragment_to_operationDetailFragment" app:destination="@id/operationDetailFragment" />
+        <argument android:name="accountId" app:argType="integer" />
+        <action android:id="@id/action_operationHistoryFragment_to_operationHistoryAttention" app:destination="@id/operationHistoryAttention" />
+        <argument android:name="numberType" app:argType="az.azerconnect.data.enums.NumberType" />
+    </fragment>
+    <fragment android:label="@string/filters" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.operationHistory.filter.OperationHistoryFilterFragment" android:id="@id/operationHistoryFilterFragment">
+        <argument android:name="filterModel" app:argType="az.azerconnect.data.models.dto.OperationHistoryFilterDto" app:nullable="true" />
+    </fragment>
+    <fragment android:label="@string/in_filter_operation_history_detail" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.operationHistory.detail.OperationDetailFragment" android:id="@id/operationDetailFragment">
+        <argument android:name="model" app:argType="az.azerconnect.data.models.dto.OperationHistoryDto" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.operationHistory.dialog.OperationHistoryAttention" android:id="@id/operationHistoryAttention" />
+</navigation>

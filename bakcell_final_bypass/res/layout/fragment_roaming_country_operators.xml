@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView android:tag="layout/fragment_roaming_country_operators_0" android:background="?android:panelColorBackground" android:layout_width="fill_parent" android:layout_height="fill_parent" android:fillViewport="true"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <az.azerconnect.bakcell.utils.widgets.StateView android:tag="binding_1" android:layout_width="fill_parent" android:layout_height="wrap_content" app:sv_ignore_referenced_ids="tabLayout">
+        <com.google.android.material.tabs.TabLayout android:id="@id/tabLayout" android:tag="binding_2" android:background="@drawable/bg_rounded_8" android:layout_width="fill_parent" android:layout_height="@dimen/_30sdp" android:layout_margin="16.0dip" android:backgroundTint="@color/bkc_color_background_tertiary" app:layout_constraintTop_toTopOf="parent" app:tabIndicator="@drawable/segment_tab_indicator" app:tabIndicatorColor="@color/bkc_color_background_main_invariable" app:tabIndicatorGravity="stretch" app:tabMode="fixed" app:tabRippleColor="@color/transparent" app:tabSelectedTextColor="@color/bkc_color_text_invariable" app:tabTextAppearance="@style/TextAppearance.Bakcell.Medium.FootNote" app:tabTextColor="@color/bkc_color_text_primary">
+            <com.google.android.material.tabs.TabItem android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/in_roaming_operator_tab_item_prepaid" />
+            <com.google.android.material.tabs.TabItem android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/in_roaming_operator_tab_item_postpaid" />
+        </com.google.android.material.tabs.TabLayout>
+        <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerView" android:tag="binding_3" android:paddingTop="12.0dip" android:paddingBottom="16.0dip" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:overScrollMode="never" android:paddingHorizontal="16.0dip" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+        <include layout="@layout/layout_loading" />
+        <include layout="@layout/layout_error" />
+    </az.azerconnect.bakcell.utils.widgets.StateView>
+</androidx.core.widget.NestedScrollView>

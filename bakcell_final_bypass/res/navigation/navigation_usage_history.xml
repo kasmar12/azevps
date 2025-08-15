@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_usage_history" app:startDestination="@id/usageHistoryFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/in_balance_usage_history" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.usageHistory.UsageHistoryFragment" android:id="@id/usageHistoryFragment">
+        <deepLink app:uri="@string/deep_link_usage_history" />
+        <argument android:name="accountId" app:argType="integer" />
+        <action android:id="@id/action_usageHistoryFragment_to_usageHistoryFilterFragment" app:destination="@id/usageHistoryFilterFragment" />
+    </fragment>
+    <fragment android:label="@string/filters" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.usageHistory.filter.UsageHistoryFilterFragment" android:id="@id/usageHistoryFilterFragment">
+        <argument android:name="filterModel" app:argType="az.azerconnect.data.models.dto.UsageHistoryFilterDto" app:nullable="true" />
+    </fragment>
+</navigation>

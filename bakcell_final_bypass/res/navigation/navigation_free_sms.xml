@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/freeSmsNavId" app:startDestination="@id/freeSmsFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_select_contact" />
+    <fragment android:label="@string/in_services_free_sms_title" android:name="az.azerconnect.bakcell.ui.main.services.freeSms.FreeSmsFragment" android:id="@id/freeSmsFragment">
+        <action android:id="@id/action_freeSmsFragment_to_selectContactFragment" app:destination="@id/selectContactNavId">
+            <argument android:name="contactDto" app:argType="az.azerconnect.data.models.dto.ContactDto" app:nullable="true" />
+        </action>
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.freeSms.status.FreeSmsSuccessFragment" android:id="@id/freeSmsSuccessFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.freeSms.status.FreeSmsLimitExceedFragment" android:id="@id/freeSmsLimitExceedFragment">
+        <argument android:name="subTitle" />
+    </fragment>
+    <action android:id="@id/action_global_freeSmsSuccessFragment" app:destination="@id/freeSmsSuccessFragment" />
+    <action android:id="@id/action_global_freeSmsLimitExceedFragment" app:destination="@id/freeSmsLimitExceedFragment" />
+</navigation>

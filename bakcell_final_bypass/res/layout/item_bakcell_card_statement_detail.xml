@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Regular.Caption1" android:textColor="@color/bkc_color_text_secondary" android:id="@id/titleTxt" android:layout_width="fill_parent" android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Medium.SubHeadline" android:textColor="@color/bkc_color_text_primary" android:id="@id/subTitleTxt" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:includeFontPadding="false" app:layout_constraintTop_toBottomOf="@id/titleTxt" />
+</androidx.constraintlayout.widget.ConstraintLayout>

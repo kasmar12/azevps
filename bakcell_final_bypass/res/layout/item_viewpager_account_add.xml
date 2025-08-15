@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton android:textAppearance="@style/TextAppearance.Bakcell.Medium.FootNote" android:textColor="@color/bkc_color_text_primary" android:id="@id/addBtn" android:layout_width="100.0dip" android:layout_height="fill_parent" android:text="@string/in_dashboard_add_account" android:insetTop="0.0dip" android:insetBottom="0.0dip" app:backgroundTint="@color/bkc_color_background_secondary" app:cornerRadius="8.0dip" app:icon="@drawable/ic_add_outlined" app:iconGravity="textTop" app:iconPadding="16.0dip" app:iconTint="@color/bkc_color_text_primary"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" />

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/webNavId" app:startDestination="@id/webFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="{title}" android:name="az.azerconnect.bakcell.ui.main.more.settings.web.WebFragment" android:id="@id/webFragment">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </fragment>
+</navigation>
