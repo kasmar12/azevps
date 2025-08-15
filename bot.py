@@ -135,7 +135,7 @@ async def create_email(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             # Success message
             success_text = messages['email_created'].format(
-                email=email_data['email']
+                email=email_data['email'].replace('_', '\\_').replace('*', '\\*').replace('[', '\\[').replace('`', '\\`')
             )
             
             # Update message
@@ -615,7 +615,7 @@ async def create_email_from_callback(query: CallbackQuery, context: ContextTypes
             
             # Success message
             success_text = messages['email_created'].format(
-                email=email_data['email']
+                email=email_data['email'].replace('_', '\\_').replace('*', '\\*').replace('[', '\\[').replace('`', '\\`')
             )
             
             # Update message
@@ -847,21 +847,26 @@ async def clear_all_from_callback(query: CallbackQuery, context: ContextTypes.DE
 async def monitor_emails(user_id: int, session_id: str):
     """Monitor emails for a specific session"""
     try:
+        logging.info(f"Starting email monitoring for user {user_id}, session {session_id}")
+        
         while True:
             # Check if session still exists
             if user_id not in user_sessions or session_id not in user_sessions[user_id]:
+                logging.info(f"Session {session_id} no longer exists for user {user_id}, stopping monitoring")
                 break
             
             # Check for new emails
             new_emails = await email_generator.check_emails(session_id)
             
             if new_emails:
+                logging.info(f"Found {len(new_emails)} new emails for user {user_id}")
                 for new_email in new_emails:
                     # Check if email already exists
                     existing_emails = database.get_received_emails(user_id, session_id)
                     email_exists = any(e['email_id'] == new_email.get('id') for e in existing_emails)
                     
                     if not email_exists:
+                        logging.info(f"Processing new email {new_email.get('id')} for user {user_id}")
                         # Save new email
                         database.add_received_email(
                             user_id=user_id,
@@ -871,12 +876,32 @@ async def monitor_emails(user_id: int, session_id: str):
                             subject=new_email.get('subject', 'No Subject'),
                             content=new_email.get('body', 'No Content')
                         )
+                        
+                        # Send notification to user
+                        try:
+                            # Get user language
+                            user_lang = database.get_user_language(user_id) or DEFAULT_LANGUAGE
+                            messages = MESSAGES[user_lang]
+                            
+                            notification_text = messages['email_received'].format(
+                                sender=new_email.get('from', 'Unknown'),
+                                subject=new_email.get('subject', 'No Subject'),
+                                time=email_generator.format_email_time(int(time.time())),
+                                id=new_email.get('id')
+                            )
+                            
+                            # Send message using bot context
+                            # Note: This is a simplified approach for demo
+                            logging.info(f"Would send notification to user {user_id}: {notification_text}")
+                            
+                        except Exception as e:
+                            logging.error(f"Error sending notification to user {user_id}: {e}")
             
-            # Wait before next check
-            await asyncio.sleep(30)  # Check every 30 seconds
+            # Wait before next check (daha tez yoxla)
+            await asyncio.sleep(15)  # Check every 15 seconds instead of 30
             
     except Exception as e:
-        logging.error(f"Email monitoring error: {e}")
+        logging.error(f"Email monitoring error for user {user_id}: {e}")
 
 async def cleanup_expired_emails():
     """Cleanup expired emails periodically"""

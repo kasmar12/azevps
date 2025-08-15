@@ -68,15 +68,15 @@ class EmailGenerator:
             # Demo məlumatları qaytar (real API olmadığı üçün)
             # Real istifadədə burada 10MinuteMail API çağırılacaq
             
-            # 10% ehtimalla yeni email qaytar
+            # 30% ehtimalla yeni email qaytar (artırıldı)
             import random
-            if random.random() < 0.1:  # 10% chance
+            if random.random() < 0.3:  # 30% chance
                 demo_emails = [
                     {
                         'id': f"email_{int(time.time())}",
                         'from': 'demo@example.com',
-                        'subject': 'Demo Email',
-                        'body': 'Bu demo email-dir. Real istifadədə burada həqiqi email məzmunu olacaq.'
+                        'subject': 'Demo Email - Test Mesajı',
+                        'body': 'Bu demo email-dir. Real istifadədə burada həqiqi email məzmunu olacaq.\n\n📧 Göndərən: demo@example.com\n📝 Mövzu: Demo Email - Test Mesajı\n⏰ Vaxt: ' + time.strftime('%H:%M:%S')
                     }
                 ]
                 return demo_emails
