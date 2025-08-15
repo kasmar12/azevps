@@ -5,10 +5,14 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
 from telegram.constants import ParseMode
 from telegram import CallbackQuery
+from datetime import timedelta
 
 from config import BOT_TOKEN, MESSAGES, DEFAULT_LANGUAGE, ADMIN_IDS
 from email_generator import EmailGenerator
 from database import DatabaseManager
+
+# Global bot application reference
+bot_application = None
 
 # Logging setup
 logging.basicConfig(
@@ -25,6 +29,9 @@ user_sessions = {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Start command handler"""
+    global bot_application
+    bot_application = context.application
+    
     user = update.effective_user
     user_id = user.id
     
@@ -33,8 +40,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id=user_id,
         username=user.username,
         first_name=user.first_name,
-        last_name=user.last_name,
-        language=DEFAULT_LANGUAGE
+        last_name=user.last_name
     )
     
     # Update user activity
@@ -47,17 +53,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Welcome message
     welcome_text = messages['welcome']
     
-    # Language selection buttons
-    keyboard = [
-        [
-            InlineKeyboardButton("🇦🇿 Azərbaycan", callback_data="lang_az"),
-            InlineKeyboardButton("🇬🇧 English", callback_data="lang_en")
-        ],
-        [
-            InlineKeyboardButton("🇹🇷 Türkçe", callback_data="lang_tr"),
-            InlineKeyboardButton("🇷🇺 Русский", callback_data="lang_ru")
-        ]
-    ]
+    # Language selection keyboard
+    keyboard = []
+    for lang_code, lang_info in SUPPORTED_LANGUAGES.items():
+        keyboard.append([
+            InlineKeyboardButton(
+                lang_info['display_name'], 
+                callback_data=f"lang_{lang_code}"
+            )
+        ])
     
     reply_markup = InlineKeyboardMarkup(keyboard)
     
@@ -877,7 +881,7 @@ async def monitor_emails(user_id: int, session_id: str):
                             content=new_email.get('body', 'No Content')
                         )
                         
-                        # Send notification to user
+                        # Send notification to user using bot
                         try:
                             # Get user language
                             user_lang = database.get_user_language(user_id) or DEFAULT_LANGUAGE
@@ -890,9 +894,16 @@ async def monitor_emails(user_id: int, session_id: str):
                                 id=new_email.get('id')
                             )
                             
-                            # Send message using bot context
-                            # Note: This is a simplified approach for demo
-                            logging.info(f"Would send notification to user {user_id}: {notification_text}")
+                            # Send real notification using bot
+                            if bot_application:
+                                await bot_application.bot.send_message(
+                                    chat_id=user_id,
+                                    text=notification_text,
+                                    parse_mode=ParseMode.MARKDOWN
+                                )
+                                logging.info(f"Notification sent to user {user_id}")
+                            else:
+                                logging.warning(f"Bot application not available for user {user_id}")
                             
                         except Exception as e:
                             logging.error(f"Error sending notification to user {user_id}: {e}")
@@ -903,31 +914,17 @@ async def monitor_emails(user_id: int, session_id: str):
     except Exception as e:
         logging.error(f"Email monitoring error for user {user_id}: {e}")
 
-async def cleanup_expired_emails():
-    """Cleanup expired emails periodically"""
-    while True:
-        try:
-            # Cleanup expired emails
-            cleaned_count = database.cleanup_expired_emails()
-            
-            if cleaned_count > 0:
-                logging.info(f"Cleaned up {cleaned_count} expired emails")
-            
-            # Wait before next cleanup
-            await asyncio.sleep(300)  # Cleanup every 5 minutes
-            
-        except Exception as e:
-            logging.error(f"Cleanup error: {e}")
-            await asyncio.sleep(300)
-
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Error handler"""
     logging.error(f"Update {update} caused error {context.error}")
 
 def main():
     """Main function"""
-    # Create application
+    global bot_application
+    
+    # Initialize bot
     application = Application.builder().token(BOT_TOKEN).build()
+    bot_application = application
     
     # Add handlers
     application.add_handler(CommandHandler("start", start))
@@ -941,15 +938,49 @@ def main():
     application.add_handler(CommandHandler("settings", settings_command))
     application.add_handler(CommandHandler("admin", admin_panel))
     
-    # Button callback handler
+    # Add callback query handler
     application.add_handler(CallbackQueryHandler(button_callback))
     
-    # Error handler
+    # Add error handler
     application.add_error_handler(error_handler)
     
-    # Start bot
     logging.info("Fake Email Bot başladıldı...")
+    
+    # Start bot
     application.run_polling(drop_pending_updates=True)
 
-if __name__ == '__main__':
-    main()
+async def cleanup_expired_emails():
+    """Cleanup expired emails periodically"""
+    try:
+        logging.info("Starting expired emails cleanup...")
+        
+        # Get all expired emails
+        current_time = int(time.time())
+        expired_emails = []
+        
+        for user_id, sessions in user_sessions.items():
+            for session_id, session_data in sessions.items():
+                if session_data['expires_at'] < current_time:
+                    expired_emails.append((user_id, session_id))
+        
+        # Remove expired sessions
+        for user_id, session_id in expired_emails:
+            if user_id in user_sessions and session_id in user_sessions[user_id]:
+                del user_sessions[user_id][session_id]
+                logging.info(f"Removed expired session {session_id} for user {user_id}")
+        
+        # Clean up database
+        database.cleanup_expired_emails()
+        
+        logging.info(f"Cleanup completed. Removed {len(expired_emails)} expired sessions")
+        
+    except Exception as e:
+        logging.error(f"Cleanup error: {e}")
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        logging.info("Bot stopped by user")
+    except Exception as e:
+        logging.error(f"Bot error: {e}")
