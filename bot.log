@@ -1,30 +1,12 @@
 nohup: ignoring input
-2025-08-15 09:33:50,283 - database - INFO - Database initialized successfully
-2025-08-15 09:33:50,283 - __main__ - INFO - Stable Diffusion Bot başladılır...
-2025-08-15 09:33:50,321 - __main__ - INFO - Application yaradıldı
-/workspace/bot.py:467: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+2025-08-15 09:37:13,289 - database - INFO - Database initialized successfully
+2025-08-15 09:37:13,289 - __main__ - INFO - Stable Diffusion Bot başladılır...
+2025-08-15 09:37:13,323 - __main__ - INFO - Application yaradıldı
+/workspace/bot.py:478: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
   conv_handler = ConversationHandler(
-2025-08-15 09:33:50,321 - __main__ - INFO - Bütün handler-lər əlavə edildi
-2025-08-15 09:33:50,321 - __main__ - INFO - Stable Diffusion Bot başladıldı...
-2025-08-15 09:33:50,594 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getMe "HTTP/1.1 200 OK"
-2025-08-15 09:33:50,683 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/deleteWebhook "HTTP/1.1 200 OK"
-2025-08-15 09:33:50,684 - telegram.ext.Application - INFO - Application started
-2025-08-15 09:34:00,936 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:34:11,020 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:34:21,104 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:34:31,188 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:34:41,273 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:34:51,358 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:34:55,513 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:34:55,901 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 09:35:02,591 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:35:02,881 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 09:35:04,335 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:35:04,525 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
-2025-08-15 09:35:04,525 - __main__ - INFO - Button callback handled: style_realistic from user 1143980741
-2025-08-15 09:35:09,673 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:35:09,928 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
-2025-08-15 09:35:09,929 - __main__ - INFO - Button callback handled: style_cyberpunk from user 1143980741
-2025-08-15 09:35:19,758 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:35:29,843 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 09:35:39,927 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:13,324 - __main__ - INFO - Bütün handler-lər əlavə edildi
+2025-08-15 09:37:13,324 - __main__ - INFO - Stable Diffusion Bot başladıldı...
+2025-08-15 09:37:13,589 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getMe "HTTP/1.1 200 OK"
+2025-08-15 09:37:13,678 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/deleteWebhook "HTTP/1.1 200 OK"
+2025-08-15 09:37:13,679 - telegram.ext.Application - INFO - Application started
+2025-08-15 09:37:23,934 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"

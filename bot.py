@@ -138,9 +138,13 @@ async def handle_style_selection(update: Update, context: ContextTypes.DEFAULT_T
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
     # Debug logging
-    logger.info(f"Style selection callback: {query.data} from user {user_id}")
+    logger.info(f"=== STYLE SELECTION CALLBACK ===")
+    logger.info(f"User ID: {user_id}")
+    logger.info(f"Callback data: {query.data}")
+    logger.info(f"User data: {context.user_data}")
     
     if query.data == "back_to_prompt":
+        logger.info("Going back to prompt")
         await query.edit_message_text(MESSAGES[lang]['enter_prompt'])
         return ENTERING_PROMPT
     
@@ -152,13 +156,15 @@ async def handle_style_selection(update: Update, context: ContextTypes.DEFAULT_T
     
     try:
         style = query.data.split("_")[1]
+        logger.info(f"Selected style: {style}")
+        
         if style not in IMAGE_STYLES:
             logger.error(f"Invalid style: {style}")
             await query.edit_message_text("❌ Etibarsız stil. Zəhmət olmasa yenidən cəhd edin.")
             return ConversationHandler.END
         
         context.user_data['style'] = style
-        logger.info(f"Style selected: {style} for user {user_id}")
+        logger.info(f"Style saved to context: {style}")
         
     except Exception as e:
         logger.error(f"Error parsing style: {e}")
@@ -175,6 +181,8 @@ async def handle_style_selection(update: Update, context: ContextTypes.DEFAULT_T
     
     prompt = context.user_data['prompt']
     style_name = IMAGE_STYLES[style]['name']
+    
+    logger.info(f"Showing size selection menu for style: {style_name}")
     
     await query.edit_message_text(
         f"📝 **Prompt:** {prompt}\n🎭 **Style:** {style_name}\n\n📏 **Şəkil ölçüsünü seçin:**",
@@ -396,7 +404,7 @@ async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Button callback handler - only for non-conversation buttons"""
+    """Button callback handler - ONLY for language and admin buttons, NOT conversation buttons"""
     query = update.callback_query
     await query.answer()
     
@@ -404,7 +412,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     data = query.data
     
-    # Only handle language and admin buttons, not conversation buttons
+    logger.info(f"Button callback received: {data} from user {user_id}")
+    
+    # ONLY handle language and admin buttons, NOT conversation buttons
     if data.startswith("lang_"):
         new_lang = data.split("_")[1]
         user_languages[user_id] = new_lang
@@ -415,6 +425,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(
             f"{SUPPORTED_LANGUAGES[new_lang]['display_name']} dilinə keçdiniz! ✅"
         )
+        logger.info(f"Language changed to {new_lang} for user {user_id}")
     
     elif data.startswith("admin_"):
         if user_id not in ADMIN_IDS:
