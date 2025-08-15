@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:id="@id/termsSv" android:tag="layout/fragment_vat_terms_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Bold.Title2" android:textColor="?colorOnBackground" android:id="@id/titleTxt" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="@string/in_terms_condition_title" android:layout_marginHorizontal="16.0dip" app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView android:id="@id/scrollView" android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_marginTop="24.0dip" android:layout_marginBottom="-10.0dip" android:layout_marginHorizontal="16.0dip" app:layout_constraintBottom_toTopOf="@id/bottomCl" app:layout_constraintTop_toBottomOf="@id/titleTxt">
+        <com.google.android.material.textview.MaterialTextView android:textSize="15.0sp" android:textColor="?colorOnBackground" android:id="@id/htmlTextView" android:layout_width="fill_parent" android:layout_height="wrap_content" android:letterSpacing="0.024" />
+    </ScrollView>
+    <androidx.constraintlayout.widget.ConstraintLayout android:id="@id/bottomCl" android:background="@drawable/terms_bg_gradient" android:layout_width="fill_parent" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent">
+        <com.google.android.material.button.MaterialButton android:id="@id/acceptBtn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="@string/in_terms_accept" android:layout_marginHorizontal="16.0dip" app:layout_constraintTop_toTopOf="parent" style="@style/Widget.Bakcell.Button" />
+        <com.google.android.material.button.MaterialButton android:id="@id/declineBtn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="16.0dip" android:text="@string/in_terms_decline" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@id/acceptBtn" style="@style/Widget.Bakcell.Button.Secondary" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+</az.azerconnect.bakcell.utils.widgets.StateView>

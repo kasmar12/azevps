@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/in_bakcell_card_add_new" app:icon="@drawable/ic_add" app:iconGravity="textStart" app:iconPadding="8.0dip" app:iconSize="20.0dip" app:iconTint="@color/bkc_color_icon_white_invariable" style="@style/Widget.Bakcell.Button"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" />

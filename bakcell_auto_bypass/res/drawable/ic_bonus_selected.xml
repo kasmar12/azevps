@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="40.0dip" android:width="40.0dip" android:viewportWidth="40.0" android:viewportHeight="40.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/bkc_color_background_brand" android:pathData="M0 16c0-8.84 7.16-16 16-16h8c8.84 0 16 7.16 16 16v0c0 8.84-7.16 16-16 16h-8c-8.84 0-16-7.16-16-16z" />
+    <path android:fillColor="@color/bkc_color_background_brand" android:pathData="M18.66 25.41c0.78-0.78 2.05-0.78 2.82 0l4.25 4.25c0.78 0.78 0.78 2.05 0 2.82l-4.25 4.25c-0.78 0.78-2.05 0.78-2.82 0l-4.25-4.25c-0.78-0.78-0.78-2.05 0-2.82z" />
+</vector>

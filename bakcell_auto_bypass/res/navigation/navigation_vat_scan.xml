@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_vat_scan" app:startDestination="@id/vatScannerFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.vat.fiscalid.VatFiscalIdFragment" android:id="@id/vatFiscalIdFragment">
+        <action android:id="@id/action_vatFiscalIdFragment_to_vatFiscalIdInfoFragment" app:destination="@id/vatFiscalIdInfoFragment" />
+        <action android:id="@id/action_vatFiscalIdFragment_to_vatVerifyFragment2" app:destination="@id/vatVerifyFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.vat.scanner.VatScannerFragment" android:id="@id/vatScannerFragment">
+        <action android:id="@id/action_vatScannerFragment_to_vatFiscalIdFragment" app:destination="@id/vatFiscalIdFragment" />
+        <action android:id="@id/action_vatScannerFragment_to_vatVerifyFragment" app:destination="@id/vatVerifyFragment" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.vat.fiscalidinfo.VatFiscalIdInfoFragment" android:id="@id/vatFiscalIdInfoFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.vat.verify.VatVerifyFragment" android:id="@id/vatVerifyFragment">
+        <action android:id="@id/action_vatVerifyFragment_to_vatScanSuccessFragment" app:destination="@id/vatScanSuccessFragment" app:popUpTo="@id/navigation_vat_scan" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:label="VatScanSuccessFragment" android:name="az.azerconnect.bakcell.ui.main.vat.verify.sucess.VatScanSuccessFragment" android:id="@id/vatScanSuccessFragment">
+        <action android:id="@id/action_vatScanSuccessFragment_to_vatScannerFragment" app:destination="@id/vatScannerFragment" app:launchSingleTop="true" app:popUpTo="@id/navigation_vat_scan" app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

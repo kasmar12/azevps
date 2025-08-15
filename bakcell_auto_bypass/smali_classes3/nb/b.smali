@@ -1,0 +1,11 @@
+.class public final Lnb/b;
+.super Landroid/widget/LinearLayout$LayoutParams;
+.source "SourceFile"
+
+
+# instance fields
+.field public a:I
+
+.field public b:Lm1/t;
+
+.field public c:Landroid/view/animation/Interpolator;

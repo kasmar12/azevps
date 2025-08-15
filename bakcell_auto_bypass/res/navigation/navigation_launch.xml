@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/launchNavId" app:startDestination="@id/splashFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_auth" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.test.TestFragment" android:id="@id/testFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.splash.SplashFragment" android:id="@id/splashFragment">
+        <action android:id="@id/action_splashFragment_to_refreshTermsFragment" app:destination="@id/refreshTermsFragment" app:popUpTo="@id/launchNavId" app:popUpToInclusive="true" />
+        <action android:id="@id/action_splashFragment_to_introFragment" app:destination="@id/introFragment" app:popUpTo="@id/launchNavId" />
+        <action android:id="@id/action_splashFragment_to_checkPinCodeFragment" app:destination="@id/checkPinCodeFragment" app:popUpTo="@id/launchNavId" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.intro.IntroFragment" android:id="@id/introFragment">
+        <action android:id="@id/action_introFragment_to_changeLanguageFragment" app:destination="@id/changeLanguageFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.pinCode.check.CheckPinCodeFragment" android:id="@id/checkPinCodeFragment">
+        <action android:id="@id/action_checkPinCodeFragment_to_sureDialogFragment" app:destination="@id/sureDialogFragment" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.sureDialog.SureDialogFragment" android:id="@id/sureDialogFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.terms.RefreshTermsFragment" android:id="@id/refreshTermsFragment">
+        <action android:id="@id/action_refreshTermsFragment_to_checkPinCodeFragment" app:destination="@id/checkPinCodeFragment" />
+        <action android:id="@id/action_refreshTermsFragment_to_termsConditionsDenyDialogFragment2" app:destination="@id/termsConditionsDenyDialogFragment2" />
+        <argument android:name="termsText" app:argType="string" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.terms.decline.TermsConditionsDenyDialogFragment" android:id="@id/termsConditionsDenyDialogFragment2" />
+    <action android:id="@id/action_global_splash" app:destination="@id/splashFragment" app:launchSingleTop="true" app:popUpTo="@id/launchNavId" app:popUpToInclusive="true" />
+    <action android:id="@id/action_global_auth" app:destination="@id/authNavId" app:popUpTo="@id/launchNavId" app:popUpToInclusive="true" />
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.settings.ChangeLanguageFragment" android:id="@id/changeLanguageFragment" />
+</navigation>

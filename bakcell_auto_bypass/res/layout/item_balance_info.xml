@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:tag="layout/item_balance_info_0" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="40.0dip" android:paddingVertical="8.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Regular.SubHeadline" android:textColor="@color/bkc_color_text_primary" android:id="@id/titleTxt" android:tag="binding_1" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginEnd="16.0dip" app:layout_constraintEnd_toStartOf="@id/valueTxt" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Medium.SubHeadline" android:textColor="@color/bkc_color_text_primary" android:gravity="end" android:id="@id/valueTxt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="200.0dip" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
