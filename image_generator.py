@@ -49,6 +49,12 @@ class ImageGenerator:
             width, height = self.parse_size(size)
             enhanced_prompt = self.enhance_prompt(prompt, style)
             
+            # Check if size is supported by SDXL
+            supported_sizes = IMAGE_SETTINGS['available_sizes']
+            if size not in supported_sizes:
+                self.logger.warning(f"Size {size} not supported by SDXL, falling back to Hugging Face")
+                return await self.generate_with_huggingface(prompt, style, size)
+            
             # API request data
             data = {
                 "text_prompts": [
@@ -119,11 +125,13 @@ class ImageGenerator:
                 else:
                     error_text = await response.text()
                     self.logger.error(f"API error: {response.status} - {error_text}")
-                    return None
+                    # Fallback to Hugging Face
+                    return await self.generate_with_huggingface(prompt, style, size)
                     
         except Exception as e:
             self.logger.error(f"Stability AI generation error: {e}")
-            return None
+            # Fallback to Hugging Face
+            return await self.generate_with_huggingface(prompt, style, size)
     
     async def generate_with_huggingface(self, prompt: str, style: str, size: str) -> Optional[Dict[str, Any]]:
         """Hugging Face API ilə şəkil yarat (pulsuz)"""
@@ -135,8 +143,8 @@ class ImageGenerator:
             # Hugging Face API (pulsuz)
             api_url = FREE_APIS['huggingface']
             
+            # No API key needed for free models
             headers = {
-                "Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY', '')}",
                 "Content-Type": "application/json"
             }
             

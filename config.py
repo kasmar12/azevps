@@ -20,7 +20,7 @@ FREE_APIS = {
 # Image Generation Settings
 IMAGE_SETTINGS = {
     'default_size': '1024x1024',
-    'available_sizes': ['512x512', '768x768', '1024x1024', '1024x1536'],
+    'available_sizes': ['1024x1024', '1152x896', '1216x832', '1344x768', '1536x640', '640x1536', '768x1344', '832x1216', '896x1152'],
     'default_style': 'realistic',
     'max_prompt_length': 1000,
     'generation_timeout': 300,  # 5 minutes
