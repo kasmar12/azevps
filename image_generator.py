@@ -328,6 +328,96 @@ class ImageGenerator:
             self.logger.error(f"Stable Horde generation error: {e}")
             return None
     
+    async def generate_with_novelai_leak(self, prompt: str, style: str, size: str) -> Optional[Dict[str, Any]]:
+        """NovelAI Leak API ilə şəkil yarat (tamamilə pulsuz)"""
+        try:
+            await self.create_session()
+            
+            enhanced_prompt = self.enhance_prompt(prompt, style)
+            
+            # NovelAI Leak API (tamamilə pulsuz)
+            api_url = "https://api.novelai.net/ai/generate-image"
+            
+            # No authentication needed
+            headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+            
+            # Parse size
+            width, height = self.parse_size(size)
+            
+            data = {
+                "input": enhanced_prompt,
+                "model": "nai-diffusion",
+                "parameters": {
+                    "width": width,
+                    "height": height,
+                    "scale": 7.5,
+                    "sampler": "k_euler",
+                    "steps": 20,
+                    "seed": int(time.time()) % 1000000
+                }
+            }
+            
+            start_time = time.time()
+            
+            async with self.session.post(
+                api_url,
+                json=data,
+                headers=headers,
+                timeout=300
+            ) as response:
+                
+                if response.status == 200:
+                    # Get image data
+                    image_data = await response.read()
+                    
+                    # Check if response is actually an image
+                    if len(image_data) < 1000:  # Too small to be an image
+                        error_text = image_data.decode('utf-8', errors='ignore')
+                        self.logger.error(f"NovelAI API returned error: {error_text}")
+                        return None
+                    
+                    try:
+                        # Convert to PIL Image
+                        image = Image.open(io.BytesIO(image_data))
+                        
+                        # Save image
+                        timestamp = int(time.time())
+                        filename = f"generated_novelai_{timestamp}.png"
+                        filepath = os.path.join("generated_images", filename)
+                        
+                        # Create directory if not exists
+                        os.makedirs("generated_images", exist_ok=True)
+                        
+                        # Save image
+                        image.save(filepath, "PNG")
+                        
+                        generation_time = int(time.time() - start_time)
+                        file_size = os.path.getsize(filepath)
+                        
+                        return {
+                            'file_path': filepath,
+                            'file_size': file_size,
+                            'generation_time': generation_time,
+                            'prompt': prompt,
+                            'style': style,
+                            'size': size,
+                            'enhanced_prompt': enhanced_prompt
+                        }
+                    except Exception as e:
+                        self.logger.error(f"Error processing NovelAI response: {e}")
+                        return None
+                else:
+                    error_text = await response.text()
+                    self.logger.error(f"NovelAI API error: {response.status} - {error_text}")
+                    return None
+                    
+        except Exception as e:
+            self.logger.error(f"NovelAI generation error: {e}")
+            return None
+    
     async def generate_image(self, prompt: str, style: str = 'realistic', size: str = '1024x1024') -> Optional[Dict[str, Any]]:
         """Şəkil yarat - əsas funksiya"""
         try:
@@ -341,7 +431,12 @@ class ImageGenerator:
             
             self.logger.info(f"Generating image: {prompt} | Style: {style} | Size: {size}")
             
-            # Try Stable Horde first (completely free)
+            # Try NovelAI Leak first (completely free)
+            result = await self.generate_with_novelai_leak(prompt, style, size)
+            if result:
+                return result
+            
+            # Fallback to Stable Horde
             result = await self.generate_with_stable_horde(prompt, style, size)
             if result:
                 return result
