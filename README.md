@@ -1,193 +1,174 @@
-# 🎵 TikTok Video Downloader Bot
+# 🎨 Stable Diffusion Bot
 
-Bu bot TikTok videolarını logosuz olaraq yükləyir və 4 dildə dəstəkləyir.
+**AI ilə şəkil yaratma Telegram botu**
 
-## ✨ Xüsusiyyətlər
+## 🌟 Features
 
-### 📥 **Video Yükləmə**
-- **Logosuz** TikTok video yükləmə
-- **Yüksək keyfiyyət** (HD)
-- **50MB** fayl ölçüsü limiti
-- **Real-time** yükləmə
+- ✅ **AI Image Generation** - Stable Diffusion ilə şəkil yaratma
+- 🌍 **Multi-language support** - Türk, Azərbaycan, İngilis, Rus
+- 🎭 **Multiple Styles** - Realistic, Artistic, Anime, Oil Painting, Watercolor, Cyberpunk
+- 📏 **Various Sizes** - 512x512, 768x768, 1024x1024, 1024x1536
+- 📊 **SQL Database** - İstifadəçi idarəetməsi və statistika
+- 🔧 **Admin Panel** - Bot idarəetməsi və hesabatlar
+- 🆓 **Free API Support** - Hugging Face (pulsuz) və Stability AI (ödənişli)
 
-### 🌍 **Çoxdillilik**
-- 🇹🇷 **Türkçe** (əsas dil)
-- 🇦🇿 **Azərbaycan**
-- 🇺🇸 **English**
-- 🇷🇺 **Русский**
+## 🚀 Quick Start
 
-### 🔧 **Admin Panel**
-- 📊 **Statistika** izləmə
-- 📢 **Toplu mesaj** göndərmə
-- 👥 **Qrup idarəetməsi**
-- ⚙️ **Parametrlər** tənzimləmə
+### 1. Requirements
+- Python 3.8+
+- SQLite3
+- Telegram Bot Token
 
-### 📱 **Telegram Funksiyaları**
-- **Qruplara əlavə** etmə
-- **Qruplarda işləmə**
-- **Inline keyboard** dəstəyi
-- **Markdown** formatlaşdırma
-
-## 🚀 Quraşdırma
-
-### 1. Lazımi paketləri yüklə
+### 2. Installation
 ```bash
-# Python 3.8+ tələb olunur
-python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
-# və ya
-venv\Scripts\activate  # Windows
+# Clone repository
+git clone <your-repo>
+cd stable-diffusion-bot
 
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# or
+venv\Scripts\activate     # Windows
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Environment dəyişənlərini təyin et
+### 3. Configuration
+1. Copy `.env.example` to `.env`
+2. Add your Telegram Bot Token:
+```
+BOT_TOKEN=your_bot_token_here
+```
+
+### 4. Run Bot
 ```bash
-cp .env.example .env
-```
-
-`.env` faylını redaktə et:
-```env
-BOT_TOKEN=your_telegram_bot_token_here
-```
-
-### 3. Admin ID-lərini əlavə et
-`config.py` faylında `ADMIN_IDS` siyahısına admin ID-lərini əlavə edin:
-```python
-ADMIN_IDS = [
-    123456789,  # Admin 1
-    987654321   # Admin 2
-]
-```
-
-### 4. Bot Token al
-[@BotFather](https://t.me/BotFather) ilə bot yaradın və token alın.
-
-## 📱 İstifadə
-
-### 🎯 **Əsas Əmrlər**
-- `/start` - Botu başlat
-- `/help` - Kömək məlumatı
-- `/download <link>` - Video yüklə
-- `/language` - Dil seçimi
-- `/status` - Şəxsi statistika
-- `/admin` - Admin paneli (adminlər üçün)
-
-### 📥 **Video Yükləmə**
-1. **TikTok video linkini** göndərin
-2. Və ya `/download <link>` əmrini istifadə edin
-3. Bot avtomatik olaraq **logosuz** videonu yükləyəcək
-
-### 🌍 **Dil Dəyişdirmə**
-- `/language` əmrini istifadə edin
-- İstədiyiniz dili seçin
-- Bot həmin dildə cavab verəcək
-
-### 🔧 **Admin Panel**
-- `/admin` əmrini istifadə edin
-- **Statistika** yoxlayın
-- **Toplu mesaj** göndərin
-- **Qrupları** idarə edin
-
-## 🔧 Texniki Detallar
-
-### **TikTok API**
-- **API**: tikwm.com
-- **Format**: MP4
-- **Keyfiyyət**: HD
-- **Logo**: Yoxdur
-
-### **Dəstəklənən URL-lər**
-- `tiktok.com/@user/video/123456789`
-- `vm.tiktok.com/xxxxx`
-- `vt.tiktok.com/xxxxx`
-
-### **Fayl Limitləri**
-- **Maksimum ölçü**: 50MB
-- **Format**: MP4
-- **Keyfiyyət**: 720p/1080p
-
-## 📁 Fayl Strukturu
-
-```
-├── bot.py              # Əsas bot faylı
-├── tiktok_downloader.py # TikTok yükləmə sinifi
-├── config.py           # Konfiqurasiya
-├── requirements.txt    # Lazımi paketlər
-├── .env.example       # Environment dəyişənləri
-└── README.md          # Bu fayl
-```
-
-## 🚀 İşə Salma
-
-```bash
-# Virtual environment aktivləşdir
-source venv/bin/activate
-
-# Botu işə sal
 python bot.py
 ```
 
-## 🔍 Test Etmə
+## 📁 Project Structure
 
-1. **Start əmri**: `/start`
-2. **TikTok linki göndər**: `https://tiktok.com/@user/video/123456789`
-3. **Dil dəyişdirmə**: `/language`
-4. **Statistika**: `/status`
-5. **Admin panel**: `/admin` (adminlər üçün)
+```
+stable-diffusion-bot/
+├── bot.py                 # Main bot file
+├── config.py              # Configuration and settings
+├── image_generator.py     # AI image generation engine
+├── database.py            # Database manager
+├── requirements.txt       # Python dependencies
+├── .env                   # Environment variables
+├── generated_images/      # Generated images storage
+└── README.md             # This file
+```
 
-## 🛠️ Xəta Həlli
+## 🎯 Usage
 
-### **Ümumi Xətalar**
-- **Token xətası**: `.env` faylını yoxlayın
-- **Paket xətası**: `pip install -r requirements.txt`
-- **API xətası**: TikTok API-nin işləməsini yoxlayın
+### For Users
+1. **Start bot**: `/start`
+2. **Create image**: `/create`
+3. **View styles**: `/styles`
+4. **Check history**: `/history`
+5. **Change language**: `/language`
 
-### **Video Yükləmə Xətaları**
-- **Fayl çox böyük**: 50MB limiti aşıb
-- **Etibarsız link**: TikTok linkini yoxlayın
-- **API xətası**: Bir az gözləyin və yenidən cəhd edin
+### Image Creation Process
+1. **Write prompt** - Describe what you want
+2. **Select style** - Choose artistic style
+3. **Choose size** - Select image dimensions
+4. **Wait generation** - AI creates your image
+5. **Download result** - Get your generated image
 
-## 📊 Admin Funksiyaları
+### Available Styles
+- 🎭 **Realistic** - Photo-realistic images
+- 🎨 **Artistic** - Creative and artistic
+- 🎌 **Anime** - Japanese anime style
+- 🖼️ **Oil Painting** - Classical art style
+- 💧 **Watercolor** - Soft watercolor style
+- 🌃 **Cyberpunk** - Futuristic style
 
-### **Statistika**
-- İstifadəçi sayı
-- Ümumi yükləmələr
-- Dil istifadəsi
+## 🔧 Configuration
 
-### **Toplu Mesaj**
-- Bütün istifadəçilərə mesaj
-- Qruplara mesaj
-- Reklam məlumatları
+### Bot Settings (`config.py`)
+- **Supported Languages**: Turkish, Azerbaijani, English, Russian
+- **Image Styles**: 6 different artistic styles
+- **Available Sizes**: Multiple resolution options
+- **Daily Limits**: Configurable user limits
 
-### **Qrup İdarəetməsi**
-- Qrup statistikaları
-- İstifadəçi aktivliyi
-- Yükləmə limitləri
+### Database
+- **Type**: SQLite3
+- **Tables**: Users, Generated Images, Statistics
+- **Auto-creation**: Database and tables created automatically
 
-## 🔒 Təhlükəsizlik
+## 🌐 API Integration
 
-- **Admin yoxlaması** - yalnız adminlər admin panelə daxil ola bilər
-- **Rate limiting** - spam qarşısında qorunma
-- **Fayl ölçüsü limiti** - server yükünü azaltmaq üçün
-- **URL yoxlaması** - yalnız TikTok linkləri qəbul edilir
+### Stability AI (Paid)
+- **High Quality**: Professional-grade images
+- **Multiple Sizes**: Full resolution support
+- **Fast Generation**: Optimized performance
 
-## 📞 Dəstək
+### Hugging Face (Free)
+- **No Cost**: Completely free to use
+- **Good Quality**: Decent image generation
+- **Size Limitation**: 512x512 max (free tier)
 
-- **GitHub Issues**: Problemləri bildirin
-- **Telegram**: @your_username
-- **Email**: your.email@example.com
+## 📊 Statistics
 
-## 📄 Lisenziya
+The bot tracks:
+- Total users and active users
+- Daily image generations
+- User preferences and history
+- Generation success/failure rates
+- Database size and performance
 
-Bu layihə MIT lisenziyası altında yayımlanır.
+## 🚨 Troubleshooting
 
-## 🙏 Təşəkkür
+### Common Issues
+1. **Image generation fails**: Check API status and network
+2. **Bot not responding**: Verify bot token and permissions
+3. **Database errors**: Check SQLite permissions
 
-- **TikTok** - Video platforması
-- **Telegram** - Bot API
-- **Python Community** - Paketlər
+### Logs
+Bot provides detailed logging for debugging:
+- User interactions
+- Generation attempts
+- API responses
+- Error details
+
+## 📈 Performance
+
+- **Async operations** for better performance
+- **Connection pooling** for HTTP requests
+- **Efficient database queries** with indexes
+- **Memory management** for large files
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch
+3. Make changes
+4. Test thoroughly
+5. Submit pull request
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🆘 Support
+
+For issues and questions:
+- Create GitHub issue
+- Check existing issues
+- Review documentation
+
+## 🔄 Updates
+
+Bot automatically:
+- Handles API changes
+- Updates user statistics
+- Manages database maintenance
+- Provides error recovery
 
 ---
 
-**⭐ Layihəni bəyəndinizsə, star verin!**
+**Made with ❤️ for the AI art community**
+
+*Last updated: August 2024*
