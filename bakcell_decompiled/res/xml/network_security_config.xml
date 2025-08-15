@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config>
+        <domain includeSubdomains="true">esim.bakcell.com</domain>
+        <domain includeSubdomains="true">digital-gateway.bakcell.com</domain>
+        <trust-anchors>
+            <certificates src="@raw/bakcell" />
+            <certificates src="@raw/bakcell_new" />
+        </trust-anchors>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.220.105.4</domain>
+        <domain includeSubdomains="true">bakcell.com</domain>
+        <domain includeSubdomains="true">bakcellcardfaq.bakcell.com</domain>
+        <domain includeSubdomains="true">digitalsales-01.azerconnect.az</domain>
+        <domain includeSubdomains="true">digitalsales-03.azerconnect.az</domain>
+        <domain includeSubdomains="true">digitalsales-02.azerconnect.az</domain>
+        <domain includeSubdomains="true">prod-bkc.azerconnect.az</domain>
+        <domain includeSubdomains="true">azerconnect.az</domain>
+        <trust-anchors>
+            <certificates src="@raw/bakcell" />
+            <certificates src="@raw/bakcell_new" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

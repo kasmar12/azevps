@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:id="@id/stateView" android:tag="layout/fragment_operation_history_0" android:background="?android:panelColorBackground" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerView" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="fill_parent" android:overScrollMode="never" android:paddingVertical="16.0dip" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+    <include layout="@layout/layout_empty_filter" />
+</az.azerconnect.bakcell.utils.widgets.StateView>

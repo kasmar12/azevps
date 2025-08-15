@@ -1,0 +1,36 @@
+.class public final LP8/T;
+.super LP8/a0;
+.source "SourceFile"
+
+# interfaces
+.implements LP8/Y;
+
+
+# instance fields
+.field public h:Ljava/lang/Float;
+
+
+# virtual methods
+.method public final e()Ljava/util/List;
+    .locals 1
+
+    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public final g(LP8/c0;)V
+    .locals 0
+
+    return-void
+.end method
+
+.method public final n()Ljava/lang/String;
+    .locals 1
+
+    const-string v0, "stop"
+
+    return-object v0
+.end method

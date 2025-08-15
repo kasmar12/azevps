@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/dashboardUnAuthNavId" app:startDestination="@id/dashboardUnAuthFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_auth" />
+    <include app:graph="@navigation/navigation_tariffs" />
+    <include app:graph="@navigation/navigation_packages" />
+    <include app:graph="@navigation/navigation_web" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.unAuth.DashboardUnAuthFragment" android:id="@id/dashboardUnAuthFragment">
+        <action android:id="@id/action_dashboardUnAuthFragment_to_storiesFragment" app:destination="@id/storiesFragment" />
+        <action android:id="@id/action_dashboardUnAuthFragment_to_tariffsNavId" app:destination="@id/navigation_tariffs">
+            <argument android:name="accountId" app:argType="integer" />
+            <argument android:name="identifier" />
+            <argument android:name="numberType" />
+        </action>
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.stories.StoriesFragment" android:id="@id/storiesFragment">
+        <argument android:name="list" app:argType="az.azerconnect.data.models.dto.StoryDto[]" />
+        <argument android:name="currentItem" app:argType="integer" />
+    </fragment>
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+</navigation>

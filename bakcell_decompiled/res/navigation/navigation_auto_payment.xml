@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_auto_payment" app:startDestination="@id/autoPaymentListFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_web" />
+    <fragment android:label="@string/in_auto_payment_nav_title" android:name="az.azerconnect.bakcell.ui.main.services.autoPayment.AutoPaymentListFragment" android:id="@id/autoPaymentListFragment">
+        <action android:id="@id/action_autoPaymentListFragment_to_autoPaymentListMenuFragment" app:destination="@id/autoPaymentListMenuFragment" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.autoPayment.menu.AutoPaymentListMenuFragment" android:id="@id/autoPaymentListMenuFragment">
+        <argument android:name="dto" app:argType="az.azerconnect.data.models.dto.AutoPaymentDto" />
+    </dialog>
+    <fragment android:label="@string/in_auto_payment_nav_title" android:name="az.azerconnect.bakcell.ui.main.services.autoPayment.create.AutoPaymentCreateFragment" android:id="@id/autoPaymentCreateFragment">
+        <argument android:name="dto" android:defaultValue="@null" app:argType="az.azerconnect.data.models.dto.AutoPaymentDto" app:nullable="true" />
+        <action android:id="@id/action_autoPaymentCreateFragment_to_paymentSourceFragment" app:destination="@id/paymentSourceFragment" />
+        <action android:id="@id/action_autoPaymentCreateFragment_to_autoPaymentCreateSuccessFragment" app:destination="@id/autoPaymentCreateSuccessFragment" app:popUpTo="@id/autoPaymentCreateFragment" app:popUpToInclusive="true" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.topUp.paymentSource.PaymentSourceFragment" android:id="@id/paymentSourceFragment">
+        <argument android:name="list" app:argType="az.azerconnect.data.models.dto.PaymentSourceDto[]" />
+        <argument android:name="selectedDto" app:argType="az.azerconnect.data.models.dto.PaymentSourceDto" app:nullable="true" />
+    </dialog>
+    <fragment android:label="@string/in_auto_payment_create_start_date_title" android:name="az.azerconnect.bakcell.ui.global.calendar.CalendarFragment" android:id="@id/calendarFragment">
+        <argument android:name="calendarTitle" />
+        <argument android:name="timeTitle" />
+        <argument android:name="calendarDto" android:defaultValue="@null" app:argType="az.azerconnect.data.models.dto.CalendarDto" app:nullable="true" />
+        <argument android:name="time" android:defaultValue="" app:nullable="true" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.autoPayment.create.success.AutoPaymentCreateSuccessFragment" android:id="@id/autoPaymentCreateSuccessFragment" />
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+    <action android:id="@id/action_global_calendarFragment" app:destination="@id/calendarFragment" />
+    <action android:id="@id/action_global_autoPaymentCreateFragment" app:destination="@id/autoPaymentCreateFragment" />
+</navigation>

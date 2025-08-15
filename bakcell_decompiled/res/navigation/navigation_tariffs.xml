@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_tariffs" app:startDestination="@id/tariffsFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/in_tariffs_title" android:name="az.azerconnect.bakcell.ui.main.tariffs.TariffsFragment" android:id="@id/tariffsFragment">
+        <deepLink app:uri="@string/deep_link_tariffs" />
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="identifier" />
+        <argument android:name="numberType" />
+        <action android:id="@id/action_tariffsFragment_to_tariffsFilterDialogFragment" app:destination="@id/tariffsFilterDialogFragment" />
+        <action android:id="@id/action_tariffsFragment_to_tariffsSortDialogFragment" app:destination="@id/tariffsSortDialogFragment" />
+        <action android:id="@id/action_tariffsFragment_to_tariffDetailFragment" app:destination="@id/tariffDetailFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.tariffs.detail.TariffDetailFragment" android:id="@id/tariffDetailFragment">
+        <deepLink app:uri="@string/deep_link_tariff_detail" />
+        <argument android:name="tariffId" />
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="identifier" />
+        <action android:id="@id/action_tariffDetailFragment_to_tariffConfirmDialogFragment" app:destination="@id/tariffConfirmDialogFragment" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.tariffs.dialog.TariffConfirmDialogFragment" android:id="@id/tariffConfirmDialogFragment">
+        <argument android:name="tariffId" app:argType="string" />
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="identifier" />
+        <action android:id="@id/action_tariffConfirmDialogFragment_to_operationSuccessFragment" app:destination="@id/operationSuccessFragment" app:popUpTo="@id/navigation_tariffs" />
+    </dialog>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.tariffs.filter.TariffsFilterDialogFragment" android:id="@id/tariffsFilterDialogFragment">
+        <argument android:name="filterModel" app:argType="az.azerconnect.data.models.request.TariffFilterModel" app:nullable="true" />
+    </dialog>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.tariffs.sort.TariffsSortDialogFragment" android:id="@id/tariffsSortDialogFragment">
+        <argument android:name="sortType" app:argType="az.azerconnect.data.enums.SortType" />
+    </dialog>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.operation.OperationSuccessFragment" android:id="@id/operationSuccessFragment" />
+</navigation>
