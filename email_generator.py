@@ -64,12 +64,21 @@ class EmailGenerator:
             return await self._generate_demo_email()
 
     async def _generate_demo_email(self) -> Optional[Dict[str, Any]]:
-        """Fallback demo email generation"""
+        """Fallback demo email generation - sadəcə GuerrillaMail domainləri"""
         try:
             names = ['user', 'test', 'demo', 'temp', 'fake', 'anon', 'guest', 'bot']
             name = random.choice(names)
             number = random.randint(1000, 9999)
-            domains = ['guerrillamail.com', 'tempmail.org', 'mailinator.com', 'sharklasers.com']
+            
+            # Sadəcə GuerrillaMail domainləri
+            domains = [
+                'guerrillamail.com',
+                'guerrillamailblock.com', 
+                'grr.la',
+                'guerrillamail.org',
+                'guerrillamail.net',
+                'sharklasers.com'
+            ]
             domain = random.choice(domains)
             email = f"{name}{number}@{domain}"
             session_id = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
@@ -197,7 +206,7 @@ class EmailGenerator:
             return False
 
     async def get_available_domains(self) -> List[str]:
-        """Mövcud domainləri al"""
+        """Mövcud domainləri al - sadəcə GuerrillaMail"""
         try:
             session = await self.get_session()
             
@@ -210,28 +219,36 @@ class EmailGenerator:
                     data = await response.json()
                     
                     if data.get('status') == 'ok':
-                        # GuerrillaMail domainləri
+                        # Sadəcə GuerrillaMail domainləri
                         domains = [
-                            'guerrillamail.com', 'guerrillamailblock.com', 'grr.la', 'guerrillamail.org',
-                            'guerrillamail.net', 'guerrillamailblock.com', 'sharklasers.com', 'grr.la'
+                            'guerrillamail.com',
+                            'guerrillamailblock.com', 
+                            'grr.la',
+                            'guerrillamail.org',
+                            'guerrillamail.net',
+                            'sharklasers.com'
                         ]
                         return domains
                     else:
                         self.logger.error(f"GuerrillaMail API error: {data}")
-                        return self._get_demo_domains()
+                        return self._get_guerrilla_domains()
                 else:
                     self.logger.error(f"GuerrillaMail API HTTP error: {response.status}")
-                    return self._get_demo_domains()
+                    return self._get_guerrilla_domains()
                     
         except Exception as e:
             self.logger.error(f"Domains fetch error: {e}")
-            return self._get_demo_domains()
+            return self._get_guerrilla_domains()
 
-    def _get_demo_domains(self) -> List[str]:
-        """Fallback demo domains"""
+    def _get_guerrilla_domains(self) -> List[str]:
+        """Sadəcə GuerrillaMail domainləri"""
         return [
-            'guerrillamail.com', 'tempmail.org', 'mailinator.com', 'sharklasers.com',
-            'temp-mail.org', 'grr.la', 'guerrillamailblock.com', '10minutemail.com'
+            'guerrillamail.com',
+            'guerrillamailblock.com', 
+            'grr.la',
+            'guerrillamail.org',
+            'guerrillamail.net',
+            'sharklasers.com'
         ]
 
     def is_email_expired(self, created_at: int) -> bool:
