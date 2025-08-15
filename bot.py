@@ -887,9 +887,13 @@ async def monitor_emails(user_id: int, session_id: str):
                             user_lang = database.get_user_language(user_id) or DEFAULT_LANGUAGE
                             messages = MESSAGES[user_lang]
                             
+                            # Markdown xüsusi simvollarını escape et
+                            safe_sender = new_email.get('from', 'Unknown').replace('_', '\\_').replace('*', '\\*').replace('[', '\\[').replace('`', '\\`')
+                            safe_subject = new_email.get('subject', 'No Subject').replace('_', '\\_').replace('*', '\\*').replace('[', '\\[').replace('`', '\\`')
+                            
                             notification_text = messages['email_received'].format(
-                                sender=new_email.get('from', 'Unknown'),
-                                subject=new_email.get('subject', 'No Subject'),
+                                sender=safe_sender,
+                                subject=safe_subject,
                                 time=email_generator.format_email_time(int(time.time())),
                                 id=new_email.get('id')
                             )

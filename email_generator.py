@@ -133,16 +133,16 @@ class EmailGenerator:
             return await self._check_demo_emails()
 
     async def _check_demo_emails(self) -> Optional[List[Dict[str, Any]]]:
-        """Fallback demo email checking"""
+        """Fallback demo email checking - daha tez-tez email qaytar"""
         try:
-            # 20% ehtimalla yeni email qaytar
-            if random.random() < 0.2:
+            # 50% ehtimalla yeni email qaytar (artırıldı)
+            if random.random() < 0.5:
                 demo_emails = [
                     {
                         'id': f"email_{int(time.time())}",
-                        'from': 'demo@example.com',
+                        'from': 'demo@guerrillamail.com',
                         'subject': 'Demo Email - Test Mesajı',
-                        'body': 'Bu demo email-dir. Real API işləmədiyi üçün bu məlumat göstərilir.\n\n📧 Göndərən: demo@example.com\n📝 Mövzu: Demo Email - Test Mesajı\n⏰ Vaxt: ' + time.strftime('%H:%M:%S')
+                        'body': 'Bu demo email-dir. Real API işləmədiyi üçün bu məlumat göstərilir.\n\n📧 Göndərən: demo@guerrillamail.com\n📝 Mövzu: Demo Email - Test Mesajı\n⏰ Vaxt: ' + time.strftime('%H:%M:%S')
                     }
                 ]
                 return demo_emails

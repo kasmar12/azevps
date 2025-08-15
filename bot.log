@@ -1,78 +1,16 @@
 nohup: ignoring input
-2025-08-15 14:50:55,018 - database - INFO - Database initialized successfully
-2025-08-15 14:50:55,060 - root - INFO - Fake Email Bot başladıldı...
-2025-08-15 14:50:55,331 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getMe "HTTP/1.1 200 OK"
-2025-08-15 14:50:55,419 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/deleteWebhook "HTTP/1.1 200 OK"
-2025-08-15 14:50:55,420 - telegram.ext.Application - INFO - Application started
-2025-08-15 14:51:05,672 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:51:15,755 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:51:25,837 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:51:35,925 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:51:46,008 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:51:56,092 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:06,178 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:16,261 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:26,355 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:36,437 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:46,524 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:51,035 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:51,418 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
-2025-08-15 14:52:51,613 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:52:51,782 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:52:52,764 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:52:52,994 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
-2025-08-15 14:52:53,260 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:52:53,693 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:52:53,884 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:52:53,885 - root - INFO - Starting email monitoring for user 1143980741, session TF9IXco3j1nR3loR
-2025-08-15 14:52:53,989 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:53:02,850 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:53:09,440 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:53:12,934 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:53:23,015 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:53:24,575 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:53:33,098 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:53:40,045 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:53:43,182 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:53:53,266 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:53:55,188 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:54:03,353 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:54:10,587 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:54:13,437 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:54:23,524 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:54:25,999 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:54:33,607 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:54:41,137 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:54:43,690 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:54:53,775 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:54:56,511 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:03,858 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:11,646 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:13,943 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:24,028 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:26,773 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:34,113 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:42,216 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:44,196 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:48,820 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:49,232 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:55:49,338 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:49,430 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
-2025-08-15 14:55:49,431 - root - ERROR - Check emails error: Can't parse entities: can't find end of the entity starting at byte offset 164
-2025-08-15 14:55:49,533 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:55:50,816 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:50,970 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:55:51,077 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:51,203 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:55:53,142 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:55:53,254 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:55:53,362 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:53,468 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:55:57,327 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:55:57,327 - root - INFO - Found 1 new emails for user 1143980741
-2025-08-15 14:55:57,327 - root - INFO - Processing new email email_1755269757 for user 1143980741
-2025-08-15 14:55:57,423 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
-2025-08-15 14:55:57,424 - root - ERROR - Error sending notification to user 1143980741: Can't parse entities: can't find end of the entity starting at byte offset 164
-2025-08-15 14:56:03,232 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:56:12,859 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:56:13,315 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:57:12,283 - database - INFO - Database initialized successfully
+2025-08-15 14:57:12,323 - root - INFO - Fake Email Bot başladıldı...
+2025-08-15 14:57:12,595 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getMe "HTTP/1.1 200 OK"
+2025-08-15 14:57:12,682 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/deleteWebhook "HTTP/1.1 200 OK"
+2025-08-15 14:57:12,683 - telegram.ext.Application - INFO - Application started
+2025-08-15 14:57:22,942 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:57:33,031 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:57:35,135 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:57:35,407 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:57:35,799 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
+2025-08-15 14:57:35,897 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:57:37,084 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:57:37,202 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:57:37,298 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
+2025-08-15 14:57:37,413 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
