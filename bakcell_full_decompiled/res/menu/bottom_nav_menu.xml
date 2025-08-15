@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="@drawable/ic_bottom_nav_dashboard" android:id="@id/dashboardNavId" android:title="@string/nav_title_dashboard" />
+    <item android:icon="@drawable/ic_bottom_nav_products" android:id="@id/productsNavId" android:title="@string/nav_title_products" />
+    <item android:icon="@drawable/ic_bottom_nav_bakcell_card" android:id="@id/bakcellCardNavId" android:title="@string/nav_title_bakcell_card" />
+    <item android:icon="@drawable/ic_bottom_nav_services" android:id="@id/servicesNavId" android:title="@string/nav_title_services" />
+    <item android:icon="@drawable/ic_bottom_nav_more" android:id="@id/moreNavId" android:title="@string/nav_title_more" />
+</menu>

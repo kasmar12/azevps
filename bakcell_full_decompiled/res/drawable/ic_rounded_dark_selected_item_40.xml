@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="40.0dip" android:width="40.0dip" android:viewportWidth="40.0" android:viewportHeight="40.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/bkc_color_background_inverse" android:pathData="M0 12c0-6.63 5.37-12 12-12h16c6.63 0 12 5.37 12 12v16c0 6.63-5.37 12-12 12h-16c-6.63 0-12-5.37-12-12z" />
+    <path android:fillColor="@color/bkc_color_icon_inverse" android:pathData="M27.7 14.28c0.4 0.39 0.4 1.02 0.02 1.42l-9.77 10c-0.2 0.2-0.47 0.3-0.75 0.3-0.28-0.01-0.55-0.14-0.73-0.35l-4.23-5c-0.36-0.43-0.3-1.06 0.11-1.41 0.43-0.36 1.06-0.3 1.41 0.11l3.53 4.16 9-9.2c0.38-0.4 1.01-0.41 1.4-0.03Z" android:fillType="evenOdd" />
+</vector>

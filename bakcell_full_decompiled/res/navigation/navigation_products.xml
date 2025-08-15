@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/productsNavId" app:startDestination="@id/productsFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_web" />
+    <fragment android:label="@string/in_products_nav_title" android:name="az.azerconnect.bakcell.ui.main.products.ProductsFragment" android:id="@id/productsFragment">
+        <action android:id="@id/action_productsFragment_to_tariffActivateNumberFragment" app:destination="@id/tariffActivateNumberFragment" />
+        <action android:id="@id/action_productsFragment_to_packageActivateNumberDialogFragment" app:destination="@id/packageActivateNumberDialogFragment" />
+        <action android:id="@id/action_productsFragment_to_fiberFragment" app:destination="@id/fiberFragment" />
+        <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+            <argument android:name="title" />
+            <argument android:name="url" />
+            <argument android:name="successKeyword" android:defaultValue="" />
+            <argument android:name="failureKeyword" android:defaultValue="" />
+            <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+            <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+        </action>
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.products.tariffActivateNumber.TariffActivateNumberFragment" android:id="@id/tariffActivateNumberFragment" />
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.packages.dialog.number.PackageActivateNumberDialogFragment" android:id="@id/packageActivateNumberDialogFragment">
+        <argument android:name="packagesType" android:defaultValue="ALL" app:argType="az.azerconnect.data.enums.PackagesType" />
+    </dialog>
+    <fragment android:label="@string/in_products_item_fiber_title" android:name="az.azerconnect.bakcell.ui.main.products.fiber.FiberFragment" android:id="@id/fiberFragment" />
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+</navigation>

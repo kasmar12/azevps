@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:tag="layout/fragment_vat_fiscal_id_0" android:layout_width="fill_parent" android:layout_height="fill_parent" android:fillViewport="true"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Bold.Title2" android:textColor="?colorOnBackground" android:id="@id/titleTxt" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="@string/in_vat_enter_fiscal_id" android:layout_marginHorizontal="16.0dip" app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.button.MaterialButton android:textAppearance="@style/TextAppearance.Bakcell.Bold.Headline" android:gravity="start" android:id="@id/infoBtn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:text="@string/in_vat_fiscal_id_info" android:drawableEnd="@drawable/ic_info_24dp" android:paddingHorizontal="16.0dip" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/titleTxt" style="@style/Widget.Bakcell.Button.Secondary" />
+        <com.google.android.material.textfield.TextInputLayout android:id="@id/fiscalIdTl" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="32.0dip" android:hint="@string/in_vat_fiscal_id" android:layout_marginHorizontal="16.0dip" app:layout_constraintTop_toBottomOf="@id/infoBtn" style="@style/Widget.Bakcell.TextInputLayout">
+            <EditText android:textColor="?colorOnBackground" android:id="@id/fiscalIdEditText" android:tag="binding_1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="phone" android:imeOptions="actionDone" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton android:id="@id/continueBtn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="32.0dip" android:text="@string/in_login_continue" android:layout_marginHorizontal="16.0dip" app:layout_constraintTop_toBottomOf="@id/fiscalIdTl" style="@style/Widget.Bakcell.Button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_esim_swap" app:startDestination="@id/swapVerifyIdentityFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_web" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.swap.document.SwapVerifyIdentityFragment" android:id="@id/swapVerifyIdentityFragment">
+        <action android:id="@id/action_swapVerifyIdentityFragment_to_ESIMAddManuallyDocumentFragment" app:destination="@id/ESIMAddManuallyDocumentFragment" />
+        <action android:id="@id/action_swapVerifyIdentityFragment_to_swapOtpFragment" app:destination="@id/swapOtpFragment" />
+        <action android:id="@id/action_swapVerifyIdentityFragment_to_swapErrorFragment" app:destination="@id/swapErrorFragment" app:popUpTo="@id/navigation_esim_swap" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.document.manually.ESimAddManuallyDocumentFragment" android:id="@id/ESIMAddManuallyDocumentFragment">
+        <action android:id="@id/action_ESIMAddManuallyDocumentFragment_to_pinCodeExampleFragment" app:destination="@id/pinCodeExampleFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.swap.otp.SwapOtpFragment" android:id="@id/swapOtpFragment">
+        <argument android:name="phoneNumber" app:argType="string" app:nullable="true" />
+        <action android:id="@id/action_swapOtpFragment_to_swapCompleteFragment" app:destination="@id/swapCompleteFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.swap.complete.SwapCompleteFragment" android:id="@id/swapCompleteFragment">
+        <action android:id="@id/action_swapCompleteFragment_to_swapSuccessFragment" app:destination="@id/swapSuccessFragment" app:popUpTo="@id/navigation_esim_swap" />
+        <action android:id="@id/action_swapCompleteFragment_to_pdfViewFragment" app:destination="@id/pdfViewFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.swap.status.SwapSuccessFragment" android:id="@id/swapSuccessFragment">
+        <action android:id="@id/action_swapSuccessFragment_to_ESimQrCodeFragment" app:destination="@id/ESimQrCodeFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.swap.status.SwapErrorFragment" android:id="@id/swapErrorFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.pdf.EsimPdfViewFragment" android:id="@id/pdfViewFragment" />
+    <dialog android:label="@string/in_esim_add_manually_document_title" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.document.dialog.PinCodeExampleFragment" android:id="@id/pinCodeExampleFragment" />
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.qrCode.ESimQrCodeFragment" android:id="@id/ESimQrCodeFragment" />
+</navigation>

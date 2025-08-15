@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:tag="layout/fragment_help_requests_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <HorizontalScrollView android:id="@id/tabScrollView" android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fillViewport="true" android:overScrollMode="never" app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingHorizontal="16.0dip">
+            <com.google.android.material.tabs.TabLayout android:id="@id/tabLayout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:overScrollMode="never" app:tabIndicator="@drawable/package_tab_indicator" app:tabIndicatorColor="?colorPrimary" app:tabIndicatorGravity="center" app:tabIndicatorHeight="32.0dip" app:tabMode="auto" app:tabRippleColor="@color/transparent" app:tabSelectedTextColor="@color/white" app:tabTextAppearance="@style/TextAppearance.Bakcell.Tab" app:tabTextColor="?colorOnBackground">
+                <com.google.android.material.tabs.TabItem android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_help_requests_tab_item_all" />
+                <com.google.android.material.tabs.TabItem android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_help_requests_tab_item_my_requests" />
+                <com.google.android.material.tabs.TabItem android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_help_requests_tab_item_request_to_me" />
+            </com.google.android.material.tabs.TabLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerView" android:tag="binding_1" android:paddingTop="8.0dip" android:paddingBottom="24.0dip" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:overScrollMode="never" android:paddingVertical="16.0dip" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintBottom_toTopOf="@id/createBtn" app:layout_constraintTop_toBottomOf="@id/tabScrollView" />
+    <View android:background="@drawable/bg_gradient" android:layout_width="fill_parent" android:layout_height="16.0dip" app:layout_constraintBottom_toTopOf="@id/createBtn" />
+    <com.google.android.material.button.MaterialButton android:id="@id/createBtn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:layout_marginBottom="16.0dip" android:text="@string/in_help_requests_create_request" android:layout_marginHorizontal="16.0dip" app:icon="@drawable/ic_add_outline" app:iconGravity="textStart" app:iconPadding="16.0dip" app:iconTint="?colorSurface" app:layout_constraintBottom_toBottomOf="parent" style="@style/Widget.Bakcell.Button" />
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+    <include layout="@layout/layout_empty_help_request" />
+</az.azerconnect.bakcell.utils.widgets.StateView>
