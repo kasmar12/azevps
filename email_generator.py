@@ -29,81 +29,59 @@ class EmailGenerator:
         try:
             await self.create_session()
             
-            # 10MinuteMail API ilə email yarat
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "Accept": "application/json",
-                "Content-Type": "application/json"
+            # Sadə təsadüfi email yarat (10MinuteMail API olmadan)
+            import random
+            import string
+            
+            # Təsadüfi ad yarat
+            names = ['user', 'test', 'demo', 'temp', 'fake', 'anon', 'guest', 'bot']
+            name = random.choice(names)
+            
+            # Təsadüfi rəqəm əlavə et
+            number = random.randint(1000, 9999)
+            
+            # Mövcud domainlər
+            domains = ['10minutemail.com', 'guerrillamail.com', 'tempmail.org', 'mailinator.com']
+            domain = random.choice(domains)
+            
+            # Email yarat
+            email = f"{name}{number}@{domain}"
+            
+            # Təsadüfi session ID
+            session_id = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+            
+            return {
+                'email': email,
+                'session_id': session_id,
+                'created_at': int(time.time()),
+                'expires_at': int(time.time()) + BOT_SETTINGS['email_lifetime'],
+                'status': 'active'
             }
-            
-            # Email yaratma endpoint
-            create_url = f"{self.base_url}/api/create"
-            
-            start_time = time.time()
-            
-            async with self.session.post(
-                create_url,
-                headers=headers,
-                timeout=30
-            ) as response:
-                
-                if response.status == 200:
-                    result = await response.json()
-                    
-                    if result.get('success'):
-                        email_data = result.get('data', {})
-                        
-                        return {
-                            'email': email_data.get('email'),
-                            'session_id': email_data.get('session_id'),
-                            'created_at': int(time.time()),
-                            'expires_at': int(time.time()) + BOT_SETTINGS['email_lifetime'],
-                            'status': 'active'
-                        }
-                    else:
-                        self.logger.error(f"Email creation failed: {result.get('message')}")
-                        return None
-                else:
-                    error_text = await response.text()
-                    self.logger.error(f"API error: {response.status} - {error_text}")
-                    return None
                     
         except Exception as e:
             self.logger.error(f"Email generation error: {e}")
             return None
     
     async def check_emails(self, session_id: str) -> Optional[List[Dict[str, Any]]]:
-        """Email-ləri yoxla"""
+        """Email-ləri yoxla (demo məlumatları)"""
         try:
-            await self.create_session()
+            # Demo məlumatları qaytar (real API olmadığı üçün)
+            # Real istifadədə burada 10MinuteMail API çağırılacaq
             
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "Accept": "application/json"
-            }
+            # 10% ehtimalla yeni email qaytar
+            import random
+            if random.random() < 0.1:  # 10% chance
+                demo_emails = [
+                    {
+                        'id': f"email_{int(time.time())}",
+                        'from': 'demo@example.com',
+                        'subject': 'Demo Email',
+                        'body': 'Bu demo email-dir. Real istifadədə burada həqiqi email məzmunu olacaq.'
+                    }
+                ]
+                return demo_emails
             
-            # Email yoxlama endpoint
-            check_url = f"{self.base_url}/api/emails/{session_id}"
-            
-            async with self.session.get(
-                check_url,
-                headers=headers,
-                timeout=30
-            ) as response:
-                
-                if response.status == 200:
-                    result = await response.json()
-                    
-                    if result.get('success'):
-                        emails = result.get('data', [])
-                        return emails
-                    else:
-                        self.logger.error(f"Email check failed: {result.get('message')}")
-                        return []
-                else:
-                    error_text = await response.text()
-                    self.logger.error(f"API error: {response.status} - {error_text}")
-                    return []
+            return []
                     
         except Exception as e:
             self.logger.error(f"Email check error: {e}")
@@ -179,34 +157,18 @@ class EmailGenerator:
     async def get_available_domains(self) -> List[str]:
         """Mövcud domainləri al"""
         try:
-            await self.create_session()
-            
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "Accept": "application/json"
-            }
-            
-            # Domainlər endpoint
-            domains_url = f"{self.base_url}/api/domains"
-            
-            async with self.session.get(
-                domains_url,
-                headers=headers,
-                timeout=30
-            ) as response:
-                
-                if response.status == 200:
-                    result = await response.json()
-                    
-                    if result.get('success'):
-                        return result.get('data', [])
-                    else:
-                        self.logger.error(f"Domains fetch failed: {result.get('message')}")
-                        return []
-                else:
-                    error_text = await response.text()
-                    self.logger.error(f"API error: {response.status} - {error_text}")
-                    return []
+            # Demo domainlər qaytar
+            domains = [
+                '10minutemail.com',
+                'guerrillamail.com',
+                'tempmail.org',
+                'mailinator.com',
+                'temp-mail.org',
+                'sharklasers.com',
+                'grr.la',
+                'guerrillamailblock.com'
+            ]
+            return domains
                     
         except Exception as e:
             self.logger.error(f"Domains fetch error: {e}")

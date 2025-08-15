@@ -4,6 +4,7 @@ import time
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
 from telegram.constants import ParseMode
+from telegram import CallbackQuery
 
 from config import BOT_TOKEN, MESSAGES, DEFAULT_LANGUAGE, ADMIN_IDS
 from email_generator import EmailGenerator
@@ -546,24 +547,302 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
     
     elif callback_data == "create_email":
-        # Create email button
-        await create_email(update, context)
+        # Create email button - send new message
+        await create_email_from_callback(query, context)
     
     elif callback_data == "check_inbox":
-        # Check inbox button
-        await check_emails(update, context)
+        # Check inbox button - send new message
+        await check_inbox_from_callback(query, context)
     
     elif callback_data == "settings":
-        # Settings button
-        await settings_command(update, context)
+        # Settings button - send new message
+        await settings_from_callback(query, context)
     
     elif callback_data == "domains":
-        # Domains button
-        await domains_command(update, context)
+        # Domains button - send new message
+        await domains_from_callback(query, context)
     
     elif callback_data == "clear_all":
-        # Clear all button
-        await clear_emails(update, context)
+        # Clear all button - send new message
+        await clear_all_from_callback(query, context)
+
+async def create_email_from_callback(query: CallbackQuery, context: ContextTypes.DEFAULT_TYPE):
+    """Create email from button callback"""
+    user = query.from_user
+    user_id = user.id
+    
+    # Update user activity
+    database.update_user_activity(user_id)
+    
+    # Get user language
+    user_lang = database.get_user_language(user_id) or DEFAULT_LANGUAGE
+    messages = MESSAGES[user_lang]
+    
+    # Check user email limit
+    user_stats = database.get_user_stats(user_id)
+    if user_stats.get('active_emails', 0) >= 5:  # Max 5 active emails
+        await query.message.reply_text(
+            "⚠️ Maksimum 5 aktiv email-iniz var. Əvvəlcə köhnə email-ləri silin.",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return
+    
+    # Send creating message
+    creating_msg = await query.message.reply_text(
+        messages['creating_email'],
+        parse_mode=ParseMode.MARKDOWN
+    )
+    
+    try:
+        # Generate new email
+        email_data = await email_generator.generate_random_email()
+        
+        if email_data:
+            # Save to database
+            database.add_user_email(
+                user_id=user_id,
+                email=email_data['email'],
+                session_id=email_data['session_id'],
+                created_at=email_data['created_at'],
+                expires_at=email_data['expires_at']
+            )
+            
+            # Store in user sessions
+            if user_id not in user_sessions:
+                user_sessions[user_id] = {}
+            
+            user_sessions[user_id][email_data['session_id']] = email_data
+            
+            # Success message
+            success_text = messages['email_created'].format(
+                email=email_data['email']
+            )
+            
+            # Update message
+            await creating_msg.edit_text(
+                success_text,
+                parse_mode=ParseMode.MARKDOWN
+            )
+            
+            # Start email monitoring for this session
+            asyncio.create_task(monitor_emails(user_id, email_data['session_id']))
+            
+        else:
+            # Error message
+            await creating_msg.edit_text(
+                messages['error_occurred'],
+                parse_mode=ParseMode.MARKDOWN
+            )
+            
+    except Exception as e:
+        logging.error(f"Create email error: {e}")
+        await creating_msg.edit_text(
+            messages['error_occurred'],
+            parse_mode=ParseMode.MARKDOWN
+        )
+
+async def check_inbox_from_callback(query: CallbackQuery, context: ContextTypes.DEFAULT_TYPE):
+    """Check inbox from button callback"""
+    user = query.from_user
+    user_id = user.id
+    
+    # Update user activity
+    database.update_user_activity(user_id)
+    
+    # Get user language
+    user_lang = database.get_user_language(user_id) or DEFAULT_LANGUAGE
+    messages = MESSAGES[user_lang]
+    
+    # Get user emails
+    user_emails = database.get_user_emails(user_id)
+    
+    if not user_emails:
+        await query.message.reply_text(
+            messages['no_emails'],
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return
+    
+    # Send checking message
+    checking_msg = await query.message.reply_text(
+        messages['checking_emails'],
+        parse_mode=ParseMode.MARKDOWN
+    )
+    
+    try:
+        # Check each email for new messages
+        for email_data in user_emails:
+            session_id = email_data['session_id']
+            
+            # Check if email is expired
+            if email_generator.is_email_expired(email_data['created_at']):
+                continue
+            
+            # Check for new emails
+            new_emails = await email_generator.check_emails(session_id)
+            
+            if new_emails:
+                for new_email in new_emails:
+                    # Check if email already exists
+                    existing_emails = database.get_received_emails(user_id, session_id)
+                    email_exists = any(e['email_id'] == new_email.get('id') for e in existing_emails)
+                    
+                    if not email_exists:
+                        # Save new email
+                        database.add_received_email(
+                            user_id=user_id,
+                            email_id=new_email.get('id'),
+                            session_id=session_id,
+                            sender=new_email.get('from', 'Unknown'),
+                            subject=new_email.get('subject', 'No Subject'),
+                            content=new_email.get('body', 'No Content')
+                        )
+                        
+                        # Send notification
+                        notification_text = messages['email_received'].format(
+                            sender=new_email.get('from', 'Unknown'),
+                            subject=new_email.get('subject', 'No Subject'),
+                            time=email_generator.format_email_time(int(time.time())),
+                            id=new_email.get('id')
+                        )
+                        
+                        await query.message.reply_text(
+                            notification_text,
+                            parse_mode=ParseMode.MARKDOWN
+                        )
+        
+        # Update checking message
+        await checking_msg.edit_text(
+            "✅ Email-lər yoxlandı!",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        
+    except Exception as e:
+        logging.error(f"Check emails error: {e}")
+        await checking_msg.edit_text(
+            messages['error_occurred'],
+            parse_mode=ParseMode.MARKDOWN
+        )
+
+async def settings_from_callback(query: CallbackQuery, context: ContextTypes.DEFAULT_TYPE):
+    """Settings from button callback"""
+    user = query.from_user
+    user_id = user.id
+    
+    # Update user activity
+    database.update_user_activity(user_id)
+    
+    # Get user stats
+    user_stats = database.get_user_stats(user_id)
+    
+    # Format settings message
+    settings_text = "⚙️ **Parametrlər:**\n\n"
+    settings_text += f"📧 **Ümumi Email-lər:** {user_stats.get('total_emails', 0)}\n"
+    settings_text += f"✅ **Aktiv Email-lər:** {user_stats.get('active_emails', 0)}\n"
+    settings_text += f"📨 **Qəbul Edilən:** {user_stats.get('received_emails', 0)}\n"
+    settings_text += f"⏰ **Email Müddəti:** 10 dəqiqə\n"
+    settings_text += f"🔢 **Maksimum Email:** 5\n\n"
+    
+    # Language selection buttons
+    keyboard = [
+        [
+            InlineKeyboardButton("🇦🇿 Azərbaycan", callback_data="lang_az"),
+            InlineKeyboardButton("🇬🇧 English", callback_data="lang_en")
+        ],
+        [
+            InlineKeyboardButton("🇹🇷 Türkçe", callback_data="lang_tr"),
+            InlineKeyboardButton("🇷🇺 Русский", callback_data="lang_ru")
+        ]
+    ]
+    
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.message.reply_text(
+        settings_text,
+        reply_markup=reply_markup,
+        parse_mode=ParseMode.MARKDOWN
+    )
+
+async def domains_from_callback(query: CallbackQuery, context: ContextTypes.DEFAULT_TYPE):
+    """Domains from button callback"""
+    user = query.from_user
+    user_id = user.id
+    
+    # Update user activity
+    database.update_user_activity(user_id)
+    
+    # Get available domains
+    domains = await email_generator.get_available_domains()
+    
+    if not domains:
+        await query.message.reply_text(
+            "❌ Domainlər tapılmadı",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return
+    
+    # Format domains message
+    domains_text = "🌐 **Mövcud Domainlər:**\n\n"
+    
+    for i, domain in enumerate(domains[:20], 1):  # Show first 20 domains
+        domains_text += f"{i}. `{domain}`\n"
+    
+    await query.message.reply_text(
+        domains_text,
+        parse_mode=ParseMode.MARKDOWN
+    )
+
+async def clear_all_from_callback(query: CallbackQuery, context: ContextTypes.DEFAULT_TYPE):
+    """Clear all from button callback"""
+    user = query.from_user
+    user_id = user.id
+    
+    # Update user activity
+    database.update_user_activity(user_id)
+    
+    # Get user language
+    user_lang = database.get_user_language(user_id) or DEFAULT_LANGUAGE
+    messages = MESSAGES[user_lang]
+    
+    # Get user emails
+    user_emails = database.get_user_emails(user_id)
+    
+    if not user_emails:
+        await query.message.reply_text(
+            messages['no_emails'],
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return
+    
+    # Send clearing message
+    clearing_msg = await query.message.reply_text(
+        messages['deleting_email'],
+        parse_mode=ParseMode.MARKDOWN
+    )
+    
+    try:
+        # Delete all user emails
+        for email_data in user_emails:
+            database.delete_user_email(user_id, email_data['id'])
+            
+            # Also delete from user sessions
+            if user_id in user_sessions:
+                for session_id in list(user_sessions[user_id].keys()):
+                    if user_sessions[user_id][session_id].get('id') == email_data['id']:
+                        del user_sessions[user_id][session_id]
+        
+        # Success message
+        await clearing_msg.edit_text(
+            "✅ Bütün email-lər silindi!",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        
+    except Exception as e:
+        logging.error(f"Clear emails error: {e}")
+        await clearing_msg.edit_text(
+            messages['error_occurred'],
+            parse_mode=ParseMode.MARKDOWN
+        )
 
 async def monitor_emails(user_id: int, session_id: str):
     """Monitor emails for a specific session"""
