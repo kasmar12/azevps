@@ -11,3 +11,50 @@ nohup: ignoring input
 2025-08-15 10:02:10,706 - telegram.ext.Application - INFO - Application started
 2025-08-15 10:02:20,963 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
 2025-08-15 10:02:31,048 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:02:40,127 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:02:40,493 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 10:02:43,716 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:02:43,863 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 10:02:45,470 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:02:45,656 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 10:02:45,656 - __main__ - INFO - === STYLE SELECTION CALLBACK ===
+2025-08-15 10:02:45,656 - __main__ - INFO - User ID: 1143980741
+2025-08-15 10:02:45,656 - __main__ - INFO - Callback data: style_realistic
+2025-08-15 10:02:45,656 - __main__ - INFO - User data: {'prompt': 'Sumqayit'}
+2025-08-15 10:02:45,656 - __main__ - INFO - Selected style: realistic
+2025-08-15 10:02:45,656 - __main__ - INFO - Style saved to context: realistic
+2025-08-15 10:02:45,656 - __main__ - INFO - Showing size selection menu for style: Realistic
+2025-08-15 10:02:45,840 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 10:02:47,573 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:02:47,667 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 10:02:47,667 - __main__ - INFO - Size selection callback: size_1024x1024 from user 1143980741
+2025-08-15 10:02:47,667 - __main__ - INFO - Size selected: 1024x1024 for user 1143980741
+2025-08-15 10:02:47,773 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 10:02:47,773 - image_generator - INFO - Generating image: Sumqayit | Style: realistic | Size: 1024x1024
+2025-08-15 10:02:47,976 - image_generator - ERROR - NovelAI API error: 404 - {"statusCode":404,"message":"On 2024-02-21, we announced the deprecation of api.novelai.net for image generation. As of 2024-04-05, this url does not work for such. Please use image.novelai.net/ai/generate-image."}
+2025-08-15 10:02:49,265 - image_generator - ERROR - Stable Horde API error: 400 - {"errors":{"apikey":"The API Key corresponding to a registered user. Missing required parameter in the HTTP headers"},"message":"Input payload validation failed"}
+
+2025-08-15 10:02:49,504 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 10:02:49,504 - image_generator - ERROR - All image generation methods failed
+2025-08-15 10:02:49,616 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 10:02:53,776 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:02:53,951 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 10:03:03,862 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:03:05,118 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:03:05,402 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 10:03:06,996 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:03:07,094 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 10:03:07,094 - __main__ - INFO - === STYLE SELECTION CALLBACK ===
+2025-08-15 10:03:07,094 - __main__ - INFO - User ID: 1143980741
+2025-08-15 10:03:07,094 - __main__ - INFO - Callback data: style_realistic
+2025-08-15 10:03:07,094 - __main__ - INFO - User data: {'prompt': 'Baku city', 'style': 'realistic', 'size': '1024x1024'}
+2025-08-15 10:03:07,094 - __main__ - INFO - Selected style: realistic
+2025-08-15 10:03:07,094 - __main__ - INFO - Style saved to context: realistic
+2025-08-15 10:03:07,095 - __main__ - INFO - Showing size selection menu for style: Realistic
+2025-08-15 10:03:07,228 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 10:03:09,066 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 10:03:09,160 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 10:03:09,160 - __main__ - INFO - Size selection callback: size_1152x896 from user 1143980741
+2025-08-15 10:03:09,160 - __main__ - INFO - Size selected: 1152x896 for user 1143980741
+2025-08-15 10:03:09,268 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 10:03:09,389 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
