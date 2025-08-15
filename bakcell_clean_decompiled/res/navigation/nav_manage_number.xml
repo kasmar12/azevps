@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/nav_manage_number" app:startDestination="@id/manageNumberFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/in_balance_manage_number" android:name="az.azerconnect.bakcell.ui.main.dashboard.coreService.ManageNumberFragment" android:id="@id/manageNumberFragment">
+        <argument android:name="accountId" app:argType="integer" />
+        <action android:id="@id/action_manageNumberFragment_to_forwardCallDialog" app:destination="@id/forwardCallDialog" />
+        <action android:id="@id/action_manageNumberFragment_to_myPageFragment" app:destination="@id/myPageFragment" />
+        <action android:id="@id/action_manageNumberFragment_to_selectContactFragment2" app:destination="@id/selectContactFragment2" />
+    </fragment>
+    <fragment android:label="@string/in_my_page_nav_title" android:name="az.azerconnect.bakcell.ui.main.dashboard.coreService.myPage.MyPageFragment" android:id="@id/myPageFragment">
+        <argument android:name="dto" app:argType="az.azerconnect.data.models.dto.CustomerProfileDto" />
+        <action android:id="@id/action_myPageFragment_to_changeSystemLanguageFragment" app:destination="@id/changeSystemLanguageFragment" />
+        <action android:id="@id/action_myPageFragment_to_changeEmailDialog" app:destination="@id/changeEmailDialog" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.coreService.forward.ForwardCallDialog" android:id="@id/forwardCallDialog" />
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.coreService.ChangeSystemLanguageFragment" android:id="@id/changeSystemLanguageFragment">
+        <argument android:name="lang" app:argType="az.azerconnect.data.enums.LanguageEnum" />
+    </dialog>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.coreService.email.ChangeEmailDialog" android:id="@id/changeEmailDialog" />
+    <fragment android:label="@string/in_select_contact_nav_title" android:name="az.azerconnect.bakcell.ui.global.selectContact.SelectContactFragment" android:id="@id/selectContactFragment2">
+        <argument android:name="contactDto" app:argType="az.azerconnect.data.models.dto.ContactDto" app:nullable="true" />
+        <action android:id="@id/action_selectContactFragment_to_selectContactManualFragment" app:destination="@id/selectContactManualFragment2" />
+    </fragment>
+    <fragment android:label="@string/in_select_contact_manual_nav_title" android:name="az.azerconnect.bakcell.ui.global.selectContact.manual.SelectContactManualFragment" android:id="@id/selectContactManualFragment2" />
+</navigation>

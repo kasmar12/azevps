@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:id="@id/stateView" android:tag="layout/fragment_web_0" android:layout_width="fill_parent" android:layout_height="fill_parent" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@id/toolbar"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+</az.azerconnect.bakcell.utils.widgets.StateView>

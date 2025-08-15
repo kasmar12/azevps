@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:tag="layout/fragment_my_subscriptions_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.tabs.TabLayout android:id="@id/tabLayout" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="48.0dip" android:paddingHorizontal="16.0dip" app:layout_constraintTop_toTopOf="parent" app:tabIndicator="@drawable/package_tab_indicator" app:tabIndicatorColor="@color/bkc_color_background_brand" app:tabIndicatorGravity="center" app:tabIndicatorHeight="32.0dip" app:tabMode="scrollable" app:tabRippleColor="@null" app:tabSelectedTextColor="@color/bkc_color_text_white_invariable" app:tabTextAppearance="@style/TextAppearance.Bakcell.Tab" app:tabTextColor="@color/bkc_color_text_secondary">
+        <com.google.android.material.tabs.TabItem android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_my_subscriptions_tab_item_all" />
+    </com.google.android.material.tabs.TabLayout>
+    <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerView" android:tag="binding_1" android:padding="16.0dip" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:overScrollMode="never" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+</az.azerconnect.bakcell.utils.widgets.StateView>

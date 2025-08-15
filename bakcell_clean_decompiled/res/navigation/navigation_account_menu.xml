@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/accountMenuNavId" app:startDestination="@id/accountMenuDialogFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_balance_detail" />
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.accountMenu.AccountMenuDialogFragment" android:id="@id/accountMenuDialogFragment">
+        <argument android:name="accountId" app:argType="integer" />
+        <action android:id="@id/action_accountMenuDialogFragment_to_accountExitDialogFragment" app:destination="@id/accountExitDialogFragment" app:popUpTo="@id/accountMenuDialogFragment" app:popUpToInclusive="true" />
+        <action android:id="@id/action_accountMenuDialogFragment_to_loggedInDevicesFragment" app:destination="@id/loggedInDevicesFragment" />
+        <action android:id="@id/action_accountMenuDialogFragment_to_setPrimaryNumberWarningFragment" app:destination="@id/setPrimaryNumberWarningFragment" />
+        <action android:id="@id/action_accountMenuDialogFragment_to_setPrimaryNumberOtpFragment" app:destination="@id/setPrimaryNumberOtpFragment" />
+        <action android:id="@id/action_accountMenuDialogFragment_to_loginSecondaryAccountOtpFragment" app:destination="@id/loginSecondaryAccountOtpFragment" />
+    </dialog>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.dashboard.balance.logOut.AccountExitDialogFragment" android:id="@id/accountExitDialogFragment">
+        <argument android:name="accountId" app:argType="integer" />
+    </dialog>
+    <fragment android:label="@string/in_account_menu_dialog_logged_in_devices" android:name="az.azerconnect.bakcell.ui.main.more.settings.devices.LoggedInDevicesFragment" android:id="@id/loggedInDevicesFragment">
+        <argument android:name="accountId" app:argType="integer" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.accountMenu.primaryNumber.warning.SetPrimaryNumberWarningFragment" android:id="@id/setPrimaryNumberWarningFragment">
+        <argument android:name="text" />
+        <argument android:name="spannableText" />
+    </dialog>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.accountMenu.primaryNumber.otp.SetPrimaryNumberOtpFragment" android:id="@id/setPrimaryNumberOtpFragment">
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="uuid" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.accountMenu.primaryNumber.otp.LoginSecondaryAccountOtpFragment" android:id="@id/loginSecondaryAccountOtpFragment">
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="uuid" />
+    </fragment>
+    <action android:id="@id/action_global_balance_detail" app:destination="@id/balanceDetailNavId">
+        <argument android:name="title" app:argType="string" />
+        <argument android:name="accountDto" app:argType="az.azerconnect.data.models.dto.AccountDto" />
+    </action>
+</navigation>

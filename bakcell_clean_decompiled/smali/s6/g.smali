@@ -1,0 +1,353 @@
+.class public final Ls6/g;
+.super LXd/h;
+.source "SourceFile"
+
+# interfaces
+.implements Lee/l;
+
+
+# instance fields
+.field public a:LQ7/c;
+
+.field public b:Ls6/h;
+
+.field public c:Laz/azerconnect/data/models/dto/ESimAccountDto;
+
+.field public d:I
+
+.field public final synthetic e:Ls6/h;
+
+
+# direct methods
+.method public constructor <init>(Ls6/h;Lkotlin/coroutines/Continuation;)V
+    .locals 0
+
+    iput-object p1, p0, Ls6/g;->e:Ls6/h;
+
+    const/4 p1, 0x1
+
+    invoke-direct {p0, p1, p2}, LXd/h;-><init>(ILkotlin/coroutines/Continuation;)V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final create(Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
+    .locals 2
+
+    new-instance v0, Ls6/g;
+
+    iget-object v1, p0, Ls6/g;->e:Ls6/h;
+
+    invoke-direct {v0, v1, p1}, Ls6/g;-><init>(Ls6/h;Lkotlin/coroutines/Continuation;)V
+
+    return-object v0
+.end method
+
+.method public final invoke(Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 1
+
+    check-cast p1, Lkotlin/coroutines/Continuation;
+
+    invoke-virtual {p0, p1}, Ls6/g;->create(Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
+
+    move-result-object p1
+
+    check-cast p1, Ls6/g;
+
+    sget-object v0, LRd/p;->a:LRd/p;
+
+    invoke-virtual {p1, v0}, Ls6/g;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object p1
+
+    return-object p1
+.end method
+
+.method public final invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 11
+
+    sget-object v0, LWd/a;->a:LWd/a;
+
+    iget v1, p0, Ls6/g;->d:I
+
+    iget-object v2, p0, Ls6/g;->e:Ls6/h;
+
+    sget-object v3, LRd/p;->a:LRd/p;
+
+    const/4 v4, 0x0
+
+    const/4 v5, 0x4
+
+    const/4 v6, 0x2
+
+    const/4 v7, 0x1
+
+    const/4 v8, 0x3
+
+    if-eqz v1, :cond_4
+
+    if-eq v1, v7, :cond_3
+
+    if-eq v1, v6, :cond_2
+
+    if-eq v1, v8, :cond_1
+
+    if-ne v1, v5, :cond_0
+
+    iget-object v0, p0, Ls6/g;->a:LQ7/c;
+
+    invoke-static {p1}, LVa/q5;->b(Ljava/lang/Object;)V
+
+    goto/16 :goto_7
+
+    :cond_0
+    new-instance p1, Ljava/lang/IllegalStateException;
+
+    const-string v0, "call to \'resume\' before \'invoke\' with coroutine"
+
+    invoke-direct {p1, v0}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
+
+    throw p1
+
+    :cond_1
+    iget-object v1, p0, Ls6/g;->c:Laz/azerconnect/data/models/dto/ESimAccountDto;
+
+    iget-object v2, p0, Ls6/g;->b:Ls6/h;
+
+    iget-object v6, p0, Ls6/g;->a:LQ7/c;
+
+    invoke-static {p1}, LVa/q5;->b(Ljava/lang/Object;)V
+
+    goto/16 :goto_6
+
+    :cond_2
+    iget-object v1, p0, Ls6/g;->c:Laz/azerconnect/data/models/dto/ESimAccountDto;
+
+    iget-object v2, p0, Ls6/g;->b:Ls6/h;
+
+    iget-object v6, p0, Ls6/g;->a:LQ7/c;
+
+    invoke-static {p1}, LVa/q5;->b(Ljava/lang/Object;)V
+
+    goto/16 :goto_5
+
+    :cond_3
+    invoke-static {p1}, LVa/q5;->b(Ljava/lang/Object;)V
+
+    goto :goto_3
+
+    :cond_4
+    invoke-static {p1}, LVa/q5;->b(Ljava/lang/Object;)V
+
+    sget-object p1, LU7/q;->a:Lv1/b;
+
+    if-eqz p1, :cond_f
+
+    const-string v1, "esim_number"
+
+    const-string v9, ""
+
+    invoke-virtual {p1, v1, v9}, Lv1/b;->getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object p1
+
+    if-eqz p1, :cond_6
+
+    invoke-virtual {p1}, Ljava/lang/String;->length()I
+
+    move-result v1
+
+    if-nez v1, :cond_5
+
+    goto :goto_0
+
+    :cond_5
+    new-instance v1, LC/d;
+
+    invoke-direct {v1}, LC/d;-><init>()V
+
+    invoke-static {p1}, LWa/M2;->b(Ljava/lang/String;)Lcom/google/gson/n;
+
+    move-result-object p1
+
+    new-instance v9, Laz/azerconnect/data/persistence/SessionManager$special$$inlined$toModel$1;
+
+    invoke-direct {v9}, Laz/azerconnect/data/persistence/SessionManager$special$$inlined$toModel$1;-><init>()V
+
+    invoke-virtual {v9}, Lcom/google/gson/reflect/TypeToken;->getType()Ljava/lang/reflect/Type;
+
+    move-result-object v9
+
+    invoke-virtual {v1, p1, v9}, LC/d;->c(Lcom/google/gson/n;Ljava/lang/reflect/Type;)Ljava/lang/Object;
+
+    move-result-object p1
+
+    goto :goto_1
+
+    :cond_6
+    :goto_0
+    move-object p1, v4
+
+    :goto_1
+    check-cast p1, Laz/azerconnect/data/models/dto/ESimDto;
+
+    if-eqz p1, :cond_7
+
+    invoke-virtual {p1}, Laz/azerconnect/data/models/dto/ESimDto;->getNumber()Ljava/lang/String;
+
+    move-result-object p1
+
+    goto :goto_2
+
+    :cond_7
+    move-object p1, v4
+
+    :goto_2
+    iput v7, p0, Ls6/g;->d:I
+
+    iget-object v1, v2, Ls6/h;->h:LV7/i;
+
+    invoke-virtual {v1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    new-instance v7, LV7/g;
+
+    invoke-direct {v7, v1, p1, v4}, LV7/g;-><init>(LV7/i;Ljava/lang/String;Lkotlin/coroutines/Continuation;)V
+
+    invoke-virtual {v1, v7, p0}, LC9/e;->d0(Lee/l;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+
+    move-result-object p1
+
+    if-ne p1, v0, :cond_8
+
+    return-object v0
+
+    :cond_8
+    :goto_3
+    check-cast p1, LQ7/c;
+
+    instance-of v1, p1, LQ7/b;
+
+    if-eqz v1, :cond_e
+
+    move-object v1, p1
+
+    check-cast v1, LQ7/b;
+
+    iget-object v1, v1, LQ7/b;->a:Ljava/lang/Object;
+
+    check-cast v1, Laz/azerconnect/data/models/dto/ESimAccountDto;
+
+    invoke-static {}, LU7/q;->c()Laz/azerconnect/data/models/dto/ESimDto;
+
+    move-result-object v7
+
+    if-eqz v7, :cond_9
+
+    invoke-virtual {v7}, Laz/azerconnect/data/models/dto/ESimDto;->getTime()Ljava/lang/String;
+
+    move-result-object v7
+
+    goto :goto_4
+
+    :cond_9
+    move-object v7, v4
+
+    :goto_4
+    invoke-virtual {v1}, Laz/azerconnect/data/models/dto/ESimAccountDto;->getCurrentTime()Ljava/lang/String;
+
+    move-result-object v9
+
+    const-string v10, "yyyy-MM-dd HH:mm:ss"
+
+    invoke-static {v7, v9, v10}, LF7/e;->b(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v7
+
+    if-ge v7, v8, :cond_d
+
+    iput-object p1, p0, Ls6/g;->a:LQ7/c;
+
+    iput-object v2, p0, Ls6/g;->b:Ls6/h;
+
+    iput-object v1, p0, Ls6/g;->c:Laz/azerconnect/data/models/dto/ESimAccountDto;
+
+    iput v6, p0, Ls6/g;->d:I
+
+    iget-object v6, v2, Ls6/h;->l:Lse/Z;
+
+    invoke-virtual {v6, v1, p0}, Lse/Z;->emit(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+
+    if-ne v3, v0, :cond_a
+
+    return-object v0
+
+    :cond_a
+    move-object v6, p1
+
+    :goto_5
+    iget-object p1, v2, Ls6/h;->j:Lse/Z;
+
+    invoke-virtual {v1}, Laz/azerconnect/data/models/dto/ESimAccountDto;->getPhoneNumber()Ljava/lang/String;
+
+    move-result-object v7
+
+    iput-object v6, p0, Ls6/g;->a:LQ7/c;
+
+    iput-object v2, p0, Ls6/g;->b:Ls6/h;
+
+    iput-object v1, p0, Ls6/g;->c:Laz/azerconnect/data/models/dto/ESimAccountDto;
+
+    iput v8, p0, Ls6/g;->d:I
+
+    invoke-virtual {p1, v7, p0}, Lse/Z;->emit(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+
+    if-ne v3, v0, :cond_b
+
+    return-object v0
+
+    :cond_b
+    :goto_6
+    iget-object p1, v2, Ls6/h;->k:Lse/Z;
+
+    invoke-virtual {v1}, Laz/azerconnect/data/models/dto/ESimAccountDto;->getTariffName()Ljava/lang/String;
+
+    move-result-object v1
+
+    iput-object v6, p0, Ls6/g;->a:LQ7/c;
+
+    iput-object v4, p0, Ls6/g;->b:Ls6/h;
+
+    iput-object v4, p0, Ls6/g;->c:Laz/azerconnect/data/models/dto/ESimAccountDto;
+
+    iput v5, p0, Ls6/g;->d:I
+
+    invoke-virtual {p1, v1, p0}, Lse/Z;->emit(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+
+    if-ne v3, v0, :cond_c
+
+    return-object v0
+
+    :cond_c
+    move-object v0, v6
+
+    :goto_7
+    move-object p1, v0
+
+    goto :goto_8
+
+    :cond_d
+    invoke-static {v4}, LU7/q;->i(Laz/azerconnect/data/models/dto/ESimDto;)V
+
+    :cond_e
+    :goto_8
+    return-object p1
+
+    :cond_f
+    const-string p1, "sharedPref"
+
+    invoke-static {p1}, Lkotlin/jvm/internal/k;->n(Ljava/lang/String;)V
+
+    throw v4
+.end method

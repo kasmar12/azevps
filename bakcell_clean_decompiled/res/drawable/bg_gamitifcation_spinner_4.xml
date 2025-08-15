@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="329.0dip" android:width="329.0dip" android:viewportWidth="329.0" android:viewportHeight="329.0"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <group>
+        <clip-path android:pathData="M0 0H329V329H0z" />
+        <group>
+            <path android:fillColor="#ff81000f" android:pathData="M270.12 40.27c3.42 2.93 3.47 8.13 0.29 11.32l-48.77 48.77c-3 3-7.8 3.1-11.22 0.59-27.41-20.1-64.95-20.1-92.35-0.01-3.43 2.5-8.22 2.4-11.22-0.6L58.05 51.57c-3.18-3.18-3.12-8.38 0.3-11.31 60.8-52.11 150.93-52.1 211.76 0.02Z" android:strokeColor="@drawable/$bg_gamitifcation_spinner_4__0" android:strokeWidth="1.0" />
+            <path android:fillColor="#ff81000f" android:pathData="M50.92 58.97c-3.18-3.18-8.38-3.12-11.31 0.3-52.11 60.8-52.1 150.93 0.02 211.76 2.93 3.42 8.13 3.47 11.31 0.29l48.78-48.77c3-3 3.1-7.8 0.58-11.22-20.1-27.41-20.1-64.95 0-92.36 2.5-3.42 2.4-8.22-0.6-11.22L50.93 58.97Z" android:strokeColor="@drawable/$bg_gamitifcation_spinner_4__1" android:strokeWidth="1.0" />
+            <path android:fillColor="#ff81000f" android:pathData="M288.77 59.29c-2.93-3.42-8.13-3.48-11.31-0.3l-48.77 48.78c-3 3-3.1 7.8-0.6 11.22 20.1 27.4 20.1 64.94 0.02 92.35-2.51 3.42-2.42 8.22 0.58 11.22l48.79 48.78c3.18 3.19 8.38 3.13 11.31-0.29 52.11-60.81 52.1-150.94-0.02-211.76Z" android:strokeColor="@drawable/$bg_gamitifcation_spinner_4__2" android:strokeWidth="1.0" />
+            <path android:fillColor="#ff81000f" android:pathData="M58.09 278.32c-3.19 3.18-3.13 8.38 0.29 11.31 60.82 52.13 150.95 52.13 211.76 0.03 3.42-2.93 3.48-8.13 0.3-11.32l-48.79-48.78c-3-3-7.8-3.1-11.22-0.6-27.4 20.1-64.94 20.1-92.35 0-3.42-2.51-8.22-2.41-11.22 0.59l-48.77 48.77Z" android:strokeColor="@drawable/$bg_gamitifcation_spinner_4__3" android:strokeWidth="1.0" />
+        </group>
+    </group>
+</vector>

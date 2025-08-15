@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_bakcell_card_payments" app:startDestination="@id/bakcellCardPaymentsFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_web" />
+    <fragment android:label="@string/in_bakcell_card_payments_nav_title" android:name="az.azerconnect.bakcell.ui.main.bakcellCard.payments.BakcellCardPaymentsFragment" android:id="@id/bakcellCardPaymentsFragment">
+        <argument android:name="cardId" />
+        <action android:id="@id/action_bakcellCardPaymentsFragment_to_bakcellCardSelectContactFragment" app:destination="@id/bakcellCardSelectContactFragment" />
+        <action android:id="@id/action_bakcellCardPaymentsFragment_to_bakcellCardPaymentAmountFragment" app:destination="@id/bakcellCardPaymentAmountFragment" />
+    </fragment>
+    <fragment android:label="@string/in_bakcell_card_payment_select_contact_nav_title" android:name="az.azerconnect.bakcell.ui.main.bakcellCard.payments.contact.BakcellCardSelectContactFragment" android:id="@id/bakcellCardSelectContactFragment">
+        <argument android:name="cardId" />
+        <argument android:name="providerId" app:argType="integer" />
+        <argument android:name="paymentSource" />
+        <argument android:name="cashbackBalance" android:defaultValue="0" app:argType="string" />
+        <deepLink app:uri="@string/deep_link_bakcell_card_payment_select_contact" />
+        <action android:id="@id/action_bakcellCardSelectContactFragment_to_bakcellCardPaymentSubscriptionFragment" app:destination="@id/bakcellCardPaymentSubscriptionFragment" app:popUpTo="@id/bakcellCardSelectContactFragment" app:popUpToInclusive="true" />
+        <action android:id="@id/action_bakcellCardSelectContactFragment_to_bakcellCardPaymentAmountFragment" app:destination="@id/bakcellCardPaymentAmountFragment" />
+    </fragment>
+    <fragment android:label="{title}" android:name="az.azerconnect.bakcell.ui.main.bakcellCard.payments.subscription.BakcellCardPaymentSubscriptionFragment" android:id="@id/bakcellCardPaymentSubscriptionFragment">
+        <argument android:name="cardId" />
+        <argument android:name="title" />
+        <argument android:name="providerId" app:argType="integer" />
+        <argument android:name="paymentSource" />
+        <argument android:name="cashbackBalance" app:argType="string" />
+        <action android:id="@id/action_bakcellCardPaymentSubscriptionFragment_to_bakcellCardPaymentAmountFragment" app:destination="@id/bakcellCardPaymentAmountFragment" />
+    </fragment>
+    <fragment android:label="{contactName}" android:name="az.azerconnect.bakcell.ui.main.bakcellCard.payments.amount.BakcellCardPaymentAmountFragment" android:id="@id/bakcellCardPaymentAmountFragment">
+        <argument android:name="cardId" />
+        <argument android:name="contactName" />
+        <argument android:name="utilDto" app:argType="az.azerconnect.data.models.dto.UtilBakcellCardPaymentAmountDto" />
+        <action android:id="@id/action_bakcellCardPaymentAmountFragment_to_operationSuccessFragment" app:destination="@id/operationSuccessFragment" app:popUpTo="@id/bakcellCardPaymentsFragment" />
+        <action android:id="@id/action_bakcellCardPaymentAmountFragment_to_operationErrorFragment" app:destination="@id/operationErrorFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.operation.OperationSuccessFragment" android:id="@id/operationSuccessFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.operation.OperationErrorFragment" android:id="@id/operationErrorFragment" />
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+</navigation>
