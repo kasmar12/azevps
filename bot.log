@@ -6,3 +6,91 @@ nohup: ignoring input
 2025-08-15 14:29:44,155 - telegram.ext.Application - INFO - Application started
 2025-08-15 14:29:54,420 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
 2025-08-15 14:30:04,509 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:14,597 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:24,686 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:32,749 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:33,029 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 14:30:33,158 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:30:33,269 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:30:39,656 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:39,947 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:30:41,300 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:41,394 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 14:30:41,524 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:30:43,115 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:43,280 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 14:30:43,467 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:30:43,613 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:30:43,614 - root - INFO - Starting email monitoring for user 1143980741, session wedDgqlhXBNAfD8I
+2025-08-15 14:30:49,868 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:50,266 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 14:30:50,478 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:30:50,674 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:30:51,777 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:51,882 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 14:30:52,027 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:30:52,172 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:30:52,173 - root - INFO - Starting email monitoring for user 1143980741, session QLLD5WtyJ2g6PXTx
+2025-08-15 14:30:55,838 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:56,016 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:30:56,105 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
+2025-08-15 14:30:56,106 - root - ERROR - Check emails error: Can't parse entities: can't find end of the entity starting at byte offset 164
+2025-08-15 14:30:56,312 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:30:58,617 - root - INFO - Found 1 new emails for user 1143980741
+2025-08-15 14:30:58,618 - root - INFO - Processing new email email_1755268258 for user 1143980741
+2025-08-15 14:30:58,621 - root - INFO - Would send notification to user 1143980741: 📨 **Yeni Email!**
+
+👤 Göndərən: `demo@example.com`
+📧 Mövzu: `Demo Email - Test Mesajı`
+⏰ Vaxt: `14:30:58`
+
+📝 Məzmunu görmək üçün /read email_1755268258 yazın
+2025-08-15 14:30:59,075 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:30:59,192 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:30:59,279 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
+2025-08-15 14:30:59,279 - root - ERROR - Check emails error: Can't parse entities: can't find end of the entity starting at byte offset 164
+2025-08-15 14:30:59,383 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:31:02,906 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:31:03,091 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:31:03,182 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
+2025-08-15 14:31:03,182 - root - ERROR - Check emails error: Can't parse entities: can't find end of the entity starting at byte offset 164
+2025-08-15 14:31:03,326 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:31:07,178 - root - INFO - Found 1 new emails for user 1143980741
+2025-08-15 14:31:07,178 - root - INFO - Processing new email email_1755268267 for user 1143980741
+2025-08-15 14:31:07,180 - root - INFO - Would send notification to user 1143980741: 📨 **Yeni Email!**
+
+👤 Göndərən: `demo@example.com`
+📧 Mövzu: `Demo Email - Test Mesajı`
+⏰ Vaxt: `14:31:07`
+
+📝 Məzmunu görmək üçün /read email_1755268267 yazın
+2025-08-15 14:31:13,000 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:31:23,089 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:31:26,026 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:31:26,427 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:31:26,514 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
+2025-08-15 14:31:26,515 - root - ERROR - Check emails error: Can't parse entities: can't find end of the entity starting at byte offset 164
+2025-08-15 14:31:26,673 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:31:27,954 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:31:28,078 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:31:28,166 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
+2025-08-15 14:31:28,166 - root - ERROR - Check emails error: Can't parse entities: can't find end of the entity starting at byte offset 164
+2025-08-15 14:31:28,277 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:31:30,862 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:31:31,010 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:31:31,164 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:31:34,131 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:31:34,259 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:31:34,345 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 400 Bad Request"
+2025-08-15 14:31:34,346 - root - ERROR - Check emails error: Can't parse entities: can't find end of the entity starting at byte offset 164
+2025-08-15 14:31:34,477 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 14:31:37,188 - root - INFO - Found 1 new emails for user 1143980741
+2025-08-15 14:31:37,189 - root - INFO - Processing new email email_1755268297 for user 1143980741
+2025-08-15 14:31:37,192 - root - INFO - Would send notification to user 1143980741: 📨 **Yeni Email!**
+
+👤 Göndərən: `demo@example.com`
+📧 Mövzu: `Demo Email - Test Mesajı`
+⏰ Vaxt: `14:31:37`
+
+📝 Məzmunu görmək üçün /read email_1755268297 yazın
+2025-08-15 14:31:44,225 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
