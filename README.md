@@ -173,27 +173,7 @@ Bot automatically:
 
 ---
 
-## 🔓 **APK BYPASS PROJECT**
 
-### **Bakcell APK Play Store Redirect Bypass**
-
-Bu repository-də həm TikTok Downloader Bot, həm də **Bakcell APK Play Store Redirect Bypass** layihəsi mövcuddur.
-
-#### **APK Bypass Xüsusiyyətləri:**
-- ✅ **Play Store Redirect Bypass** - Play Store yönləndirmə bypass
-- ✅ **Installation Source Check Removal** - quraşdırma mənbəyi yoxlaması silmə
-- ✅ **Package Verification Bypass** - paket yoxlaması bypass
-- ✅ **Installation Method Override** - quraşdırma metodu dəyişdirmə
-
-#### **APK Faylları:**
-- `APK_Files/Bakcell_1.4.24.apk` - Original APK
-- `APK_Files/Bakcell_1.4.24_MODIFIED.apk` - Modified APK
-- `Decompiled_APK/` - Decompiled və extracted fayllar
-
-#### **Ətraflı Məlumat:**
-Ətraflı məlumat üçün `APK_BYPASS_README.md` faylını oxuyun.
-
----
 
 **Made with ❤️ for the TikTok community**
 

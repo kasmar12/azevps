@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector android:height="16.0dip" android:width="16.0dip" android:viewportWidth="16.0" android:viewportHeight="16.0"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M13.8 3.14c0.27-0.26 0.27-0.68 0-0.94-0.26-0.27-0.68-0.27-0.94 0L8 7.06 3.14 2.2c-0.26-0.27-0.68-0.27-0.94 0-0.27 0.26-0.27 0.68 0 0.94L7.06 8 2.2 12.86c-0.27 0.26-0.27 0.68 0 0.94 0.26 0.27 0.68 0.27 0.94 0L8 8.94l4.86 4.86c0.26 0.27 0.68 0.27 0.94 0 0.27-0.26 0.27-0.68 0-0.94L8.94 8l4.86-4.86Z" android:fillType="evenOdd" />
-</vector>

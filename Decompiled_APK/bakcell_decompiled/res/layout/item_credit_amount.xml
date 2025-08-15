@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.button.MaterialButton android:textAppearance="@style/TextAppearance.Bakcell.Medium.Title2" android:textColor="@color/bkc_color_text_white_invariable" android:id="@id/itemBtn" android:tag="layout/item_credit_amount_0" android:layout_width="wrap_content" android:layout_height="64.0dip" android:paddingHorizontal="16.0dip" app:cornerRadius="8.0dip" style="@style/Widget.Bakcell.Button"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" />
