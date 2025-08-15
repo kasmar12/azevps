@@ -1,26 +1,8 @@
 nohup: ignoring input
-2025-08-15 14:41:55,829 - database - INFO - Database initialized successfully
-2025-08-15 14:41:55,961 - root - INFO - Fake Email Bot başladıldı...
-2025-08-15 14:41:56,234 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getMe "HTTP/1.1 200 OK"
-2025-08-15 14:41:56,324 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/deleteWebhook "HTTP/1.1 200 OK"
-2025-08-15 14:41:56,325 - telegram.ext.Application - INFO - Application started
-2025-08-15 14:42:06,597 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:42:16,683 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:42:26,770 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:42:35,809 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:42:36,177 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:42:38,450 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:42:38,549 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
-2025-08-15 14:42:38,665 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:42:41,127 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:42:41,225 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
-2025-08-15 14:42:41,341 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:42:41,478 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:42:41,586 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:42:45,461 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:42:45,557 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/answerCallbackQuery "HTTP/1.1 200 OK"
-2025-08-15 14:42:45,677 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
-2025-08-15 14:42:45,773 - email_generator - ERROR - GuerrillaMail API HTTP error: 404
-2025-08-15 14:42:45,882 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/editMessageText "HTTP/1.1 200 OK"
-2025-08-15 14:42:55,548 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 14:43:05,632 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:43:53,001 - database - INFO - Database initialized successfully
+2025-08-15 14:43:53,040 - root - INFO - Fake Email Bot başladıldı...
+2025-08-15 14:43:53,293 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getMe "HTTP/1.1 200 OK"
+2025-08-15 14:43:53,374 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/deleteWebhook "HTTP/1.1 200 OK"
+2025-08-15 14:43:53,375 - telegram.ext.Application - INFO - Application started
+2025-08-15 14:44:03,636 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:44:13,721 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"

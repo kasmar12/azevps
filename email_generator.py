@@ -28,36 +28,35 @@ class EmailGenerator:
         try:
             session = await self.get_session()
             
-            # GuerrillaMail API endpoint
-            url = "https://api.guerrillamail.com/ajax/new_email"
+            # GuerrillaMail API endpoint - düzgün URL
+            url = "https://api.guerrillamail.com/ajax/get_email_address"
             
-            # Random email yarat
-            names = ['user', 'test', 'demo', 'temp', 'fake', 'anon', 'guest', 'bot', 'mail', 'email']
-            name = random.choice(names)
-            number = random.randint(1000, 9999)
-            email = f"{name}{number}@guerrillamail.com"
-            
-            # API çağır
-            async with session.post(url, json={'email': email}) as response:
+            # API çağır - yeni email al
+            async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
                     
                     if data.get('status') == 'ok':
+                        email = data.get('email_addr', '')
                         session_id = data.get('sid', ''.join(random.choices(string.ascii_letters + string.digits, k=16)))
                         
-                        return {
-                            'email': email,
-                            'session_id': session_id,
-                            'created_at': int(time.time()),
-                            'expires_at': int(time.time()) + BOT_SETTINGS['email_lifetime'],
-                            'status': 'active'
-                        }
+                        if email:
+                            return {
+                                'email': email,
+                                'session_id': session_id,
+                                'created_at': int(time.time()),
+                                'expires_at': int(time.time()) + BOT_SETTINGS['email_lifetime'],
+                                'status': 'active'
+                            }
+                        else:
+                            self.logger.error("No email address received from API")
+                            return await self._generate_demo_email()
                     else:
                         self.logger.error(f"GuerrillaMail API error: {data}")
-                        return None
+                        return await self._generate_demo_email()
                 else:
                     self.logger.error(f"GuerrillaMail API HTTP error: {response.status}")
-                    return None
+                    return await self._generate_demo_email()
                     
         except Exception as e:
             self.logger.error(f"Email generation error: {e}")
@@ -91,11 +90,12 @@ class EmailGenerator:
         try:
             session = await self.get_session()
             
-            # GuerrillaMail API endpoint
+            # GuerrillaMail API endpoint - düzgün URL
             url = "https://api.guerrillamail.com/ajax/check_email"
             
-            # API çağır
-            async with session.post(url, json={'sid': session_id}) as response:
+            # API çağır - session ID ilə email-ləri yoxla
+            params = {'sid': session_id}
+            async with session.get(url, params=params) as response:
                 if response.status == 200:
                     data = await response.json()
                     
