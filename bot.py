@@ -468,8 +468,8 @@ def main():
             entry_points=[CommandHandler("create", create_image)],
             states={
                 ENTERING_PROMPT: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_prompt)],
-                SELECTING_STYLE: [CallbackQueryHandler(handle_style_selection, pattern=r'^style_|back_to_prompt$')],
-                SELECTING_SIZE: [CallbackQueryHandler(handle_size_selection, pattern=r'^size_|back_to_style$')]
+                SELECTING_STYLE: [CallbackQueryHandler(handle_style_selection)],
+                SELECTING_SIZE: [CallbackQueryHandler(handle_size_selection)]
             },
             fallbacks=[CommandHandler("cancel", lambda u, c: ConversationHandler.END)]
         )
