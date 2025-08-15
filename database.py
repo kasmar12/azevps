@@ -601,3 +601,206 @@ class Database:
         except Exception as e:
             logging.error(f"Error getting database stats: {e}")
             return {}
+    
+    def add_like_history(self, account_id: int, comment_id: str, media_id: str, 
+                        comment_text: str = None, user_id: str = None, 
+                        username: str = None, success: bool = True, 
+                        error_message: str = None, like_strategy: str = 'MODERATE',
+                        delay_used: int = None) -> bool:
+        """Add like history record"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    INSERT INTO like_history 
+                    (account_id, comment_id, media_id, comment_text, user_id, username, 
+                     success, error_message, like_strategy, delay_used)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (account_id, comment_id, media_id, comment_text, user_id, username, 
+                     success, error_message, like_strategy, delay_used))
+                conn.commit()
+                return True
+        except Exception as e:
+            logging.error(f"Error adding like history: {e}")
+            return False
+    
+    def check_already_liked(self, comment_id: str, account_id: int) -> bool:
+        """Check if comment was already liked by account"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    SELECT COUNT(*) FROM like_history 
+                    WHERE comment_id = ? AND account_id = ? AND success = 1
+                ''', (comment_id, account_id))
+                
+                count = cursor.fetchone()[0]
+                return count > 0
+        except Exception as e:
+            logging.error(f"Error checking like history: {e}")
+            return False
+    
+    def log_user_activity(self, telegram_user_id: int, action: str, details: str = None,
+                         target_account: str = None, result: str = None):
+        """Log user activity"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    INSERT INTO user_activity 
+                    (telegram_user_id, action, details, target_account, result)
+                    VALUES (?, ?, ?, ?, ?)
+                ''', (telegram_user_id, action, details, target_account, result))
+                conn.commit()
+        except Exception as e:
+            logging.error(f"Error logging user activity: {e}")
+    
+    def remove_account(self, username: str) -> bool:
+        """Remove Instagram account"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('DELETE FROM instagram_accounts WHERE username = ?', (username,))
+                conn.commit()
+                logging.info(f"Account {username} removed successfully")
+                return True
+        except Exception as e:
+            logging.error(f"Error removing account {username}: {e}")
+            return False
+    
+    def update_statistics(self, date: str, likes_count: int = 1, success: bool = True):
+        """Update daily statistics"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Check if record exists
+                cursor.execute('SELECT * FROM bot_statistics WHERE date = ?', (date,))
+                if cursor.fetchone():
+                    # Update existing record
+                    if success:
+                        cursor.execute('''
+                            UPDATE bot_statistics 
+                            SET total_likes = total_likes + ?,
+                                successful_likes = successful_likes + ?,
+                                updated_at = ?
+                            WHERE date = ?
+                        ''', (likes_count, likes_count, datetime.now(), date))
+                    else:
+                        cursor.execute('''
+                            UPDATE bot_statistics 
+                            SET total_likes = total_likes + ?,
+                                failed_likes = failed_likes + ?,
+                                updated_at = ?
+                            WHERE date = ?
+                        ''', (likes_count, likes_count, datetime.now(), date))
+                else:
+                    # Create new record
+                    if success:
+                        cursor.execute('''
+                            INSERT INTO bot_statistics 
+                            (date, total_likes, successful_likes, active_accounts)
+                            VALUES (?, ?, ?, ?)
+                        ''', (date, likes_count, likes_count, len(self.get_accounts(active_only=True))))
+                    else:
+                        cursor.execute('''
+                            INSERT INTO bot_statistics 
+                            (date, total_likes, failed_likes, active_accounts)
+                            VALUES (?, ?, ?, ?)
+                        ''', (date, likes_count, likes_count, len(self.get_accounts(active_only=True))))
+                
+                conn.commit()
+        except Exception as e:
+            logging.error(f"Error updating statistics: {e}")
+    
+    def get_statistics(self, days: int = 7) -> Dict:
+        """Get bot statistics for specified days"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                
+                end_date = datetime.now().date()
+                start_date = end_date - timedelta(days=days)
+                
+                cursor.execute('''
+                    SELECT * FROM bot_statistics 
+                    WHERE date BETWEEN ? AND ?
+                    ORDER BY date DESC
+                ''', (start_date, end_date))
+                
+                stats = []
+                for row in cursor.fetchall():
+                    stats.append(dict(row))
+                
+                # Get account count
+                cursor.execute('SELECT COUNT(*) FROM instagram_accounts WHERE is_active = 1')
+                active_accounts = cursor.fetchone()[0]
+                
+                return {
+                    'daily_stats': stats,
+                    'active_accounts': active_accounts,
+                    'total_accounts': len(self.get_accounts(active_only=False))
+                }
+        except Exception as e:
+            logging.error(f"Error getting statistics: {e}")
+            return {}
+    
+    def get_setting(self, key: str) -> Optional[str]:
+        """Get bot setting value"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('SELECT value FROM bot_settings WHERE key = ?', (key,))
+                result = cursor.fetchone()
+                return result[0] if result else None
+        except Exception as e:
+            logging.error(f"Error getting setting {key}: {e}")
+            return None
+    
+    def set_setting(self, key: str, value: str, description: str = None, category: str = 'general'):
+        """Set bot setting value"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    INSERT OR REPLACE INTO bot_settings 
+                    (key, value, description, category, updated_at)
+                    VALUES (?, ?, ?, ?, ?)
+                ''', (key, value, description, category, datetime.now()))
+                conn.commit()
+        except Exception as e:
+            logging.error(f"Error setting {key}: {e}")
+    
+    def reset_daily_likes(self):
+        """Reset daily like counts for all accounts"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('UPDATE instagram_accounts SET daily_likes = 0')
+                conn.commit()
+                logging.info("Daily likes reset successfully")
+        except Exception as e:
+            logging.error(f"Error resetting daily likes: {e}")
+    
+    def get_like_history(self, limit: int = 100) -> List[Dict]:
+        """Get recent like history"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute('''
+                    SELECT lh.*, ia.username as account_username
+                    FROM like_history lh
+                    LEFT JOIN instagram_accounts ia ON lh.account_id = ia.id
+                    ORDER BY lh.liked_at DESC
+                    LIMIT ?
+                ''', (limit,))
+                
+                history = []
+                for row in cursor.fetchall():
+                    history.append(dict(row))
+                return history
+        except Exception as e:
+            logging.error(f"Error getting like history: {e}")
+            return []

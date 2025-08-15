@@ -1,692 +1,837 @@
-import logging
 import asyncio
+import logging
+import json
 from datetime import datetime, timedelta
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes, ConversationHandler
-from config import (
-    BOT_TOKEN, 
-    SUPPORTED_LANGUAGES, 
-    MESSAGES, 
-    DEFAULT_LANGUAGE,
-    ADMIN_IDS,
-    BOT_SETTINGS,
-    TIKTOK_API_URL
-)
-from tiktok_downloader import TikTokDownloader
-from database import DatabaseManager
+from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
+from config import Config
+from database import Database
+from instagram_manager import InstagramManager
+from like_engine import LikeEngine
 
-# Logging konfiqurasiyası
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
-
-# TikTok downloader
-tiktok_downloader = TikTokDownloader()
-
-# Database manager
-db_manager = DatabaseManager()
-
-# İstifadəçi dil tərcihləri
-user_languages = {}
-
-# İstifadəçi statistika
-user_stats = {}
-
-# Admin panel state
-WAITING_FOR_BROADCAST_MESSAGE = 1
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Start əmri"""
-    user_id = update.effective_user.id
-    username = update.effective_user.username or "Unknown"
-    
-    logger.info(f"Start command from user {user_id} (@{username})")
-    
-    # İstifadəçi dil tərcihini yoxla
-    if user_id not in user_languages:
-        user_languages[user_id] = DEFAULT_LANGUAGE
-        logger.info(f"New user {user_id} added with language {DEFAULT_LANGUAGE}")
-    
-    # İstifadəçi statistikasını başlat
-    if user_id not in user_stats:
-        user_stats[user_id] = {
-            'downloads': 0,
-            'last_download': None,
-            'total_downloads': 0,
-            'username': username
-        }
-        logger.info(f"New user stats created for {user_id}")
-    
-    # SQL veritabanına istifadəçi əlavə et
-    db_manager.add_user(
-        user_id=user_id,
-        username=username,
-        first_name=update.effective_user.first_name,
-        last_name=update.effective_user.last_name,
-        language_code=DEFAULT_LANGUAGE
-    )
-    
-    # İstifadəçi aktivliyini yenilə
-    db_manager.update_user_activity(user_id)
-    
-    lang = user_languages[user_id]
-    welcome_message = MESSAGES[lang]['welcome']
-    
-    try:
-        # Xoş gəldin mesajı
-        await update.message.reply_text(welcome_message, parse_mode='Markdown')
-        logger.info(f"Welcome message sent to user {user_id}")
+class InstagramLikeBot:
+    def __init__(self):
+        self.config = Config()
+        self.db = Database()
+        self.instagram_manager = InstagramManager()
+        self.like_engine = LikeEngine()
         
-        # Dil seçimi menyusu
-        await language_menu(update, context)
-        logger.info(f"Language menu sent to user {user_id}")
-        
-    except Exception as e:
-        logger.error(f"Error sending welcome message to {user_id}: {e}")
-        await update.message.reply_text("Xoş gəlmisiniz! Bot işləyir.")
-
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Kömək əmri"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    help_text = MESSAGES[lang]['help']
-    await update.message.reply_text(help_text, parse_mode='Markdown')
-
-async def download_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Video yükləmə əmri"""
-    user_id = update.effective_user.id
-    chat_id = update.effective_chat.id
-    chat_type = update.effective_chat.type
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    # Linki al
-    if context.args:
-        url = ' '.join(context.args)
-    else:
-        await update.message.reply_text(MESSAGES[lang]['no_link'])
-        return
-    
-    # URL-ni yoxla
-    if not tiktok_downloader.is_valid_tiktok_url(url):
-        await update.message.reply_text(MESSAGES[lang]['invalid_link'])
-        return
-    
-    # Processing mesajı
-    processing_msg = await update.message.reply_text(MESSAGES[lang]['processing'])
-    
-    try:
-        # Video yüklə
-        result = await tiktok_downloader.download_video(url)
-        
-        if result is None:
-            await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
-            return
-        
-        if isinstance(result, dict) and result.get('error'):
-            error_type = result.get('error')
-            if error_type == 'file_too_large':
-                await processing_msg.edit_text(MESSAGES[lang]['file_too_large'])
-            elif error_type == 'api_error':
-                error_msg = result.get('message', 'API xətası')
-                await processing_msg.edit_text(f"❌ API Xətası: {error_msg}")
-            else:
-                await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
-            return
-        
-        # Video faylını göndər - caption yoxdur
-        with open(result['file_path'], 'rb') as video_file:
-            await update.message.reply_video(
-                video=video_file
-            )
-        
-        # Müvəqqəti faylı sil
-        tiktok_downloader.cleanup_file(result['file_path'])
-        
-        # Processing mesajını sil
-        await processing_msg.delete()
-        
-        # Statistika yenilə
-        user_stats[user_id]['downloads'] += 1
-        user_stats[user_id]['total_downloads'] += 1
-        user_stats[user_id]['last_download'] = datetime.now()
-        
-        # SQL veritabanında yükləmə sayını artır
-        db_manager.increment_user_downloads(user_id)
-        db_manager.update_user_activity(user_id)
-        
-        # Qrup statistikasını yenilə
-        if chat_type in ['group', 'supergroup']:
-            if 'group_stats' not in user_stats[user_id]:
-                user_stats[user_id]['group_stats'] = {}
-            if chat_id not in user_stats[user_id]['group_stats']:
-                user_stats[user_id]['group_stats'][chat_id] = {
-                    'chat_title': update.effective_chat.title,
-                    'downloads': 0
-                }
-            user_stats[user_id]['group_stats'][chat_id]['downloads'] += 1
-        
-    except Exception as e:
-        logger.error(f"Download error: {e}")
-        await processing_msg.edit_text(MESSAGES[lang]['error'])
-
-async def handle_url_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """URL mesajlarını idarə edir - sadəcə link göndərməklə yükləmə"""
-    user_id = update.effective_user.id
-    chat_id = update.effective_chat.id
-    chat_type = update.effective_chat.type
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    url = update.message.text.strip()
-    
-    # URL-ni yoxla
-    if not tiktok_downloader.is_valid_tiktok_url(url):
-        return  # Digər mesajlar üçün
-    
-    # Qrup və ya kanal olduqda log
-    if chat_type in ['group', 'supergroup']:
-        chat_title = update.effective_chat.title
-        logger.info(f"TikTok link detected in {chat_type} '{chat_title}' ({chat_id}) from user {user_id}: {url}")
-    else:
-        logger.info(f"TikTok link detected from user {user_id}: {url}")
-    
-    # Processing mesajı
-    processing_msg = await update.message.reply_text(MESSAGES[lang]['processing'])
-    
-    try:
-        # Video yüklə
-        result = await tiktok_downloader.download_video(url)
-        
-        if result is None:
-            await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
-            return
-        
-        if isinstance(result, dict) and result.get('error'):
-            error_type = result.get('error')
-            if error_type == 'file_too_large':
-                await processing_msg.edit_text(MESSAGES[lang]['file_too_large'])
-            elif error_type == 'api_error':
-                error_msg = result.get('message', 'API xətası')
-                await processing_msg.edit_text(f"❌ API Xətası: {error_msg}")
-            else:
-                await processing_msg.edit_text(MESSAGES[lang]['download_failed'])
-            return
-        
-        # Video faylını göndər - caption yoxdur
-        with open(result['file_path'], 'rb') as video_file:
-            await update.message.reply_video(
-                video=video_file
-            )
-        
-        # Müvəqqəti faylı sil
-        tiktok_downloader.cleanup_file(result['file_path'])
-        
-        # Processing mesajını sil
-        await processing_msg.delete()
-        
-        # Statistika yenilə
-        user_stats[user_id]['downloads'] += 1
-        user_stats[user_id]['total_downloads'] += 1
-        user_stats[user_id]['last_download'] = datetime.now()
-        
-        # SQL veritabanında yükləmə sayını artır
-        db_manager.increment_user_downloads(user_id)
-        db_manager.update_user_activity(user_id)
-        
-        # Qrup statistikasını yenilə
-        if chat_type in ['group', 'supergroup']:
-            if 'group_stats' not in user_stats[user_id]:
-                user_stats[user_id]['group_stats'] = {}
-            if chat_id not in user_stats[user_id]['group_stats']:
-                user_stats[user_id]['group_stats'][chat_id] = {
-                    'chat_title': update.effective_chat.title,
-                    'downloads': 0
-                }
-            user_stats[user_id]['group_stats'][chat_id]['downloads'] += 1
-        
-    except Exception as e:
-        logger.error(f"Download error: {e}")
-        await processing_msg.edit_text(MESSAGES[lang]['error'])
-
-async def language_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Dil seçimi menyusu"""
-    keyboard = []
-    
-    for lang_code, lang_info in SUPPORTED_LANGUAGES.items():
-        keyboard.append([
-            InlineKeyboardButton(
-                lang_info['name'],
-                callback_data=f"lang_{lang_code}"
-            )
-        ])
-    
-    keyboard.append([InlineKeyboardButton("🔙 Geri", callback_data="back_main")])
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    
-    await update.message.reply_text(
-        "🌍 **Dil seçin / Dil seçin / Select language / Выберите язык:**",
-        reply_markup=reply_markup
-    )
-
-async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Admin panel - /admin komandası ilə"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    # Admin ID yoxlaması
-    if user_id not in ADMIN_IDS:
-        await update.message.reply_text(
-            f"❌ **Admin deyilsiniz!**\n\n"
-            f"👤 **Sizin ID:** `{user_id}`\n"
-            f"🔑 **Admin ID-lər:** {ADMIN_IDS}\n\n"
-            f"💡 Admin olmaq üçün config.py faylında ADMIN_IDS siyahısına ID-nizi əlavə edin.",
-            parse_mode='Markdown'
-        )
-        return
-    
-    # Admin panel menyusu
-    keyboard = [
-        [InlineKeyboardButton("📊 Statistika (SQL)", callback_data="admin_stats")],
-        [InlineKeyboardButton("📢 Toplu mesaj", callback_data="admin_broadcast")],
-        [InlineKeyboardButton("👥 Qrup idarəetməsi", callback_data="admin_groups")],
-        [InlineKeyboardButton("⚙️ Parametrlər", callback_data="admin_settings")]
-    ]
-    
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    
-    admin_text = f"🔧 **Admin Panel** - Xoş gəlmisiniz!\n\n"
-    admin_text += f"👤 **Admin ID:** `{user_id}`\n"
-    admin_text += f"🌍 **Dil:** {SUPPORTED_LANGUAGES[lang]['display_name']}\n"
-    admin_text += f"🕐 **Vaxt:** {datetime.now().strftime('%d.%m.%Y %H:%M')}\n\n"
-    admin_text += f"📋 **Mövcud funksiyalar:**\n"
-    admin_text += f"• 📊 Statistika (SQL veritabanı)\n"
-    admin_text += f"• 📢 Toplu mesaj göndərmə\n"
-    admin_text += f"• 👥 Qrup idarəetməsi\n"
-    admin_text += f"• ⚙️ Bot parametrləri"
-    
-    await update.message.reply_text(
-        admin_text,
-        reply_markup=reply_markup,
-        parse_mode='Markdown'
-    )
-
-async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Button callback handler"""
-    query = update.callback_query
-    await query.answer()
-    
-    user_id = query.from_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    data = query.data
-    
-    logger.info(f"Button callback: {data} from user {user_id}")
-    
-    if data.startswith("lang_"):
-        new_lang = data.split("_")[1]
-        user_languages[user_id] = new_lang
-        
-        # SQL veritabanında dil dəyişdir
-        db_manager.update_user_language(user_id, new_lang)
-        
-        # Dil dəyişdirildi mesajı + Qrupa əlavə et buttonu
-        keyboard = [
-            [InlineKeyboardButton("👥 Qrupa Əlavə Et", url="https://t.me/TikTokDownloaderBot?startgroup=true")],
-            [InlineKeyboardButton("🔙 Ana Menyua Qayıt", callback_data="back_main")]
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        
-        await query.edit_message_text(
-            f"{MESSAGES[new_lang]['language_changed']}\n\n👥 **Qrupa əlavə etmək üçün aşağıdakı buttonu istifadə edin:**",
-            reply_markup=reply_markup
-        )
-    
-    elif data == "back_main":
-        await query.edit_message_text("🔙 Ana menyuya qayıtdınız.")
-    
-    # Admin broadcast callback-lər - birbaşa data ilə yoxlama
-    elif data == "admin_broadcast_groups":
-        if user_id not in ADMIN_IDS:
-            await query.edit_message_text("❌ Admin deyilsiniz!")
-            return
-            
-        logger.info(f"Admin {user_id} starting broadcast to groups")
-        await query.edit_message_text(
-            "👥 **Qruplara Mesaj Göndərmə:**\n\n"
-            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
-            "💡 **Qeyd:** Bu mesaj yalnız qruplara göndəriləcək.",
-            parse_mode='Markdown'
-        )
-        context.user_data['broadcast_type'] = 'groups'
-        return WAITING_FOR_BROADCAST_MESSAGE
-    
-    elif data == "admin_broadcast_users":
-        if user_id not in ADMIN_IDS:
-            await query.edit_message_text("❌ Admin deyilsiniz!")
-            return
-            
-        logger.info(f"Admin {user_id} starting broadcast to users")
-        await query.edit_message_text(
-            "👤 **İstifadəçilərə Mesaj Göndərmə:**\n\n"
-            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
-            "💡 **Qeyd:** Bu mesaj yalnız fərdi istifadəçilərə göndəriləcək.",
-            parse_mode='Markdown'
-        )
-        context.user_data['broadcast_type'] = 'users'
-        return WAITING_FOR_BROADCAST_MESSAGE
-    
-    elif data == "admin_broadcast_all":
-        if user_id not in ADMIN_IDS:
-            await query.edit_message_text("❌ Admin deyilsiniz!")
-            return
-            
-        logger.info(f"Admin {user_id} starting broadcast to all")
-        await query.edit_message_text(
-            "🌐 **Hərkəsə Mesaj Göndərmə:**\n\n"
-            "📝 Göndərmək istədiyiniz mesajı yazın:\n\n"
-            "💡 **Qeyd:** Bu mesaj bütün istifadəçilərə və qruplara göndəriləcək.",
-            parse_mode='Markdown'
-        )
-        context.user_data['broadcast_type'] = 'all'
-        return WAITING_FOR_BROADCAST_MESSAGE
-    
-    elif data == "admin_back":
-        if user_id not in ADMIN_IDS:
-            await query.edit_message_text("❌ Admin deyilsiniz!")
-            return
-            
-        # Ana admin panelə qayıt
-        await admin_panel(update, context)
-    
-    elif data.startswith("admin_"):
-        if user_id not in ADMIN_IDS:
-            await query.edit_message_text("❌ Admin deyilsiniz!")
-            return
-        
-        admin_action = data.split("_")[1]
-        
-        if admin_action == "stats":
-            # SQL veritabanından statistikaları al
-            db_stats = db_manager.get_detailed_stats()
-            
-            stats_text = f"📊 **Bot Statistika (SQL):**\n\n"
-            stats_text += f"👥 **Ümumi istifadəçilər:** {db_stats.get('total_users', 0)}\n"
-            stats_text += f"🟢 **Aktiv istifadəçilər (7 gün):** {db_stats.get('active_users_7d', 0)}\n"
-            stats_text += f"🟢 **Aktiv istifadəçilər (30 gün):** {db_stats.get('active_users_30d', 0)}\n"
-            stats_text += f"🆕 **Bu gün yeni istifadəçilər:** {db_stats.get('new_users_today', 0)}\n"
-            stats_text += f"📥 **Bu gün yükləmələr:** {db_stats.get('total_downloads_today', 0)}\n"
-            stats_text += f"💾 **Veritabanı ölçüsü:** {db_stats.get('database_size', 'Unknown')}\n"
-            stats_text += f"🌍 **Dəstəklənən dillər:** {len(SUPPORTED_LANGUAGES)}"
-            
-            await query.edit_message_text(stats_text, parse_mode='Markdown')
-        
-        elif admin_action == "broadcast":
-            # Broadcast seçimi menyusu
-            keyboard = [
-                [InlineKeyboardButton("👥 Qruplara Mesaj", callback_data="admin_broadcast_groups")],
-                [InlineKeyboardButton("👤 İstifadəçilərə Mesaj", callback_data="admin_broadcast_users")],
-                [InlineKeyboardButton("🌐 Hərkəsə Mesaj", callback_data="admin_broadcast_all")],
-                [InlineKeyboardButton("🔙 Geri", callback_data="admin_back")]
+        # Initialize logging
+        logging.basicConfig(
+            level=getattr(logging, self.config.LOG_LEVEL),
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(self.config.LOG_FILE),
+                logging.StreamHandler()
             ]
+        )
+        self.logger = logging.getLogger(__name__)
+        
+        # Bot application
+        self.application = Application.builder().token(self.config.BOT_TOKEN).build()
+        
+        # Setup handlers
+        self.setup_handlers()
+        
+        # User states for multi-step operations
+        self.user_states = {}
+        
+    def setup_handlers(self):
+        """Setup bot command and message handlers"""
+        
+        # Command handlers
+        self.application.add_handler(CommandHandler("start", self.start_command))
+        self.application.add_handler(CommandHandler("help", self.help_command))
+        self.application.add_handler(CommandHandler("stats", self.stats_command))
+        self.application.add_handler(CommandHandler("accounts", self.accounts_command))
+        self.application.add_handler(CommandHandler("add_account", self.add_account_command))
+        self.application.add_handler(CommandHandler("remove_account", self.remove_account_command))
+        self.application.add_handler(CommandHandler("strategy", self.strategy_command))
+        self.application.add_handler(CommandHandler("status", self.status_command))
+        
+        # Callback query handler
+        self.application.add_handler(CallbackQueryHandler(self.button_callback))
+        
+        # Message handler for Instagram links
+        self.application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
+        
+        # Error handler
+        self.application.add_error_handler(self.error_handler)
+    
+    async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /start command"""
+        try:
+            user_id = update.effective_user.id
+            username = update.effective_user.username or update.effective_user.first_name
+            
+            # Log user activity
+            self.db.log_user_activity(user_id, "start_command", f"User {username} started bot")
+            
+            # Create welcome message with inline keyboard
+            keyboard = [
+                [
+                    InlineKeyboardButton("📱 Comment Linki Göndər", callback_data="send_comment_link"),
+                    InlineKeyboardButton("❓ Kömək", callback_data="help")
+                ],
+                [
+                    InlineKeyboardButton("📊 Hesablar", callback_data="accounts"),
+                    InlineKeyboardButton("⚙️ Tənzimləmələr", callback_data="settings")
+                ],
+                [
+                    InlineKeyboardButton("📈 Statistika", callback_data="stats"),
+                    InlineKeyboardButton("🔧 Status", callback_data="status")
+                ]
+            ]
+            
             reply_markup = InlineKeyboardMarkup(keyboard)
             
-            await query.edit_message_text(
-                "📢 **Toplu Mesaj Göndərmə:**\n\n"
-                "👥 **Qruplara Mesaj** - Yalnız qruplara\n"
-                "👤 **İstifadəçilərə Mesaj** - Yalnız fərdi istifadəçilərə\n"
-                "🌐 **Hərkəsə Mesaj** - Bütün qruplara və istifadəçilərə\n\n"
-                "Seçim edin:",
+            welcome_text = f"""
+🎯 **Instagram Comment Like Bot-a xoş gəlmisiniz!**
+
+👋 Salam, {username}!
+
+📱 **Bu bot ilə:**
+• Instagram comment-lərini avtomatik like edə bilərsiniz
+• İstədiyiniz qədər hesab əlavə edə bilərsiniz
+• Moderate strategiya ilə təhlükəsiz like edə bilərsiniz
+
+🚀 **Başlamaq üçün:**
+1. Instagram comment linkini göndərin
+2. Bot avtomatik olaraq bütün aktiv hesablardan like edəcək
+3. Like statistikalarını izləyə bilərsiniz
+
+💡 **Mövcud komandalar:**
+/help - Kömək məlumatı
+/accounts - Hesab idarəetməsi
+/stats - Bot statistikaları
+/strategy - Like strategiyası
+            """
+            
+            await update.message.reply_text(
+                welcome_text,
                 reply_markup=reply_markup,
                 parse_mode='Markdown'
             )
-        
-        elif admin_action == "groups":
-            # Qrup statistikası
-            total_groups = 0
-            total_group_downloads = 0
-            groups_info = []
             
-            for user_id, user_stat in user_stats.items():
-                if 'group_stats' in user_stat:
-                    for chat_id, group_stat in user_stat['group_stats'].items():
-                        total_groups += 1
-                        total_group_downloads += group_stat['downloads']
-                        groups_info.append({
-                            'title': group_stat['chat_title'],
-                            'downloads': group_stat['downloads']
-                        })
+        except Exception as e:
+            self.logger.error(f"Error in start command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /help command"""
+        try:
+            help_text = """
+🔍 **Instagram Comment Like Bot - Kömək**
+
+📱 **İstifadə qaydası:**
+1. Instagram comment linkini kopyalayın
+2. Bot-a göndərin
+3. Bot avtomatik olaraq bütün aktiv hesablardan like edəcək
+
+✅ **Dəstəklənən link formatları:**
+• `https://www.instagram.com/p/POST_ID/comment/COMMENT_ID/`
+• `https://www.instagram.com/reel/REEL_ID/comment/COMMENT_ID/`
+• `https://www.instagram.com/tv/VIDEO_ID/comment/COMMENT_ID/`
+
+🔄 **Like Strategiyaları:**
+• **Moderate** (cari): 30-60 saniyə arası delay
+• **Conservative**: 60-120 saniyə arası delay
+• **Aggressive**: 10-30 saniyə arası delay
+
+⚙️ **Təhlükəsizlik:**
+• Hər hesab üçün günlük like limiti: 100
+• Hər hesab üçün saatlıq aktivlik limiti: 30
+• Hesablar arası təhlükəsiz delay-lər
+• Avtomatik hesab bloklaması
+
+🔧 **Komandalar:**
+/start - Bot-u başlatmaq
+/accounts - Hesab idarəetməsi
+/add_account - Yeni hesab əlavə etmək
+/remove_account - Hesab silmək
+/strategy - Like strategiyasını dəyişdirmək
+/stats - Bot statistikaları
+/status - Sistem statusu
+
+💡 **Məsləhətlər:**
+• Linki düzgün kopyaladığınızdan əmin olun
+• Comment-in public olduğunu yoxlayın
+• Hesabların aktiv olduğunu yoxlayın
+• Rate limit-ləri aşmayın
+            """
             
-            if total_groups > 0:
-                groups_text = f"👥 **Qrup Statistika:**\n\n"
-                groups_text += f"📊 **Ümumi qruplar:** {total_groups}\n"
-                groups_text += f"📥 **Qrupda yükləmələr:** {total_group_downloads}\n\n"
+            await update.message.reply_text(help_text, parse_mode='Markdown')
+            
+        except Exception as e:
+            self.logger.error(f"Error in help command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def stats_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /stats command"""
+        try:
+            user_id = update.effective_user.id
+            
+            # Get bot statistics
+            bot_stats = self.db.get_database_stats()
+            like_stats = self.like_engine.get_like_statistics()
+            strategy_info = self.like_engine.get_strategy_info()
+            
+            stats_text = f"""
+📊 **Bot Statistikaları**
+
+🎯 **Ümumi Məlumatlar:**
+• Ümumi hesab sayı: {bot_stats.get('total_accounts', 0)}
+• Aktiv hesab sayı: {bot_stats.get('active_accounts', 0)}
+• Bloklanmış hesab sayı: {bot_stats.get('locked_accounts', 0)}
+• Aktiv proxy sayı: {bot_stats.get('active_proxies', 0)}
+
+❤️ **Like Statistikaları:**
+• Bu gün edilən like-lar: {bot_stats.get('today_likes', 0)}
+• Ümumi like-lar: {bot_stats.get('total_likes', 0)}
+• Uğurlu like-lar: {like_stats.get('successful_likes', 0)}
+• Uğursuz like-lar: {like_stats.get('failed_likes', 0)}
+• Uğur nisbəti: {like_stats.get('success_rate', 0):.1f}%
+
+⚙️ **Cari Strategiya:**
+• Ad: {strategy_info.get('name', 'Unknown')}
+• Delay aralığı: {strategy_info.get('delay_min', 0)}-{strategy_info.get('delay_max', 0)} saniyə
+• Saatda maksimum comment: {strategy_info.get('max_comments_per_hour', 0)}
+
+🕐 **Bot Uptime:**
+• Başlama vaxtı: {like_stats.get('start_time', 'Unknown')}
+• İşləmə müddəti: {like_stats.get('uptime_hours', 0):.1f} saat
+            """
+            
+            await update.message.reply_text(stats_text, parse_mode='Markdown')
+            
+        except Exception as e:
+            self.logger.error(f"Error in stats command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def accounts_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /accounts command"""
+        try:
+            # Get all accounts
+            accounts = self.db.get_accounts(active_only=False)
+            account_status = self.instagram_manager.get_all_accounts_status()
+            
+            if not accounts:
+                await update.message.reply_text("❌ Heç bir hesab tapılmadı. /add_account komandası ilə hesab əlavə edin.")
+                return
+            
+            accounts_text = f"📱 **Instagram Hesabları** ({len(accounts)})\n\n"
+            
+            for account in accounts:
+                username = account['username']
+                status = account_status.get(username, {})
                 
-                # Top 5 qruplar
-                top_groups = sorted(groups_info, key=lambda x: x['downloads'], reverse=True)[:5]
-                groups_text += "🏆 **Top 5 Qruplar:**\n"
-                for i, group in enumerate(top_groups, 1):
-                    groups_text += f"{i}. {group['title']} - {group['downloads']} yükləmə\n"
+                # Status emoji
+                if account['is_active']:
+                    if status.get('is_online', False):
+                        status_emoji = "🟢"
+                        status_text = "Online"
+                    else:
+                        status_emoji = "🟡"
+                        status_text = "Offline"
+                else:
+                    status_emoji = "🔴"
+                    status_text = "Deaktiv"
                 
-                await query.edit_message_text(groups_text, parse_mode='Markdown')
+                # Priority text
+                priority_map = {3: "🔴 Yüksək", 2: "🟡 Orta", 1: "🟢 Aşağı", 0: "⚪ Backup"}
+                priority_text = priority_map.get(account['priority'], "Unknown")
+                
+                accounts_text += f"""
+{status_emoji} **{username}**
+• Status: {status_text}
+• Prioritet: {priority_text}
+• Qrup: {account.get('group_name', 'default')}
+• Günlük like-lar: {account.get('daily_likes', 0)}/100
+• Saatlıq aktivlik: {account.get('hourly_activity', 0)}/30
+• Son aktivlik: {account.get('last_activity', 'Heç vaxt')}
+                """
+            
+            # Add inline keyboard for account management
+            keyboard = [
+                [
+                    InlineKeyboardButton("➕ Hesab Əlavə Et", callback_data="add_account"),
+                    InlineKeyboardButton("❌ Hesab Sil", callback_data="remove_account")
+                ],
+                [
+                    InlineKeyboardButton("🔒 Hesab Blokla", callback_data="lock_account"),
+                    InlineKeyboardButton("🔓 Hesab Aç", callback_data="unlock_account")
+                ],
+                [
+                    InlineKeyboardButton("📊 Hesab Performansı", callback_data="account_performance")
+                ]
+            ]
+            
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await update.message.reply_text(
+                accounts_text,
+                reply_markup=reply_markup,
+                parse_mode='Markdown'
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error in accounts command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def add_account_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /add_account command"""
+        try:
+            user_id = update.effective_user.id
+            
+            # Set user state to add account
+            self.user_states[user_id] = {
+                'action': 'add_account',
+                'step': 'username'
+            }
+            
+            await update.message.reply_text(
+                "📱 **Yeni Instagram Hesabı Əlavə Etmək**\n\n"
+                "Zəhmət olmasa Instagram username-ini göndərin:",
+                parse_mode='Markdown'
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error in add_account command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def remove_account_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /remove_account command"""
+        try:
+            # Get all accounts for selection
+            accounts = self.db.get_accounts(active_only=False)
+            
+            if not accounts:
+                await update.message.reply_text("❌ Silinəcək hesab tapılmadı.")
+                return
+            
+            # Create inline keyboard with account options
+            keyboard = []
+            for account in accounts:
+                keyboard.append([
+                    InlineKeyboardButton(
+                        f"❌ {account['username']}", 
+                        callback_data=f"remove_{account['username']}"
+                    )
+                ])
+            
+            keyboard.append([InlineKeyboardButton("🔙 Geri", callback_data="accounts")])
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await update.message.reply_text(
+                "🗑️ **Hesab Silmək**\n\n"
+                "Silinəcək hesabı seçin:",
+                reply_markup=reply_markup,
+                parse_mode='Markdown'
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error in remove_account command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def strategy_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /strategy command"""
+        try:
+            current_strategy = self.like_engine.get_current_strategy()
+            strategies = self.config.LIKE_STRATEGIES
+            
+            strategy_text = f"⚙️ **Like Strategiyaları**\n\n"
+            strategy_text += f"🎯 **Cari strategiya: {current_strategy}**\n\n"
+            
+            for name, config in strategies.items():
+                # Current strategy indicator
+                current_indicator = "✅" if name == current_strategy else "⚪"
+                
+                strategy_text += f"""
+{current_indicator} **{name}**
+• Delay: {config['delay_min']}-{config['delay_max']} saniyə
+• Saatda maksimum comment: {config['max_comments_per_hour']}
+• Hesab/comment: {'Sınırsız' if config['accounts_per_comment'] == 0 else config['accounts_per_comment']}
+                """
+            
+            # Create inline keyboard for strategy selection
+            keyboard = []
+            for name in strategies.keys():
+                if name != current_strategy:
+                    keyboard.append([
+                        InlineKeyboardButton(
+                            f"🔄 {name} Strategiyasına Keç", 
+                            callback_data=f"strategy_{name}"
+                        )
+                    ])
+            
+            keyboard.append([InlineKeyboardButton("🔙 Geri", callback_data="settings")])
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await update.message.reply_text(
+                strategy_text,
+                reply_markup=reply_markup,
+                parse_mode='Markdown'
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error in strategy command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def status_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /status command"""
+        try:
+            # Get system status
+            bot_stats = self.db.get_database_stats()
+            account_status = self.instagram_manager.get_all_accounts_status()
+            
+            # Calculate online accounts
+            online_accounts = sum(1 for status in account_status.values() if status.get('is_online', False))
+            
+            status_text = f"""
+🔧 **Sistem Statusu**
+
+📱 **Hesab Statusu:**
+• Ümumi hesab: {bot_stats.get('total_accounts', 0)}
+• Aktiv hesab: {bot_stats.get('active_accounts', 0)}
+• Online hesab: {online_accounts}
+• Bloklanmış hesab: {bot_stats.get('locked_accounts', 0)}
+
+⚡ **Performans:**
+• Bu gün edilən like-lar: {bot_stats.get('today_likes', 0)}
+• Gözləyən işlər: {bot_stats.get('pending_tasks', 0)}
+• Aktiv proxy: {bot_stats.get('active_proxies', 0)}
+
+🔄 **Cari Strategiya:**
+• Ad: {self.like_engine.get_current_strategy()}
+• Delay: {self.like_engine.get_strategy_info()['delay_min']}-{self.like_engine.get_strategy_info()['delay_max']} saniyə
+
+💾 **Veritabanı:**
+• Status: ✅ Aktiv
+• Fayl ölçüsü: Təyin edilməyib
+• Son yeniləmə: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+            """
+            
+            await update.message.reply_text(status_text, parse_mode='Markdown')
+            
+        except Exception as e:
+            self.logger.error(f"Error in status command: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle incoming messages"""
+        try:
+            user_id = update.effective_user.id
+            message_text = update.message.text
+            
+            # Check if user is in a multi-step process
+            if user_id in self.user_states:
+                await self.handle_multi_step(update, context)
+                return
+            
+            # Check if message contains Instagram link
+            if 'instagram.com' in message_text:
+                await self.handle_instagram_link(update, context)
+                return
+            
+            # Default response
+            await update.message.reply_text(
+                "📱 Zəhmət olmasa Instagram comment linkini göndərin və ya /help komandasından istifadə edin."
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error handling message: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def handle_instagram_link(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle Instagram links"""
+        try:
+            user_id = update.effective_user.id
+            message_text = update.message.text
+            
+            # Log user activity
+            self.db.log_user_activity(user_id, "instagram_link", f"Link: {message_text}")
+            
+            # Send processing message
+            processing_msg = await update.message.reply_text(
+                "⏳ Instagram comment linki emal olunur...\n\n"
+                "🔍 Link analiz edilir...",
+                parse_mode='Markdown'
+            )
+            
+            # Parse Instagram URL
+            url_info = self.like_engine.parse_instagram_url(message_text)
+            
+            if not url_info:
+                await processing_msg.edit_text(
+                    "❌ **Etibarsız Instagram linki**\n\n"
+                    "Zəhmət olmasa düzgün Instagram comment linki göndərin.\n\n"
+                    "📝 **Düzgün format:**\n"
+                    "`https://www.instagram.com/p/POST_ID/comment/COMMENT_ID/`",
+                    parse_mode='Markdown'
+                )
+                return
+            
+            # Update processing message
+            await processing_msg.edit_text(
+                "⏳ Instagram comment linki emal olunur...\n\n"
+                "🔍 Link analiz edildi\n"
+                "📱 Hesablar yoxlanılır...",
+                parse_mode='Markdown'
+            )
+            
+            # Check available accounts
+            available_accounts = self.instagram_manager.get_accounts_for_like(
+                url_info.get('comment_id', 'unknown')
+            )
+            
+            if not available_accounts:
+                await processing_msg.edit_text(
+                    "❌ **Heç bir aktiv hesab tapılmadı**\n\n"
+                    "Zəhmət olmasa:\n"
+                    "1. Hesabların aktiv olduğunu yoxlayın\n"
+                    "2. Yeni hesab əlavə edin\n"
+                    "3. Hesab limitlərini yoxlayın",
+                    parse_mode='Markdown'
+                )
+                return
+            
+            # Update processing message
+            await processing_msg.edit_text(
+                "⏳ Instagram comment linki emal olunur...\n\n"
+                "🔍 Link analiz edildi\n"
+                "📱 Hesablar yoxlanıldı\n"
+                "❤️ Comment like edilir...",
+                parse_mode='Markdown'
+            )
+            
+            # Perform like operation
+            if url_info['type'] == 'comment':
+                result = await self.like_engine.like_comment_with_accounts(
+                    url_info['comment_id'],
+                    url_info['media_id']
+                )
             else:
-                await query.edit_message_text("👥 Heç bir qrup statistikası tapılmadı.")
-        
-        elif admin_action == "settings":
-            # Bot parametrləri
-            settings_text = f"⚙️ **Bot Parametrləri:**\n\n"
-            settings_text += f"🔑 **Admin ID-lər:** {ADMIN_IDS}\n"
-            settings_text += f"🌍 **Dəstəklənən dillər:** {len(SUPPORTED_LANGUAGES)}\n"
-            settings_text += f"📁 **Maksimum fayl ölçüsü:** {BOT_SETTINGS['max_file_size'] // (1024*1024)} MB\n"
-            settings_text += f"⏱️ **Yükləmə timeout:** {BOT_SETTINGS['download_timeout']} saniyə\n"
-            settings_text += f"📥 **Gündə maksimum yükləmə:** {BOT_SETTINGS['max_downloads_per_user']}\n\n"
-            settings_text += f"💾 **Veritabanı:** SQLite\n"
-            settings_text += f"🔧 **API:** {TIKTOK_API_URL}\n\n"
-            settings_text += f"📝 **Parametrləri dəyişmək üçün config.py faylını redaktə edin.**"
+                result = await self.like_engine.auto_like_comments(message_text)
             
-            await query.edit_message_text(settings_text, parse_mode='Markdown')
+            # Show results
+            if result.get('success', False):
+                success_text = f"""
+✅ **Comment uğurla like edildi!**
 
-async def handle_broadcast_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Broadcast mesaj handler"""
-    user_id = update.effective_user.id
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
+📊 **Nəticələr:**
+• İstifadə edilən hesab: {result.get('accounts_used', 0)}
+• Uğurlu like-lar: {result.get('successful_likes', 0)}
+• Uğursuz like-lar: {result.get('failed_likes', 0)}
+
+🎯 **Strategiya:** {self.like_engine.get_current_strategy()}
+⏱️ **Vaxt:** {datetime.now().strftime('%H:%M:%S')}
+                """
+                
+                await processing_msg.edit_text(success_text, parse_mode='Markdown')
+                
+            else:
+                error_text = f"""
+❌ **Comment like edilə bilmədi**
+
+🚨 **Xəta:** {result.get('error', 'Naməlum xəta')}
+
+💡 **Həll yolları:**
+• Hesabların aktiv olduğunu yoxlayın
+• Linkin düzgün olduğunu yoxlayın
+• Comment-in public olduğunu yoxlayın
+• Bir az gözləyin və yenidən cəhd edin
+                """
+                
+                await processing_msg.edit_text(error_text, parse_mode='Markdown')
+            
+        except Exception as e:
+            self.logger.error(f"Error handling Instagram link: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
     
-    if user_id not in ADMIN_IDS:
-        return ConversationHandler.END
+    async def handle_multi_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle multi-step user interactions"""
+        try:
+            user_id = update.effective_user.id
+            message_text = update.message.text
+            user_state = self.user_states[user_id]
+            
+            if user_state['action'] == 'add_account':
+                await self.handle_add_account_step(update, context, user_state, message_text)
+            
+        except Exception as e:
+            self.logger.error(f"Error in multi-step handler: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
     
-    broadcast_type = context.user_data.get('broadcast_type')
-    if not broadcast_type:
-        return ConversationHandler.END
-    
-    message_text = update.message.text
-    
-    if message_text.lower() in ['/cancel', 'cancel', 'iptal', 'ləğv']:
-        await update.message.reply_text(MESSAGES[lang]['cancel'])
-        context.user_data.pop('broadcast_type', None)
-        return ConversationHandler.END
-    
-    sent_count = 0
-    failed_count = 0
-    
-    if broadcast_type == 'users':
-        # Yalnız fərdi istifadəçilərə
-        for user_id in user_stats.keys():
-            try:
-                await context.bot.send_message(
-                    chat_id=user_id,
-                    text=f"📢 **Admin Mesajı (İstifadəçilərə):**\n\n{message_text}",
+    async def handle_add_account_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE, user_state: dict, message_text: str):
+        """Handle add account step by step"""
+        try:
+            user_id = update.effective_user.id
+            
+            if user_state['step'] == 'username':
+                # Store username and ask for password
+                user_state['username'] = message_text
+                user_state['step'] = 'password'
+                
+                await update.message.reply_text(
+                    f"📱 **Hesab əlavə edilir: {message_text}**\n\n"
+                    "Zəhmət olmasa Instagram şifrəsini göndərin:",
                     parse_mode='Markdown'
                 )
-                sent_count += 1
-                await asyncio.sleep(0.1)  # Rate limit
-            except Exception as e:
-                logger.error(f"Broadcast to user error: {e}")
-                failed_count += 1
+                
+            elif user_state['step'] == 'password':
+                # Store password and add account
+                username = user_state['username']
+                password = message_text
+                
+                # Add account to database
+                success = self.db.add_account(username, password)
+                
+                if success:
+                    await update.message.reply_text(
+                        f"✅ **Hesab uğurla əlavə edildi!**\n\n"
+                        f"👤 **Username:** {username}\n"
+                        f"🔒 **Status:** Aktiv\n"
+                        f"📊 **Prioritet:** Orta\n"
+                        f"👥 **Qrup:** default\n\n"
+                        "🎯 İndi comment linkini göndərə bilərsiniz!",
+                        parse_mode='Markdown'
+                    )
+                    
+                    # Reload accounts in manager
+                    self.instagram_manager.load_accounts()
+                    
+                else:
+                    await update.message.reply_text(
+                        f"❌ **Hesab əlavə edilə bilmədi**\n\n"
+                        f"🚨 Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin."
+                    )
+                
+                # Clear user state
+                del self.user_states[user_id]
+            
+        except Exception as e:
+            self.logger.error(f"Error in add account step: {e}")
+            await update.message.reply_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+            del self.user_states[user_id]
     
-    elif broadcast_type == 'groups':
-        # Yalnız qruplara
-        group_chats = set()
-        for user_stat in user_stats.values():
-            if 'group_stats' in user_stat:
-                for chat_id in user_stat['group_stats'].keys():
-                    group_chats.add(chat_id)
-        
-        for chat_id in group_chats:
-            try:
-                await context.bot.send_message(
-                    chat_id=chat_id,
-                    text=f"📢 **Admin Mesajı (Qruplara):**\n\n{message_text}",
+    async def button_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle inline keyboard button callbacks"""
+        try:
+            query = update.callback_query
+            await query.answer()
+            
+            data = query.data
+            
+            if data == "send_comment_link":
+                await query.edit_message_text(
+                    "📱 **Instagram Comment Linki Göndərin**\n\n"
+                    "Zəhmət olmasa Instagram comment linkini buraya yapışdırın:",
                     parse_mode='Markdown'
                 )
-                sent_count += 1
-                await asyncio.sleep(0.1)  # Rate limit
-            except Exception as e:
-                logger.error(f"Broadcast to group error: {e}")
-                failed_count += 1
+                
+            elif data == "help":
+                await self.help_command(update, context)
+                
+            elif data == "accounts":
+                await self.accounts_command(update, context)
+                
+            elif data == "stats":
+                await self.stats_command(update, context)
+                
+            elif data == "status":
+                await self.status_command(update, context)
+                
+            elif data == "settings":
+                await self.show_settings(update, context)
+                
+            elif data == "add_account":
+                await self.add_account_command(update, context)
+                
+            elif data == "remove_account":
+                await self.remove_account_command(update, context)
+                
+            elif data.startswith("strategy_"):
+                strategy = data.replace("strategy_", "")
+                await self.change_strategy_callback(update, context, strategy)
+                
+            elif data.startswith("remove_"):
+                username = data.replace("remove_", "")
+                await self.remove_account_callback(update, context, username)
+                
+            else:
+                await query.edit_message_text("❌ Naməlum əməliyyat.")
+                
+        except Exception as e:
+            self.logger.error(f"Error in button callback: {e}")
+            await update.callback_query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
     
-    elif broadcast_type == 'all':
-        # Hərkəsə (istifadəçilər + qruplar)
-        # İstifadəçilərə
-        for user_id in user_stats.keys():
-            try:
-                await context.bot.send_message(
-                    chat_id=user_id,
-                    text=f"📢 **Admin Mesajı (Hərkəsə):**\n\n{message_text}",
+    async def show_settings(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Show bot settings"""
+        try:
+            settings_text = """
+⚙️ **Bot Tənzimləmələri**
+
+🎯 **Cari Strategiya:** Moderate
+📱 **Maksimum Hesab:** Sınırsız
+❤️ **Like Limitləri:**
+• Hesab başına günlük: 100
+• Hesab başına saatlıq: 30
+• Hesablar arası delay: 30-60 saniyə
+
+🛡️ **Təhlükəsizlik:**
+• IP Rotation: ✅ Aktiv
+• Proxy Rotation: ✅ Aktiv
+• Account Locking: ✅ Aktiv
+• Rate Limiting: ✅ Aktiv
+
+🔧 **Tənzimləmələr:**
+• Hesab idarəetməsi
+• Strategiya dəyişdirmə
+• Proxy idarəetməsi
+• Sistem statusu
+            """
+            
+            keyboard = [
+                [
+                    InlineKeyboardButton("🔄 Strategiya Dəyişdir", callback_data="strategy"),
+                    InlineKeyboardButton("📱 Hesablar", callback_data="accounts")
+                ],
+                [
+                    InlineKeyboardButton("🌐 Proxy-lər", callback_data="proxies"),
+                    InlineKeyboardButton("📊 Statistika", callback_data="stats")
+                ],
+                [
+                    InlineKeyboardButton("🔙 Geri", callback_data="start")
+                ]
+            ]
+            
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await update.callback_query.edit_message_text(
+                settings_text,
+                reply_markup=reply_markup,
+                parse_mode='Markdown'
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error showing settings: {e}")
+            await update.callback_query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def change_strategy_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE, strategy: str):
+        """Change like strategy"""
+        try:
+            # Change strategy
+            self.like_engine.change_strategy(strategy)
+            
+            # Get strategy info
+            strategy_info = self.like_engine.get_strategy_info(strategy)
+            
+            await update.callback_query.edit_message_text(
+                f"✅ **Strategiya uğurla dəyişdirildi!**\n\n"
+                f"🎯 **Yeni strategiya:** {strategy}\n"
+                f"⏱️ **Delay aralığı:** {strategy_info['delay_min']}-{strategy_info['delay_max']} saniyə\n"
+                f"📊 **Saatda maksimum comment:** {strategy_info['max_comments_per_hour']}\n\n"
+                f"🔄 Strategiya dəyişikliyi dərhal tətbiq olundu!",
+                parse_mode='Markdown'
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Error changing strategy: {e}")
+            await update.callback_query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+    
+    async def remove_account_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE, username: str):
+        """Remove account callback"""
+        try:
+            # Remove account from database
+            success = self.db.remove_account(username)
+            
+            if success:
+                await update.callback_query.edit_message_text(
+                    f"✅ **Hesab uğurla silindi!**\n\n"
+                    f"👤 **Username:** {username}\n"
+                    f"🗑️ Hesab veritabanından silindi\n\n"
+                    f"📱 Yeni hesab əlavə etmək üçün /add_account komandasından istifadə edin.",
                     parse_mode='Markdown'
                 )
-                sent_count += 1
-                await asyncio.sleep(0.1)  # Rate limit
-            except Exception as e:
-                logger.error(f"Broadcast to user error: {e}")
-                failed_count += 1
-        
-        # Qruplara
-        group_chats = set()
-        for user_stat in user_stats.values():
-            if 'group_stats' in user_stat:
-                for chat_id in user_stat['group_stats'].keys():
-                    group_chats.add(chat_id)
-        
-        for chat_id in group_chats:
-            try:
-                await context.bot.send_message(
-                    chat_id=chat_id,
-                    text=f"📢 **Admin Mesajı (Hərkəsə):**\n\n{message_text}",
-                    parse_mode='Markdown'
+                
+                # Reload accounts in manager
+                self.instagram_manager.load_accounts()
+                
+            else:
+                await update.callback_query.edit_message_text(
+                    f"❌ **Hesab silinə bilmədi**\n\n"
+                    f"🚨 Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin."
                 )
-                sent_count += 1
-                await asyncio.sleep(0.1)  # Rate limit
-            except Exception as e:
-                logger.error(f"Broadcast to group error: {e}")
-                failed_count += 1
+                
+        except Exception as e:
+            self.logger.error(f"Error removing account: {e}")
+            await update.callback_query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
     
-    # Nəticə mesajı
-    type_names = {
-        'users': 'İstifadəçilərə',
-        'groups': 'Qruplara',
-        'all': 'Hərkəsə'
-    }
+    async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle bot errors"""
+        try:
+            self.logger.error(f"Update {update} caused error {context.error}")
+            
+            if update and update.effective_message:
+                await update.effective_message.reply_text(
+                    "❌ Bot xətası baş verdi. Zəhmət olmasa bir az gözləyin və yenidən cəhd edin."
+                )
+                
+        except Exception as e:
+            self.logger.error(f"Error in error handler: {e}")
     
-    await update.message.reply_text(
-        f"✅ **Toplu mesaj göndərildi!**\n\n"
-        f"📤 **Hədəf:** {type_names.get(broadcast_type, 'Bilinmir')}\n"
-        f"📤 **Göndərildi:** {sent_count}\n"
-        f"❌ **Xəta:** {failed_count}"
-    )
+    async def start_bot(self):
+        """Start the bot"""
+        try:
+            self.logger.info("Starting Instagram Like Bot...")
+            
+            # Start the application
+            await self.application.initialize()
+            await self.application.start()
+            await self.application.updater.start_polling()
+            
+            self.logger.info("Bot started successfully!")
+            
+            # Keep the bot running
+            await asyncio.Event().wait()  # Keep running indefinitely
+            
+        except Exception as e:
+            self.logger.error(f"Error starting bot: {e}")
+            raise
     
-    context.user_data.pop('broadcast_type', None)
-    return ConversationHandler.END
+    async def stop_bot(self):
+        """Stop the bot"""
+        try:
+            self.logger.info("Stopping Instagram Like Bot...")
+            
+            # Cleanup
+            await self.like_engine.cleanup()
+            
+            # Stop the application
+            await self.application.updater.stop()
+            await self.application.stop()
+            await self.application.shutdown()
+            
+            self.logger.info("Bot stopped successfully!")
+            
+        except Exception as e:
+            self.logger.error(f"Error stopping bot: {e}")
 
-async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Status əmri"""
-    user_id = update.effective_user.id
-    chat_id = update.effective_chat.id
-    chat_type = update.effective_chat.type
-    lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
-    
-    if user_id not in user_stats:
-        await update.message.reply_text("❌ Statistika tapılmadı.")
-        return
-    
-    stats = user_stats[user_id]
-    
-    status_text = f"📊 **Sizin Statistikanız:**\n\n"
-    status_text += f"📥 **Bu gün:** {stats['downloads']} yükləmə\n"
-    status_text += f"📈 **Ümumi:** {stats['total_downloads']} yükləmə\n"
-    
-    if stats['last_download']:
-        last_download = stats['last_download'].strftime("%d.%m.%Y %H:%M")
-        status_text += f"🕐 **Son yükləmə:** {last_download}\n"
-    
-    # Qrup statistikası
-    if chat_type in ['group', 'supergroup'] and 'group_stats' in stats and chat_id in stats['group_stats']:
-        group_stats = stats['group_stats'][chat_id]
-        status_text += f"\n👥 **Qrup:** {group_stats['chat_title']}\n"
-        status_text += f"📥 **Qrupda yükləmələr:** {group_stats['downloads']}"
-    
-    status_text += f"\n🌍 **Dil:** {SUPPORTED_LANGUAGES[lang]['display_name']}"
-    
-    await update.message.reply_text(status_text, parse_mode='Markdown')
-
-async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Error handler"""
-    logger.error(f"Update {update} caused error {context.error}")
-
-def main():
-    """Əsas funksiya"""
-    logger.info("Bot başladılır...")
-    
+# Main function
+async def main():
+    """Main function to run the bot"""
     try:
-        application = Application.builder().token(BOT_TOKEN).build()
-        logger.info("Application yaradıldı")
+        # Create bot instance
+        bot = InstagramLikeBot()
         
-        # Conversation handler for admin broadcast
-        conv_handler = ConversationHandler(
-            entry_points=[
-                CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast_groups$'),
-                CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast_users$'),
-                CallbackQueryHandler(button_callback, pattern=r'^admin_broadcast_all$')
-            ],
-            states={
-                WAITING_FOR_BROADCAST_MESSAGE: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_broadcast_message)]
-            },
-            fallbacks=[CommandHandler("cancel", lambda u, c: ConversationHandler.END)]
-        )
-        
-        # Əmrlər
-        application.add_handler(CommandHandler("start", start))
-        application.add_handler(CommandHandler("help", help_command))
-        application.add_handler(CommandHandler("download", download_video))
-        application.add_handler(CommandHandler("language", language_menu))
-        application.add_handler(CommandHandler("admin", admin_panel))
-        application.add_handler(CommandHandler("status", status_command))
-        
-        # URL mesajları
-        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_url_message))
-        
-        # Callback query
-        application.add_handler(CallbackQueryHandler(button_callback))
-        
-        # Conversation handler
-        application.add_handler(conv_handler)
-        
-        # Xəta handler
-        application.add_error_handler(error_handler)
-        
-        logger.info("Bütün handler-lər əlavə edildi")
-        logger.info("TikTok Video Downloader Bot (SQL) başladıldı...")
-        
-        # Botu işə sal
-        application.run_polling(
-            allowed_updates=Update.ALL_TYPES,
-            drop_pending_updates=True  # Köhnə mesajları görmə
-        )
+        # Start the bot
+        await bot.start_bot()
         
     except KeyboardInterrupt:
-        logger.info("Bot dayandırılır...")
+        print("\n🛑 Bot dayandırılır...")
     except Exception as e:
-        logger.error(f"Bot xətası: {e}")
-        raise
+        print(f"❌ Xəta baş verdi: {e}")
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    # Run the bot
+    asyncio.run(main())
