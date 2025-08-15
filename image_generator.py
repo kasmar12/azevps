@@ -418,6 +418,99 @@ class ImageGenerator:
             self.logger.error(f"NovelAI generation error: {e}")
             return None
     
+    async def generate_with_free_stable_diffusion(self, prompt: str, style: str, size: str) -> Optional[Dict[str, Any]]:
+        """Free Stable Diffusion API ilə şəkil yarat (tamamilə pulsuz)"""
+        try:
+            await self.create_session()
+            
+            enhanced_prompt = self.enhance_prompt(prompt, style)
+            
+            # Free Stable Diffusion API (tamamilə pulsuz)
+            api_url = "https://stablediffusionapi.com/api/v3/text2img"
+            
+            # No authentication needed
+            headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+            
+            # Parse size
+            width, height = self.parse_size(size)
+            
+            data = {
+                "key": "free",  # Free tier
+                "prompt": enhanced_prompt,
+                "width": str(width),
+                "height": str(height),
+                "samples": "1",
+                "num_inference_steps": "20",
+                "safety_checker": "no",
+                "enhance_prompt": "yes",
+                "guidance_scale": 7.5,
+                "webhook": None,
+                "seed": None
+            }
+            
+            start_time = time.time()
+            
+            async with self.session.post(
+                api_url,
+                json=data,
+                headers=headers,
+                timeout=300
+            ) as response:
+                
+                if response.status == 200:
+                    result = await response.json()
+                    
+                    # Check if generation is successful
+                    if result.get('status') == 'success':
+                        # Get image URL
+                        image_url = result.get('output', [None])[0]
+                        
+                        if image_url:
+                            # Download image
+                            async with self.session.get(image_url) as img_response:
+                                if img_response.status == 200:
+                                    image_bytes = await img_response.read()
+                                    
+                                    # Save image
+                                    timestamp = int(time.time())
+                                    filename = f"generated_free_sd_{timestamp}.png"
+                                    filepath = os.path.join("generated_images", filename)
+                                    
+                                    # Create directory if not exists
+                                    os.makedirs("generated_images", exist_ok=True)
+                                    
+                                    # Save image
+                                    with open(filepath, 'wb') as f:
+                                        f.write(image_bytes)
+                                    
+                                    generation_time = int(time.time() - start_time)
+                                    file_size = os.path.getsize(filepath)
+                                    
+                                    return {
+                                        'file_path': filepath,
+                                        'file_size': file_size,
+                                        'generation_time': generation_time,
+                                        'prompt': prompt,
+                                        'style': style,
+                                        'size': size,
+                                        'enhanced_prompt': enhanced_prompt
+                                    }
+                    else:
+                        error_msg = result.get('message', 'Unknown error')
+                        self.logger.error(f"Free SD API error: {error_msg}")
+                        return None
+                else:
+                    error_text = await response.text()
+                    self.logger.error(f"Free SD API error: {response.status} - {error_text}")
+                    return None
+                    
+        except Exception as e:
+            self.logger.error(f"Free SD generation error: {e}")
+            return None
+    
     async def generate_image(self, prompt: str, style: str = 'realistic', size: str = '1024x1024') -> Optional[Dict[str, Any]]:
         """Şəkil yarat - əsas funksiya"""
         try:
@@ -431,7 +524,12 @@ class ImageGenerator:
             
             self.logger.info(f"Generating image: {prompt} | Style: {style} | Size: {size}")
             
-            # Try NovelAI Leak first (completely free)
+            # Try Free Stable Diffusion first (completely free)
+            result = await self.generate_with_free_stable_diffusion(prompt, style, size)
+            if result:
+                return result
+            
+            # Fallback to NovelAI Leak
             result = await self.generate_with_novelai_leak(prompt, style, size)
             if result:
                 return result
