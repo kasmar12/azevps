@@ -7,7 +7,7 @@ from telegram.constants import ParseMode
 from telegram import CallbackQuery
 from datetime import timedelta
 
-from config import BOT_TOKEN, MESSAGES, DEFAULT_LANGUAGE, ADMIN_IDS
+from config import BOT_TOKEN, MESSAGES, DEFAULT_LANGUAGE, ADMIN_IDS, SUPPORTED_LANGUAGES
 from email_generator import EmailGenerator
 from database import DatabaseManager
 
