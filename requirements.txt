@@ -1,6 +1,40 @@
-python-telegram-bot==21.7
+# Instagram Comment Like Bot Dependencies
+# Python 3.8+ required
+
+# Telegram Bot
+python-telegram-bot==20.7
+python-telegram-bot[ext]>=20.7
+
+# Instagram Automation
+instagrapi==2.0.0
+selenium==4.15.2
+webdriver-manager==4.0.1
+playwright==1.40.0
+
+# HTTP Requests
 requests==2.31.0
-python-dotenv==1.0.0
 aiohttp==3.9.1
+httpx==0.25.2
+
+# Data Processing
 beautifulsoup4==4.12.2
-html5lib==1.1
+lxml==4.9.3
+Pillow==10.1.0
+
+# Database
+sqlite3
+sqlalchemy==2.0.23
+
+# Utilities
+python-dotenv==1.0.0
+schedule==1.2.0
+colorama==0.4.6
+tqdm==4.66.1
+
+# Security
+cryptography==41.0.7
+fake-useragent==1.4.0
+
+# Async Support
+asyncio
+aiofiles==23.2.1
