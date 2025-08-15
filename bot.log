@@ -99,3 +99,26 @@ nohup: ignoring input
 2025-08-15 08:50:56,858 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
 2025-08-15 08:51:12,148 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
 2025-08-15 08:51:12,447 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 08:51:22,243 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:24,713 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:24,714 - __main__ - INFO - Start command from user 1143980741 (@kenanbabayevofficial)
+2025-08-15 08:51:24,714 - __main__ - INFO - New user 1143980741 added with language az
+2025-08-15 08:51:24,715 - database - ERROR - Error adding user 1143980741: no such table: bot_stats
+2025-08-15 08:51:24,992 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 08:51:24,993 - __main__ - INFO - Welcome message sent to user 1143980741
+2025-08-15 08:51:26,562 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:32,115 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:34,350 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:34,351 - __main__ - INFO - Start command from user 1143980741 (@kenanbabayevofficial)
+2025-08-15 08:51:34,351 - database - ERROR - Error adding user 1143980741: no such table: bot_stats
+2025-08-15 08:51:34,674 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 08:51:34,675 - __main__ - INFO - Welcome message sent to user 1143980741
+2025-08-15 08:51:37,061 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:47,143 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:49,635 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:51:49,636 - __main__ - INFO - Start command from user 1143980741 (@kenanbabayevofficial)
+2025-08-15 08:51:49,637 - database - ERROR - Error adding user 1143980741: no such table: bot_stats
+2025-08-15 08:51:49,917 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 08:51:49,918 - __main__ - INFO - Welcome message sent to user 1143980741
+2025-08-15 08:51:51,960 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 08:52:02,042 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
