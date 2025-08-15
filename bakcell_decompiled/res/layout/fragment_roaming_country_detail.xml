@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<az.azerconnect.bakcell.utils.widgets.StateView android:tag="layout/fragment_roaming_country_detail_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <HorizontalScrollView android:id="@id/headerLayout" android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:fillViewport="true" android:overScrollMode="never" app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingHorizontal="16.0dip">
+            <com.google.android.material.tabs.TabLayout android:id="@id/tabLayout" android:clipToPadding="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:overScrollMode="never" app:layout_constraintTop_toTopOf="parent" app:tabIndicator="@drawable/package_tab_indicator" app:tabIndicatorColor="@color/bkc_color_background_brand" app:tabIndicatorGravity="center" app:tabIndicatorHeight="32.0dip" app:tabMode="auto" app:tabRippleColor="@color/transparent" app:tabSelectedTextColor="@color/white" app:tabTextAppearance="@style/TextAppearance.Bakcell.Tab" app:tabTextColor="?colorOnBackground">
+                <com.google.android.material.tabs.TabItem android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_roaming_country_detail_tab_item_packages" />
+                <com.google.android.material.tabs.TabItem android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_roaming_country_detail_tab_item_operators" />
+                <com.google.android.material.tabs.TabItem android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_roaming_country_detail_tab_item_operator_comparison" />
+            </com.google.android.material.tabs.TabLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+    <androidx.viewpager2.widget.ViewPager2 android:id="@id/viewPager" android:background="?android:panelColorBackground" android:saveEnabled="false" android:layout_width="fill_parent" android:layout_height="0.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@id/headerLayout" />
+    <include layout="@layout/layout_loading" />
+    <include layout="@layout/layout_error" />
+</az.azerconnect.bakcell.utils.widgets.StateView>

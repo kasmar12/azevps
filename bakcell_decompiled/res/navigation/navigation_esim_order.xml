@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_esim_order" app:startDestination="@id/ESimSelectNumberFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_web" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.document.ESimVerifyIdentityFragment" android:id="@id/ESimVerifyIdentityFragment">
+        <action android:id="@id/action_ESIMAddDocumentFragment_to_ESIMAddManuallyDocumentFragment" app:destination="@id/ESIMAddManuallyDocumentFragment" />
+        <action android:id="@id/action_ESIMAddDocumentFragment_to_ESIMTariffsFragment" app:destination="@id/ESIMTariffsFragment" />
+        <argument android:name="dto" app:argType="az.azerconnect.data.models.dto.StockDto" app:nullable="true" />
+        <action android:id="@id/action_ESimVerifyIdentityFragment_to_ESimFaceRecognitionFragment" app:destination="@id/ESimFaceRecognitionOnboardingFragment" />
+        <action android:id="@id/action_ESimVerifyIdentityFragment_to_ESimOtpFragment" app:destination="@id/ESimOtpFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.tariff.ESimTariffsFragment" android:id="@id/ESIMTariffsFragment">
+        <action android:id="@id/action_ESIMTariffsFragment_to_ESIMTariffDetailFragment" app:destination="@id/ESIMTariffDetailFragment" />
+        <action android:id="@id/action_ESIMTariffsFragment_to_ESimCompleteOrderFragment" app:destination="@id/ESimCompleteOrderFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.tariff.detail.ESimTariffDetailFragment" android:id="@id/ESIMTariffDetailFragment">
+        <argument android:name="tariffId" app:argType="string" />
+        <action android:id="@id/action_ESIMTariffDetailFragment_to_ESimCompleteOrderFragment" app:destination="@id/ESimCompleteOrderFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.completeOrder.ESimCompleteOrderFragment" android:id="@id/ESimCompleteOrderFragment">
+        <action android:id="@id/action_ESimCompleteOrderFragment_to_ESimOrderStatusFragment" app:destination="@id/ESimOrderStatusFragment" app:popUpTo="@id/ESimSelectNumberFragment" app:popUpToInclusive="true" />
+        <action android:id="@id/action_ESimCompleteOrderFragment_to_pdfViewFragment" app:destination="@id/pdfViewFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.selectNumber.ESimSelectNumberFragment" android:id="@id/ESimSelectNumberFragment">
+        <action android:id="@id/action_ESimSelectNumberFragment_to_ESimVerifyIdentityFragment" app:destination="@id/ESimVerifyIdentityFragment" />
+    </fragment>
+    <fragment android:label="@string/in_bakcell_card_order_fr_onboarding_nav_title" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.faceRecognition.onboarding.ESimFaceRecognitionOnboardingFragment" android:id="@id/ESimFaceRecognitionOnboardingFragment">
+        <action android:id="@id/action_ESimFaceRecognitionOnboardingFragment_to_ESimFaceRecognitionFragment" app:destination="@id/ESimFaceRecognitionFragment" app:popUpTo="@id/ESimFaceRecognitionOnboardingFragment" app:popUpToInclusive="true" />
+        <action android:id="@id/action_ESimFaceRecognitionOnboardingFragment_to_eSimFaceRecognitionSimaFragment" app:destination="@id/eSimFaceRecognitionSimaFragment" app:popUpTo="@id/ESimFaceRecognitionOnboardingFragment" app:popUpToInclusive="true" />
+        <action android:id="@id/action_ESimFaceRecognitionOnboardingFragment_to_permissionDialog" app:destination="@id/permissionDialog" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.faceRecognition.ESimFaceRecognitionFragment" android:id="@id/ESimFaceRecognitionFragment">
+        <action android:id="@id/action_ESimFaceRecognitionFragment_to_ESimFaceErrorFragment" app:destination="@id/ESimFaceErrorFragment" app:popUpTo="@id/navigation_esim_order" app:popUpToInclusive="true" />
+        <action android:id="@id/action_ESimFaceRecognitionFragment_to_esimApiCheckDialog" app:destination="@id/esimApiCheckDialog" />
+        <argument android:name="data" app:argType="az.azerconnect.data.models.dto.RulesData" app:nullable="true" />
+        <action android:id="@id/action_ESimFaceRecognitionFragment_to_eSimFaceRecognitionSimaFragment" app:destination="@id/eSimFaceRecognitionSimaFragment" app:popUpTo="@id/ESimFaceRecognitionFragment" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.sima.EsimFaceRecognitionSimaFragment" android:id="@id/eSimFaceRecognitionSimaFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.otp.ESimOtpFragment" android:id="@id/ESimOtpFragment">
+        <argument android:name="phoneNumber" app:argType="string" app:nullable="true" />
+        <action android:id="@id/action_ESimOtpFragment_to_ESIMTariffsFragment" app:destination="@id/ESIMTariffsFragment" />
+    </fragment>
+    <fragment android:label="@string/in_esim_add_manually_document_title" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.document.manually.ESimAddManuallyDocumentFragment" android:id="@id/ESIMAddManuallyDocumentFragment">
+        <action android:id="@id/action_ESIMAddManuallyDocumentFragment_to_pinCodeExampleFragment" app:destination="@id/ESimPinCodeInfoDialogFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.faceRecognition.error.ESimFaceErrorFragment" android:id="@id/ESimFaceErrorFragment">
+        <action android:id="@id/action_ESimFaceErrorFragment_to_serviceCentersFragment" app:destination="@id/serviceCentersFragment" />
+    </fragment>
+    <fragment android:label="@string/in_service_centers_nav_title" android:name="az.azerconnect.bakcell.ui.main.more.serviceCenters.ServiceCentersFragment" android:id="@id/serviceCentersFragment">
+        <action android:id="@id/action_serviceCentersFragment_to_serviceCentersFilterFragment" app:destination="@id/serviceCentersFilterFragment" />
+        <action android:id="@id/action_serviceCentersFragment_to_permissionDialog" app:destination="@id/permissionDialog" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.permission.PermissionDialogFragment" android:id="@id/permissionDialog">
+        <argument android:name="title" />
+        <argument android:name="subTitle" />
+        <argument android:name="iconType" app:argType="az.azerconnect.data.enums.PermissionIconType" />
+        <argument android:name="permissions" app:argType="string[]" />
+    </dialog>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.serviceCenters.filter.ServiceCentersFilterFragment" android:id="@id/serviceCentersFilterFragment">
+        <argument android:name="selectedType" app:nullable="true" />
+        <argument android:name="selectedCity" app:nullable="true" />
+        <argument android:name="typeList" app:argType="string[]" />
+        <argument android:name="cityList" app:argType="string[]" />
+    </dialog>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.status.ESimOrderStatusFragment" android:id="@id/ESimOrderStatusFragment">
+        <action android:id="@id/action_ESimOrderStatusFragment_to_pdfViewFragment" app:destination="@id/pdfViewFragment" />
+        <action android:id="@id/action_ESimOrderStatusFragment_to_ESimQrCodeFragment" app:destination="@id/ESimQrCodeFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.qrCode.ESimQrCodeFragment" android:id="@id/ESimQrCodeFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.pdf.EsimPdfViewFragment" android:id="@id/pdfViewFragment">
+        <argument android:name="esimContract" android:defaultValue="false" app:argType="boolean" />
+    </fragment>
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+    <dialog android:label="@string/in_esim_add_manually_document_title" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.document.dialog.PinCodeExampleFragment" android:id="@id/ESimPinCodeInfoDialogFragment" />
+    <dialog android:label="EsimApiCheckDialog" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.apiCheck.EsimApiCheckDialog" android:id="@id/esimApiCheckDialog">
+        <argument android:name="filePath" app:argType="string" />
+    </dialog>
+</navigation>

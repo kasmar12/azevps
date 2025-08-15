@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/authNavId" app:startDestination="@id/loginFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_web" />
+    <include app:graph="@navigation/navigation_esim" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.signUp.SignUpFragment" android:id="@id/loginFragment">
+        <deepLink app:uri="@string/deep_link_auth" />
+        <action android:id="@id/action_loginFragment_to_termsFragment" app:destination="@id/termsFragment" />
+        <action android:id="@id/action_loginFragment_to_whiteListFragment" app:destination="@id/whiteListFragment" />
+        <action android:id="@id/action_loginFragment_to_navESimId" app:destination="@id/navESimId" />
+        <action android:id="@id/action_loginFragment_to_ESimQrCodeFragment" app:destination="@id/ESimQrCodeFragment" />
+        <action android:id="@id/action_loginFragment_to_ESimOrderStatusFragment" app:destination="@id/ESimOrderStatusFragment" />
+        <action android:id="@id/action_loginFragment_to_changeLanguageFragment" app:destination="@id/changeLanguageFragment" />
+        <action android:id="@id/action_loginFragment_to_setPrimaryNumberWarningFragment" app:destination="@id/setPrimaryNumberWarningFragment" />
+        <action android:id="@id/action_loginFragment_to_sessionExpiredFragment" app:destination="@id/sessionExpiredFragment" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.accountMenu.primaryNumber.warning.SetPrimaryNumberWarningFragment" android:id="@id/setPrimaryNumberWarningFragment">
+        <argument android:name="text" />
+        <argument android:name="spannableText" />
+    </dialog>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.otp.OtpFragment" android:id="@id/otpFragment">
+        <argument android:name="phoneNumber" app:argType="string" />
+        <argument android:name="uuid" app:argType="string" />
+        <action android:id="@id/action_otpFragment_to_pinCodeFragment" app:destination="@id/setPinCodeFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.fingerprint.FingerPrintFragment" android:id="@id/fingerPrintFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.pinCode.set.SetPinCodeFragment" android:id="@id/setPinCodeFragment">
+        <action android:id="@id/action_setPinCodeFragment_to_fingerPrintFragment" app:destination="@id/fingerPrintFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.terms.TermsFragment" android:id="@id/termsFragment">
+        <deepLink app:uri="@string/deep_link_terms" />
+        <action android:id="@id/action_termsFragment_to_otpFragment" app:destination="@id/otpFragment" app:popUpTo="@id/loginFragment" />
+        <argument android:name="phoneNumber" app:argType="string" />
+        <action android:id="@id/action_termsFragment_to_termsConditionsDenyDialogFragment" app:destination="@id/termsConditionsDenyDialogFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.whitelist.WhiteListFragment" android:id="@id/whiteListFragment">
+        <deepLink app:uri="@string/deep_link_whiteList" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.qrCode.ESimQrCodeFragment" android:id="@id/ESimQrCodeFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.sales.status.ESimOrderStatusFragment" android:id="@id/ESimOrderStatusFragment">
+        <action android:id="@id/action_ESimOrderStatusFragment_to_ESimQrCodeFragment" app:destination="@id/ESimQrCodeFragment" />
+        <action android:id="@id/action_ESimOrderStatusFragment_to_pdfViewFragment" app:destination="@id/esimPdfViewFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.services.eSIM.pdf.EsimPdfViewFragment" android:id="@id/esimPdfViewFragment">
+        <argument android:name="esimContract" android:defaultValue="true" app:argType="boolean" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.launch.auth.terms.decline.TermsConditionsDenyDialogFragment" android:id="@id/termsConditionsDenyDialogFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.forceUpdate.ForceUpdateFragment" android:id="@id/forceUpdateFragment">
+        <deepLink app:uri="@string/deep_link_force_update" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.settings.ChangeLanguageFragment" android:id="@id/changeLanguageFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.accountMenu.primaryNumber.sessionExpired.SessionExpiredFragment" android:id="@id/sessionExpiredFragment">
+        <argument android:name="deviceName" />
+    </fragment>
+    <action android:id="@id/action_global_webFragment" app:destination="@id/webNavId">
+        <argument android:name="title" />
+        <argument android:name="url" />
+        <argument android:name="successKeyword" android:defaultValue="" />
+        <argument android:name="failureKeyword" android:defaultValue="" />
+        <argument android:name="postData" android:defaultValue="" app:nullable="true" />
+        <argument android:name="webCanGoBack" android:defaultValue="false" app:argType="boolean" />
+    </action>
+</navigation>

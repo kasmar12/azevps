@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_notifications" app:startDestination="@id/notificationsFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/in_notifications_toolbar_title" android:name="az.azerconnect.bakcell.ui.main.notification.NotificationsFragment" android:id="@id/notificationsFragment">
+        <deepLink app:uri="@string/deep_link_notifications" />
+        <action android:id="@id/action_notificationsFragment_to_notificationDetailFragment" app:destination="@id/notificationDetailFragment" />
+        <action android:id="@id/action_notificationsFragment_to_notificationReadAllFragment" app:destination="@id/notificationReadAllFragment" />
+    </fragment>
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.notification.detail.NotificationDetailFragment" android:id="@id/notificationDetailFragment">
+        <deepLink app:uri="@string/deep_link_notification_detail" />
+        <argument android:name="id" app:argType="integer" />
+        <action android:id="@id/action_notificationDetailFragment_to_notificationSuccessFragment" app:destination="@id/notificationSuccessFragment" app:popUpTo="@id/notificationDetailFragment" app:popUpToInclusive="true" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.notification.readAll.NotificationReadAllDialogFragment" android:id="@id/notificationReadAllFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.notification.success.NotificationActivationSuccessFragment" android:id="@id/notificationSuccessFragment">
+        <deepLink app:uri="@string/deep_link_notification_activation_success" />
+    </fragment>
+</navigation>

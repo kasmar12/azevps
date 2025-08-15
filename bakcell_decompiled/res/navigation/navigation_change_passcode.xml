@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/navigation_change_passcode" app:startDestination="@id/changePasscodeFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <fragment android:label="@string/in_change_passcode_nav_title" android:name="az.azerconnect.bakcell.ui.main.more.settings.changePasscode.ChangePasscodeFragment" android:id="@id/changePasscodeFragment">
+        <action android:id="@id/action_changePasscodeFragment_to_changePasscodeSuccessFragment" app:destination="@id/changePasscodeSuccessFragment" app:popUpTo="@id/navigation_change_passcode" />
+        <action android:id="@id/action_changePasscodeFragment_to_sureDialogFragment" app:destination="@id/sureDialogFragment" />
+    </fragment>
+    <dialog android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.global.sureDialog.SureDialogFragment" android:id="@id/sureDialogFragment" />
+    <fragment android:label="@string/empty_label" android:name="az.azerconnect.bakcell.ui.main.more.settings.changePasscode.ChangePasscodeSuccessFragment" android:id="@id/changePasscodeSuccessFragment" />
+</navigation>

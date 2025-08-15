@@ -1,0 +1,20 @@
+.class public final Lcom/google/android/gms/location/LocationStatusCodes;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+
+# annotations
+.annotation runtime Ljava/lang/Deprecated;
+.end annotation
+
+
+# static fields
+.field public static final ERROR:I = 0x1
+
+.field public static final GEOFENCE_NOT_AVAILABLE:I = 0x3e8
+
+.field public static final GEOFENCE_TOO_MANY_GEOFENCES:I = 0x3e9
+
+.field public static final GEOFENCE_TOO_MANY_PENDING_INTENTS:I = 0x3ea
+
+.field public static final SUCCESS:I

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="328.0dip" android:width="328.0dip" android:viewportWidth="328.0" android:viewportHeight="328.0"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <group>
+        <clip-path android:pathData="M0 0h328v328H0V0Z" />
+        <group>
+            <path android:fillColor="@drawable/$bg_gamitifcation_spinner_active_6__0" android:pathData="M233.68 16.77C212.4 6.66 188.62 1 163.5 1c-25.12 0-48.91 5.66-70.18 15.77-4.27 2.03-5.74 7.29-3.37 11.38l34.27 59.34c2.23 3.86 7.06 5.26 11.22 3.67 8.72-3.33 18.18-5.16 28.06-5.16 9.88 0 19.34 1.83 28.06 5.16 4.16 1.59 9 0.19 11.22-3.67l34.27-59.34c2.36-4.09 0.9-9.35-3.38-11.38Z" android:strokeColor="@drawable/$bg_gamitifcation_spinner_active_6__1" android:strokeWidth="1.05" />
+        </group>
+    </group>
+</vector>

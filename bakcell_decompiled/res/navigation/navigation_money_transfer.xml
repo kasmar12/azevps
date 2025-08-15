@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@id/moneyTransferNavId" app:startDestination="@id/moneyTransferFragment"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:graph="@navigation/navigation_select_contact" />
+    <fragment android:label="@string/in_money_transfer_nav_title" android:name="az.azerconnect.bakcell.ui.main.services.moneyTransfer.MoneyTransferFragment" android:id="@id/moneyTransferFragment">
+        <deepLink app:uri="@string/deep_link_money_transfer" />
+        <argument android:name="accountId" app:argType="integer" />
+        <argument android:name="identifier" />
+        <action android:id="@id/action_moneyTransferFragment_to_selectContactFragment" app:destination="@id/selectContactNavId">
+            <argument android:name="contactDto" app:argType="az.azerconnect.data.models.dto.ContactDto" app:nullable="true" />
+        </action>
+    </fragment>
+</navigation>
