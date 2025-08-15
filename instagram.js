@@ -465,41 +465,160 @@ class InstagramDownloader {
     }
   }
 
-  // Faylı yükləmək
+  // Faylı yükləmək - Təkmilləşdirilmiş versiya
   async downloadFile(fileUrl, fileName) {
     try {
       console.log(`📥 Fayl yüklənir: ${fileName}`);
+      console.log(`🔗 URL: ${fileUrl}`);
       
-      const response = await axios({
-        method: 'GET',
-        url: fileUrl,
-        responseType: 'stream',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Referer': 'https://www.instagram.com/',
-        },
-        timeout: 60000
-      });
-
-      const filePath = path.join(this.downloadPath, fileName);
-      const writer = fs.createWriteStream(filePath);
-
-      response.data.pipe(writer);
-
-      return new Promise((resolve, reject) => {
-        writer.on('finish', () => {
-          console.log(`✅ Fayl uğurla yükləndi: ${fileName}`);
-          resolve(filePath);
+      // Method 1: Standard download with Instagram headers
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: fileUrl,
+          responseType: 'stream',
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://www.instagram.com/',
+            'Accept': 'video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,audio/*;q=0.6,*/*;q=0.5',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Sec-Fetch-Dest': 'video',
+            'Sec-Fetch-Mode': 'no-cors',
+            'Sec-Fetch-Site': 'cross-site',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+          },
+          timeout: 60000,
+          maxRedirects: 5,
+          validateStatus: function (status) {
+            return status >= 200 && status < 400; // Accept redirects
+          }
         });
-        writer.on('error', reject);
-      });
+
+        const filePath = path.join(this.downloadPath, fileName);
+        const writer = fs.createWriteStream(filePath);
+
+        response.data.pipe(writer);
+
+        return new Promise((resolve, reject) => {
+          writer.on('finish', () => {
+            console.log(`✅ Fayl uğurla yükləndi: ${fileName}`);
+            resolve(filePath);
+          });
+          writer.on('error', reject);
+        });
+      } catch (error) {
+        console.log(`⚠️ Method 1 uğursuz: ${error.message}`);
+        throw error;
+      }
     } catch (error) {
       console.error('❌ Fayl yüklənərkən xəta:', error.message);
-      throw new Error('Fayl yüklənə bilmədi');
+      
+      // Method 2: Try with different headers
+      try {
+        console.log('🔄 Method 2 sınanılır - fərli headers ilə...');
+        
+        const response = await axios({
+          method: 'GET',
+          url: fileUrl,
+          responseType: 'stream',
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://www.instagram.com/',
+            'Accept': '*/*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Origin': 'https://www.instagram.com',
+            'Sec-Fetch-Dest': 'video',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'cross-site',
+          },
+          timeout: 60000,
+          maxRedirects: 5
+        });
+
+        const filePath = path.join(this.downloadPath, fileName);
+        const writer = fs.createWriteStream(filePath);
+
+        response.data.pipe(writer);
+
+        return new Promise((resolve, reject) => {
+          writer.on('finish', () => {
+            console.log(`✅ Fayl Method 2 ilə yükləndi: ${fileName}`);
+            resolve(filePath);
+          });
+          writer.on('error', reject);
+        });
+      } catch (error2) {
+        console.log(`⚠️ Method 2 də uğursuz: ${error2.message}`);
+        
+        // Method 3: Try with minimal headers
+        try {
+          console.log('🔄 Method 3 sınanılır - minimal headers ilə...');
+          
+          const response = await axios({
+            method: 'GET',
+            url: fileUrl,
+            responseType: 'stream',
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            },
+            timeout: 60000
+          });
+
+          const filePath = path.join(this.downloadPath, fileName);
+          const writer = fs.createWriteStream(filePath);
+
+          response.data.pipe(writer);
+
+          return new Promise((resolve, reject) => {
+            writer.on('finish', () => {
+              console.log(`✅ Fayl Method 3 ilə yükləndi: ${fileName}`);
+              resolve(filePath);
+            });
+            writer.on('error', reject);
+          });
+        } catch (error3) {
+          console.log(`⚠️ Method 3 də uğursuz: ${error3.message}`);
+          throw new Error(`Bütün download metodları uğursuz oldu. Son xəta: ${error3.message}`);
+        }
+      }
     }
   }
 
-  // Instagram məzmununu yükləmək
+  // Instagram video URL-ini təkmilləşdirmək
+  async enhanceVideoUrl(videoUrl) {
+    try {
+      console.log(`🔧 Video URL təkmilləşdirilir: ${videoUrl}`);
+      
+      // URL-i analiz etmək
+      const urlObj = new URL(videoUrl);
+      
+      // Instagram video URL-lərini təkmilləşdirmək
+      if (urlObj.hostname.includes('instagram')) {
+        // Method 1: Direct video URL
+        if (videoUrl.includes('.mp4')) {
+          console.log('✅ Video URL artıq düzgün format-da');
+          return videoUrl;
+        }
+        
+        // Method 2: Try to find better quality version
+        const enhancedUrl = videoUrl.replace(/&amp;/g, '&');
+        console.log(`🔧 Enhanced URL: ${enhancedUrl}`);
+        return enhancedUrl;
+      }
+      
+      return videoUrl;
+    } catch (error) {
+      console.error('❌ URL təkmilləşdirilərkən xəta:', error.message);
+      return videoUrl;
+    }
+  }
+
+  // Instagram məzmununu yükləmək - Təkmilləşdirilmiş versiya
   async downloadInstagramContent(url) {
     try {
       // URL validasiyası
@@ -520,28 +639,47 @@ class InstagramDownloader {
 
       const results = [];
       
-      // Şəkil yükləmək
-      if (contentData.imageUrl) {
-        console.log(`🖼️ Şəkil tapıldı: ${contentData.imageUrl}`);
-        const imageFileName = `instagram_image_${Date.now()}.jpg`;
-        const imagePath = await this.downloadFile(contentData.imageUrl, imageFileName);
-        results.push({
-          type: 'image',
-          path: imagePath,
-          url: contentData.imageUrl
-        });
-      }
-
-      // Video yükləmək
+      // Video yükləmək (prioritet)
       if (contentData.videoUrl) {
         console.log(`🎥 Video tapıldı: ${contentData.videoUrl}`);
+        
+        // Video URL-i təkmilləşdirmək
+        const enhancedVideoUrl = await this.enhanceVideoUrl(contentData.videoUrl);
+        
         const videoFileName = `instagram_video_${Date.now()}.mp4`;
-        const videoPath = await this.downloadFile(contentData.videoUrl, videoFileName);
-        results.push({
-          type: 'video',
-          path: videoPath,
-          url: contentData.videoUrl
-        });
+        try {
+          const videoPath = await this.downloadFile(enhancedVideoUrl, videoFileName);
+          results.push({
+            type: 'video',
+            path: videoPath,
+            url: enhancedVideoUrl
+          });
+          console.log('✅ Video uğurla yükləndi!');
+        } catch (videoError) {
+          console.error('❌ Video yüklənə bilmədi:', videoError.message);
+          // Video yüklənməsə, şəkilə keç
+        }
+      }
+      
+      // Şəkil yükləmək (əgər video yüklənmədisə və ya əlavə olaraq)
+      if (contentData.imageUrl && (results.length === 0 || contentData.videoUrl)) {
+        console.log(`🖼️ Şəkil tapıldı: ${contentData.imageUrl}`);
+        const imageFileName = `instagram_image_${Date.now()}.jpg`;
+        try {
+          const imagePath = await this.downloadFile(contentData.imageUrl, imageFileName);
+          results.push({
+            type: 'image',
+            path: imagePath,
+            url: contentData.imageUrl
+          });
+          console.log('✅ Şəkil uğurla yükləndi!');
+        } catch (imageError) {
+          console.error('❌ Şəkil yüklənə bilmədi:', imageError.message);
+        }
+      }
+
+      if (results.length === 0) {
+        throw new Error('Heç bir fayl yüklənə bilmədi.');
       }
 
       return {
