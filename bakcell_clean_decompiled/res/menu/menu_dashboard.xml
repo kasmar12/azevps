@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:icon="@drawable/ic_online_chat" android:id="@id/actionChat" android:title="" app:iconTint="@color/bkc_color_icon_primary" app:showAsAction="always" />
-    <item android:id="@id/actionNotifications" android:visible="false" android:title="" app:actionLayout="@layout/action_layout_notification" app:showAsAction="always" />
-</menu>

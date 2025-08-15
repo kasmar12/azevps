@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="fill_parent" android:layout_height="56.0dip"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.google.android.material.button.MaterialButton android:textSize="14.0sp" android:textColor="?colorOnBackground" android:id="@id/retryBtn" android:layout_width="fill_parent" android:layout_height="48.0dip" android:text="@string/retry" android:insetTop="0.0dip" android:insetBottom="0.0dip" android:layout_marginHorizontal="16.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent" style="@style/Widget.Bakcell.Button.Secondary" />
-    <ProgressBar android:id="@id/progressBar" android:background="@color/transparent" android:layout_width="40.0dip" android:layout_height="40.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
