@@ -11,3 +11,32 @@ nohup: ignoring input
 2025-08-15 09:43:01,461 - telegram.ext.Application - INFO - Application started
 2025-08-15 09:43:11,710 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
 2025-08-15 09:43:21,795 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:43:31,880 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:43:41,963 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:43:52,045 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:43:55,292 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:43:55,608 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:43:59,801 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:43:59,921 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:44:01,538 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:44:01,641 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:44:01,642 - __main__ - INFO - === STYLE SELECTION CALLBACK ===
+2025-08-15 09:44:01,642 - __main__ - INFO - User ID: 1143980741
+2025-08-15 09:44:01,642 - __main__ - INFO - Callback data: style_realistic
+2025-08-15 09:44:01,642 - __main__ - INFO - User data: {'prompt': 'Azərbaycan bayrağı ilə qədim qala'}
+2025-08-15 09:44:01,642 - __main__ - INFO - Selected style: realistic
+2025-08-15 09:44:01,642 - __main__ - INFO - Style saved to context: realistic
+2025-08-15 09:44:01,642 - __main__ - INFO - Showing size selection menu for style: Realistic
+2025-08-15 09:44:01,773 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 09:44:03,125 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:44:03,271 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:44:03,272 - __main__ - INFO - Size selection callback: size_1024x1024 from user 1143980741
+2025-08-15 09:44:03,272 - __main__ - INFO - Size selected: 1024x1024 for user 1143980741
+2025-08-15 09:44:03,452 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 09:44:03,452 - image_generator - INFO - Generating image: Azərbaycan bayrağı ilə qədim qala | Style: realistic | Size: 1024x1024
+2025-08-15 09:44:03,534 - image_generator - ERROR - API error: 401 - {"id":"267a70cb82e9b28abb380aed6717b8e7","message":"Incorrect API key provided: your_st****************here. You can find your API key at https://stability.ai.","name":"unauthorized"}
+
+2025-08-15 09:44:03,564 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 09:44:03,575 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 09:44:03,575 - image_generator - ERROR - All image generation methods failed
+2025-08-15 09:44:03,749 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
