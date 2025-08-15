@@ -1,0 +1,24 @@
+{
+  "name": "instagram-downloader-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for downloading Instagram content",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "keywords": ["telegram", "bot", "instagram", "downloader"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.64.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "fs-extra": "^11.1.1",
+    "path": "^0.12.7",
+    "url": "^0.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

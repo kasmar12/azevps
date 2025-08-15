@@ -1,178 +1,188 @@
-# 🎬 TikTok Video Downloader Bot
+# 📱 Instagram Downloader Telegram Bot
 
-**Telegram bot for downloading TikTok videos without watermarks**
+Bu bot Instagram məzmunlarını (post, reel, story, video) yükləmək üçün yaradılmış Telegram botudur.
 
-## 🌟 Features
+## ✨ Xüsusiyyətlər
 
-- ✅ **Watermark-free video downloads** from TikTok
-- 🌍 **Multi-language support**: Turkish, Azerbaijani, English, Russian
-- 👥 **Group functionality** - works in groups and tracks group statistics
-- 📊 **SQL database** for user management and statistics
-- 🔧 **Admin panel** with broadcast messaging capabilities
-- 📱 **Direct link support** - just send TikTok link to download
-- 🚫 **No captions** - clean video files
+- 📸 **Instagram Post-larını** yükləmək
+- 🎥 **Instagram Reels** saxlamaq
+- 📱 **Instagram Stories** yükləmək
+- 🎬 **Instagram TV** video-larını download etmək
+- 🔄 **Rate limiting** - istifadəçi başına məhdudiyyət
+- 💾 **Automatic cleanup** - faylları avtomatik təmizləmək
+- 📊 **User statistics** - istifadəçi statistikaları
+- 🌐 **Multi-format support** - şəkil və video formatları
 
-## 🚀 Quick Start
+## 🚀 Quraşdırma
 
-### 1. Requirements
-- Python 3.8+
-- SQLite3
+### 1. Tələblər
+- Node.js (v14 və ya yuxarı)
+- npm və ya yarn
 - Telegram Bot Token
 
-### 2. Installation
+### 2. Layihəni klonlamaq
 ```bash
-# Clone repository
-git clone https://github.com/kasmar12/azevps.git
-cd azevps
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate     # Windows
-
-# Install dependencies
-pip install -r requirements.txt
+git clone <repository-url>
+cd instagram-downloader-bot
 ```
 
-### 3. Configuration
-1. Copy `.env.example` to `.env`
-2. Add your Telegram Bot Token:
-```
-BOT_TOKEN=your_bot_token_here
-```
-
-### 4. Run Bot
+### 3. Dependencies quraşdırmaq
 ```bash
-python bot.py
+npm install
 ```
 
-## 📁 Project Structure
-
-```
-azevps/
-├── bot.py                 # Main bot file
-├── config.py              # Configuration and settings
-├── tiktok_downloader.py   # TikTok video downloader
-├── database.py            # Database manager
-├── database.sql           # Database schema
-├── requirements.txt       # Python dependencies
-├── admin_panel.php       # Web admin panel
-└── README.md             # This file
+### 4. Environment variables quraşdırmaq
+`.env` faylı yaradın:
+```env
+BOT_TOKEN=your_telegram_bot_token_here
+BOT_USERNAME=@your_bot_username
 ```
 
-## 🔧 Configuration
+### 5. Bot-u başlatmaq
+```bash
+npm start
+```
 
-### Bot Settings (`config.py`)
-- **Supported Languages**: Turkish, Azerbaijani, English, Russian
-- **Max File Size**: 50MB
-- **Download Timeout**: 60 seconds
-- **Admin IDs**: Add your Telegram ID for admin access
+Development üçün:
+```bash
+npm run dev
+```
 
-### Database
-- **Type**: SQLite3
-- **Tables**: Users, Downloads, Groups, Statistics
-- **Auto-creation**: Database and tables are created automatically
+## 🔧 Telegram Bot Yaratmaq
 
-## 📱 Usage
+### 1. @BotFather ilə bot yaradın
+1. Telegram-da @BotFather-a mesaj göndərin
+2. `/newbot` komandasını yazın
+3. Bot adını və username-i təyin edin
+4. Bot token-i alın
 
-### For Users
-1. **Start bot**: `/start`
-2. **Send TikTok link**: Just paste any TikTok video URL
-3. **Download**: Video will be downloaded automatically
-4. **Change language**: `/language`
+### 2. Bot token-i .env faylına əlavə edin
+```env
+BOT_TOKEN=1234567890:ABCdefGHIjklMNOpqrsTUVwxyz
+BOT_USERNAME=@your_bot_username
+```
 
-### For Admins
-1. **Access admin panel**: `/admin`
-2. **View statistics**: SQL-based user and download statistics
-3. **Send broadcast messages**:
-   - 👥 To groups only
-   - 👤 To users only
-   - 🌐 To everyone
+## 📱 İstifadə Qaydası
 
-## 🌐 Admin Panel
+### 1. Bot-u başlatmaq
+```
+/start
+```
 
-Web-based admin panel (`admin_panel.php`) for:
-- User management
-- Download statistics
-- Broadcast messaging
-- Group management
+### 2. Instagram linkini göndərmək
+Instagram post, reel və ya story linkini bot-a göndərin:
+```
+https://www.instagram.com/p/ABC123/
+https://www.instagram.com/reel/XYZ789/
+https://www.instagram.com/stories/username/123456/
+```
 
-**Setup**: Upload to web server and configure database credentials.
+### 3. Məzmunu yükləmək
+Bot avtomatik olaraq:
+- Linki analiz edəcək
+- Məzmunu yükləyəcək
+- Telegram-da göndərəcək
+- Faylları təmizləyəcək
 
-## 🔒 Security
+## 🛠️ Komandalar
 
-- Admin ID-based access control
-- Rate limiting for downloads
-- Input validation for URLs
-- Secure file handling
+- `/start` - Bot-u başlatmaq
+- `/help` - Kömək məlumatı
+- `/stats` - İstifadəçi statistikası
 
-## 📊 Statistics
+## ⚙️ Konfiqurasiya
 
-The bot tracks:
-- Total users and active users
-- Daily downloads
-- Group activity
-- User language preferences
-- Download success/failure rates
+`config.js` faylında aşağıdakı parametrləri dəyişə bilərsiniz:
 
-## 🛠️ API Integration
+```javascript
+module.exports = {
+  BOT_TOKEN: 'your_token',
+  DOWNLOAD_PATH: './downloads',
+  MAX_FILE_SIZE: 50 * 1024 * 1024, // 50MB
+  RATE_LIMIT: {
+    MAX_REQUESTS: 10,        // Dəqiqədə maksimum sorğu
+    WINDOW_MS: 60000         // Rate limit pəncərəsi (ms)
+  }
+};
+```
 
-- **TikTok API**: Uses `tikwm.com` for video extraction
-- **Headers**: Custom User-Agent and request headers
-- **Compression**: Handles Brotli compressed responses
-- **Fallbacks**: Multiple video quality options
+## 📁 Fayl Strukturu
 
-## 🚨 Troubleshooting
+```
+instagram-downloader-bot/
+├── package.json          # Dependencies və scripts
+├── config.js            # Bot konfiqurasiyası
+├── bot.js               # Əsas bot faylı
+├── instagram.js         # Instagram downloader modulu
+├── utils.js             # Utility funksiyaları
+├── downloads/           # Yüklənən fayllar (avtomatik yaradılır)
+└── README.md            # Bu fayl
+```
 
-### Common Issues
-1. **Video download fails**: Check API status and network
-2. **Bot not responding**: Verify bot token and permissions
-3. **Database errors**: Check SQLite permissions
+## 🔒 Təhlükəsizlik
 
-### Logs
-Bot provides detailed logging for debugging:
-- User interactions
-- Download attempts
-- API responses
-- Error details
+- **Rate limiting** - spam-ə qarşı qorunma
+- **File size limits** - böyük faylların yüklənməsinin qarşısını almaq
+- **Input validation** - düzgün Instagram linklərinin yoxlanması
+- **Automatic cleanup** - faylların avtomatik silinməsi
 
-## 📈 Performance
+## ⚠️ Məhdudiyyətlər
 
-- **Async operations** for better performance
-- **Connection pooling** for HTTP requests
-- **Efficient database queries** with indexes
-- **Memory management** for large files
+- Maksimum fayl ölçüsü: **50MB**
+- Dəqiqədə maksimum sorğu: **10**
+- Yalnız **public** Instagram məzmunları
+- Instagram API məhdudiyyətləri
 
-## 🤝 Contributing
+## 🐛 Problemlərin Həlli
 
-1. Fork the repository
-2. Create feature branch
-3. Make changes
-4. Test thoroughly
-5. Submit pull request
+### Bot işləmir
+1. `.env` faylının düzgün quraşdırıldığını yoxlayın
+2. Bot token-in düzgün olduğunu yoxlayın
+3. Node.js versiyasını yoxlayın
+4. Console xətalarını yoxlayın
 
-## 📄 License
+### Download işləmir
+1. Instagram linkinin düzgün olduğunu yoxlayın
+2. Məzmunun public olduğunu yoxlayın
+3. İnternet bağlantınızı yoxlayın
+4. Rate limit-i yoxlayın
 
-This project is open source and available under the MIT License.
+### Fayl ölçüsü çox böyük
+1. Konfiqurasiyada `MAX_FILE_SIZE` parametrini artırın
+2. Daha kiçik keyfiyyətli məzmun axtarın
 
-## 🆘 Support
+## 🔄 Yeniləmələr
 
-For issues and questions:
-- Create GitHub issue
-- Check existing issues
-- Review documentation
+### v1.0.0
+- Əsas Instagram download funksiyası
+- Telegram bot inteqrasiyası
+- Rate limiting
+- File cleanup
+- User statistics
 
-## 🔄 Updates
+## 📞 Dəstək
 
-Bot automatically:
-- Handles TikTok API changes
-- Updates user statistics
-- Manages database maintenance
-- Provides error recovery
+Əgər problem yaşayırsınızsa:
+1. GitHub Issues bölməsində problem bildirin
+2. Console xətalarını paylaşın
+3. Bot konfiqurasiyasını yoxlayın
+
+## 📄 Lisenziya
+
+Bu layihə MIT lisenziyası altında yayımlanır.
+
+## 🤝 Töhfə
+
+Töhfə vermək istəyirsinizsə:
+1. Fork edin
+2. Feature branch yaradın
+3. Commit edin
+4. Pull request göndərin
+
+## ⭐ Uğurlar!
+
+Instagram Downloader Bot ilə xoş istifadə! 🎉
 
 ---
 
-**Made with ❤️ for the TikTok community**
-
-*Last updated: August 2024*
+**Qeyd:** Bu bot yalnız təhsil məqsədləri üçün yaradılmışdır. Instagram Terms of Service-ə riayət edin.
