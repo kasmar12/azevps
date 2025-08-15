@@ -137,13 +137,33 @@ async def handle_style_selection(update: Update, context: ContextTypes.DEFAULT_T
     user_id = query.from_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
+    # Debug logging
+    logger.info(f"Style selection callback: {query.data} from user {user_id}")
+    
     if query.data == "back_to_prompt":
         await query.edit_message_text(MESSAGES[lang]['enter_prompt'])
         return ENTERING_PROMPT
     
-    # Stil seçimini al
-    style = query.data.split("_")[1]
-    context.user_data['style'] = style
+    # Stil seçimini al və yoxla
+    if not query.data or not query.data.startswith("style_"):
+        logger.error(f"Invalid style callback data: {query.data}")
+        await query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+        return ConversationHandler.END
+    
+    try:
+        style = query.data.split("_")[1]
+        if style not in IMAGE_STYLES:
+            logger.error(f"Invalid style: {style}")
+            await query.edit_message_text("❌ Etibarsız stil. Zəhmət olmasa yenidən cəhd edin.")
+            return ConversationHandler.END
+        
+        context.user_data['style'] = style
+        logger.info(f"Style selected: {style} for user {user_id}")
+        
+    except Exception as e:
+        logger.error(f"Error parsing style: {e}")
+        await query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+        return ConversationHandler.END
     
     # Ölçü seçimi menyusu
     keyboard = []
@@ -172,6 +192,9 @@ async def handle_size_selection(update: Update, context: ContextTypes.DEFAULT_TY
     user_id = query.from_user.id
     lang = user_languages.get(user_id, DEFAULT_LANGUAGE)
     
+    # Debug logging
+    logger.info(f"Size selection callback: {query.data} from user {user_id}")
+    
     if query.data == "back_to_style":
         # Stil seçimi menyusuna qayıt
         keyboard = []
@@ -194,9 +217,26 @@ async def handle_size_selection(update: Update, context: ContextTypes.DEFAULT_TY
         )
         return SELECTING_STYLE
     
-    # Ölçü seçimini al
-    size = query.data.split("_")[1]
-    context.user_data['size'] = size
+    # Ölçü seçimini al və yoxla
+    if not query.data or not query.data.startswith("size_"):
+        logger.error(f"Invalid size callback data: {query.data}")
+        await query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+        return ConversationHandler.END
+    
+    try:
+        size = query.data.split("_")[1]
+        if size not in IMAGE_SETTINGS['available_sizes']:
+            logger.error(f"Invalid size: {size}")
+            await query.edit_message_text("❌ Etibarsız ölçü. Zəhmət olmasa yenidən cəhd edin.")
+            return ConversationHandler.END
+        
+        context.user_data['size'] = size
+        logger.info(f"Size selected: {size} for user {user_id}")
+        
+    except Exception as e:
+        logger.error(f"Error parsing size: {e}")
+        await query.edit_message_text("❌ Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.")
+        return ConversationHandler.END
     
     # Şəkil yaratmağa başla
     prompt = context.user_data['prompt']

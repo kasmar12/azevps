@@ -1,16 +1,12 @@
 nohup: ignoring input
-2025-08-15 07:21:25,834 - database - ERROR - Database initialization error: unrecognized token: "#"
-2025-08-15 07:21:25,834 - __main__ - INFO - Stable Diffusion Bot başladılır...
-2025-08-15 07:21:25,882 - __main__ - INFO - Application yaradıldı
-/workspace/bot.py:427: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+2025-08-15 08:36:08,593 - database - ERROR - Database initialization error: unrecognized token: "#"
+2025-08-15 08:36:08,593 - __main__ - INFO - Stable Diffusion Bot başladılır...
+2025-08-15 08:36:08,642 - __main__ - INFO - Application yaradıldı
+/workspace/bot.py:467: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
   conv_handler = ConversationHandler(
-2025-08-15 07:21:25,883 - __main__ - INFO - Bütün handler-lər əlavə edildi
-2025-08-15 07:21:25,883 - __main__ - INFO - Stable Diffusion Bot başladıldı...
-2025-08-15 07:21:26,147 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getMe "HTTP/1.1 200 OK"
-2025-08-15 07:21:26,234 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/deleteWebhook "HTTP/1.1 200 OK"
-2025-08-15 07:21:26,235 - telegram.ext.Application - INFO - Application started
-2025-08-15 07:21:30,507 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 409 Conflict"
-2025-08-15 07:21:30,508 - __main__ - ERROR - Update None caused error Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-2025-08-15 07:21:38,441 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
-2025-08-15 07:21:38,442 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
-2025-08-15 07:21:38,442 - telegram.ext.Application - INFO - Application.stop() complete
+2025-08-15 08:36:08,643 - __main__ - INFO - Bütün handler-lər əlavə edildi
+2025-08-15 08:36:08,643 - __main__ - INFO - Stable Diffusion Bot başladıldı...
+2025-08-15 08:36:08,908 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getMe "HTTP/1.1 200 OK"
+2025-08-15 08:36:08,993 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/deleteWebhook "HTTP/1.1 200 OK"
+2025-08-15 08:36:08,994 - telegram.ext.Application - INFO - Application started
+2025-08-15 08:36:19,252 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
