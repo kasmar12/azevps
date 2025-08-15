@@ -43,7 +43,7 @@ class DatabaseManager:
                         size VARCHAR(20) NOT NULL,
                         image_path TEXT NOT NULL,
                         file_size INTEGER,
-                        generation_time INTEGER,  # seconds
+                        generation_time INTEGER,  -- seconds
                         status VARCHAR(20) DEFAULT 'success',
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (user_id) REFERENCES users(user_id)
@@ -88,7 +88,7 @@ class DatabaseManager:
                 # Insert default bot stats for today
                 conn.execute('''
                     INSERT OR IGNORE INTO bot_stats (stat_date, total_users, active_users, new_users, total_images, successful_generations, failed_generations)
-                    VALUES (DATE('now'), 0, 0, 0, 0, 0, 0)
+                    VALUES (date('now'), 0, 0, 0, 0, 0, 0)
                 ''')
                 
                 conn.commit()
@@ -111,7 +111,7 @@ class DatabaseManager:
                     UPDATE bot_stats 
                     SET total_users = (SELECT COUNT(*) FROM users),
                         new_users = new_users + 1
-                    WHERE stat_date = DATE('now')
+                    WHERE stat_date = date('now')
                 ''')
                 
                 conn.commit()
@@ -175,7 +175,7 @@ class DatabaseManager:
                     UPDATE bot_stats 
                     SET total_images = total_images + 1,
                         successful_generations = successful_generations + 1
-                    WHERE stat_date = DATE('now')
+                    WHERE stat_date = date('now')
                 ''')
                 
                 conn.commit()
@@ -268,14 +268,14 @@ class DatabaseManager:
                 # New users today
                 cursor = conn.execute('''
                     SELECT COUNT(*) FROM users 
-                    WHERE DATE(created_at) = DATE('now')
+                    WHERE date(created_at) = date('now')
                 ''')
                 new_users_today = cursor.fetchone()[0]
                 
                 # Total images today
                 cursor = conn.execute('''
                     SELECT COUNT(*) FROM generated_images 
-                    WHERE DATE(created_at) = DATE('now')
+                    WHERE date(created_at) = date('now')
                 ''')
                 total_images_today = cursor.fetchone()[0]
                 
