@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector android:height="24.0dip" android:width="24.0dip" android:viewportWidth="24.0" android:viewportHeight="24.0"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="@color/bkc_color_icon_primary" android:pathData="M2 12c0 5.52 4.48 10 10 10s10-4.48 10-10S17.52 2 12 2 2 6.48 2 12Zm2 0c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8-8-3.58-8-8Zm12.74-2.32c0.37-0.41 0.34-1.04-0.06-1.42-0.41-0.37-1.04-0.34-1.42 0.06l-4.72 5.16-1.77-2.12c-0.36-0.42-0.99-0.48-1.41-0.13-0.42 0.36-0.48 0.99-0.13 1.41l2.5 3c0.19 0.22 0.46 0.35 0.75 0.36 0.28 0 0.56-0.11 0.76-0.32l5.5-6Z" android:fillType="evenOdd" />
-</vector>

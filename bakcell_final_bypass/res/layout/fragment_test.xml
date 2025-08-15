@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:tag="layout/fragment_test_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.google.android.material.checkbox.MaterialCheckBox android:textAppearance="@style/TextAppearance.Bakcell.Regular.Callout" android:textColor="@color/bkc_color_text_secondary" android:gravity="top" android:id="@id/checkbox" android:paddingTop="3.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="0.0dip" android:text="Salam" android:paddingStart="8.0dip" app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>

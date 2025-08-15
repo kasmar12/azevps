@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:tag="layout/content_dashboard_fiber_0" android:layout_width="fill_parent" android:layout_height="wrap_content"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Medium.Headline" android:textColor="@color/bkc_color_text_primary" android:id="@id/section" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/in_dashboard_fiber_title" android:layout_marginHorizontal="16.0dip" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-    <androidx.recyclerview.widget.RecyclerView android:orientation="horizontal" android:id="@id/recyclerView" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0dip" android:overScrollMode="never" android:paddingHorizontal="16.0dip" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintTop_toBottomOf="@id/section" />
-</androidx.constraintlayout.widget.ConstraintLayout>
