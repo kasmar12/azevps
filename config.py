@@ -62,6 +62,62 @@ IMAGE_STYLES = {
     }
 }
 
+# Bot Messages (MESSAGES dictionary)
+MESSAGES = {
+    'tr': {
+        'welcome': '🎨 **Stable Diffusion Bot**\n\nAI ilə şəkil yaratma botuna xoş gəlmisiniz!\n\n📝 Şəkil yaratmaq üçün /create yazın',
+        'help': '🎨 **Kömək:**\n\n/create - Şəkil yaratma\n/styles - Mövcud stillər\n/history - Yaradılan şəkillər\n/settings - Parametrlər',
+        'enter_prompt': '📝 Şəkil üçün prompt yazın:',
+        'select_style': '🎭 Şəkil stilini seçin:',
+        'select_size': '📏 Şəkil ölçüsünü seçin:',
+        'generating': '⏳ Şəkil yaradılır...\n\n📝 Prompt: {prompt}\n🎭 Style: {style}\n📏 Size: {size}',
+        'generation_success': '✅ Şəkil uğurla yaradıldı!',
+        'generation_failed': '❌ Şəkil yaradıla bilmədi. Zəhmət olmasa yenidən cəhd edin.',
+        'daily_limit_reached': '⚠️ Gündəlik limitə çatdınız. Sabah yenidən cəhd edin.',
+        'invalid_prompt': '❌ Prompt çox uzun və ya boşdur. Zəhmət olmasa düzəldin.',
+        'processing': '🔄 Şəkil emal edilir...'
+    },
+    'az': {
+        'welcome': '🎨 **Stable Diffusion Bot**\n\nAI ilə şəkil yaratma botuna xoş gəlmisiniz!\n\n📝 Şəkil yaratmaq üçün /create yazın',
+        'help': '🎨 **Kömək:**\n\n/create - Şəkil yaratma\n/styles - Mövcud stillər\n/history - Yaradılan şəkillər\n/settings - Parametrlər',
+        'enter_prompt': '📝 Şəkil üçün prompt yazın:',
+        'select_style': '🎭 Şəkil stilini seçin:',
+        'select_size': '📏 Şəkil ölçüsünü seçin:',
+        'generating': '⏳ Şəkil yaradılır...\n\n📝 Prompt: {prompt}\n🎭 Style: {style}\n📏 Size: {size}',
+        'generation_success': '✅ Şəkil uğurla yaradıldı!',
+        'generation_failed': '❌ Şəkil yaradıla bilmədi. Zəhmət olmasa yenidən cəhd edin.',
+        'daily_limit_reached': '⚠️ Gündəlik limitə çatdınız. Sabah yenidən cəhd edin.',
+        'invalid_prompt': '❌ Prompt çox uzun və ya boşdur. Zəhmət olmasa düzəldin.',
+        'processing': '🔄 Şəkil emal edilir...'
+    },
+    'en': {
+        'welcome': '🎨 **Stable Diffusion Bot**\n\nWelcome to AI image generation bot!\n\n📝 Use /create to generate images',
+        'help': '🎨 **Help:**\n\n/create - Generate image\n/styles - Available styles\n/history - Generated images\n/settings - Settings',
+        'enter_prompt': '📝 Enter prompt for image:',
+        'select_style': '🎭 Select image style:',
+        'select_size': '📏 Select image size:',
+        'generating': '⏳ Generating image...\n\n📝 Prompt: {prompt}\n🎭 Style: {style}\n📏 Size: {size}',
+        'generation_success': '✅ Image generated successfully!',
+        'generation_failed': '❌ Failed to generate image. Please try again.',
+        'daily_limit_reached': '⚠️ Daily limit reached. Try again tomorrow.',
+        'invalid_prompt': '❌ Prompt is too long or empty. Please fix it.',
+        'processing': '🔄 Processing image...'
+    },
+    'ru': {
+        'welcome': '🎨 **Stable Diffusion Bot**\n\nДобро пожаловать в бот генерации изображений ИИ!\n\n📝 Используйте /create для генерации изображений',
+        'help': '🎨 **Помощь:**\n\n/create - Создать изображение\n/styles - Доступные стили\n/history - Созданные изображения\n/settings - Настройки',
+        'enter_prompt': '📝 Введите описание для изображения:',
+        'select_style': '🎭 Выберите стиль изображения:',
+        'select_size': '📏 Выберите размер изображения:',
+        'generating': '⏳ Генерируется изображение...\n\n📝 Описание: {prompt}\n🎭 Стиль: {style}\n📏 Размер: {size}',
+        'generation_success': '✅ Изображение успешно создано!',
+        'generation_failed': '❌ Не удалось создать изображение. Попробуйте еще раз.',
+        'daily_limit_reached': '⚠️ Достигнут дневной лимит. Попробуйте завтра.',
+        'invalid_prompt': '❌ Описание слишком длинное или пустое. Исправьте это.',
+        'processing': '🔄 Обработка изображения...'
+    }
+}
+
 # Supported Languages
 SUPPORTED_LANGUAGES = {
     'tr': {
@@ -75,7 +131,6 @@ SUPPORTED_LANGUAGES = {
         'generating': '⏳ Şəkil yaradılır...\n\n📝 Prompt: {prompt}\n🎭 Style: {style}\n📏 Size: {size}',
         'generation_success': '✅ Şəkil uğurla yaradıldı!',
         'generation_failed': '❌ Şəkil yaradıla bilmədi. Zəhmət olmasa yenidən cəhd edin.',
-        'daily_limit_reached': '⚠️ Gündəlik limitə çatdınız. Sabah yenidən cəhd edin.',
         'invalid_prompt': '❌ Prompt çox uzun və ya boşdur. Zəhmət olmasa düzəldin.',
         'processing': '🔄 Şəkil emal edilir...'
     },
@@ -90,7 +145,6 @@ SUPPORTED_LANGUAGES = {
         'generating': '⏳ Şəkil yaradılır...\n\n📝 Prompt: {prompt}\n🎭 Style: {style}\n📏 Size: {size}',
         'generation_success': '✅ Şəkil uğurla yaradıldı!',
         'generation_failed': '❌ Şəkil yaradıla bilmədi. Zəhmət olmasa yenidən cəhd edin.',
-        'daily_limit_reached': '⚠️ Gündəlik limitə çatdınız. Sabah yenidən cəhd edin.',
         'invalid_prompt': '❌ Prompt çox uzun və ya boşdur. Zəhmət olmasa düzəldin.',
         'processing': '🔄 Şəkil emal edilir...'
     },
@@ -105,7 +159,6 @@ SUPPORTED_LANGUAGES = {
         'generating': '⏳ Generating image...\n\n📝 Prompt: {prompt}\n🎭 Style: {style}\n📏 Size: {size}',
         'generation_success': '✅ Image generated successfully!',
         'generation_failed': '❌ Failed to generate image. Please try again.',
-        'daily_limit_reached': '⚠️ Daily limit reached. Try again tomorrow.',
         'invalid_prompt': '❌ Prompt is too long or empty. Please fix it.',
         'processing': '🔄 Processing image...'
     },
@@ -120,7 +173,6 @@ SUPPORTED_LANGUAGES = {
         'generating': '⏳ Генерируется изображение...\n\n📝 Описание: {prompt}\n🎭 Стиль: {style}\n📏 Размер: {size}',
         'generation_success': '✅ Изображение успешно создано!',
         'generation_failed': '❌ Не удалось создать изображение. Попробуйте еще раз.',
-        'daily_limit_reached': '⚠️ Достигнут дневной лимит. Попробуйте завтра.',
         'invalid_prompt': '❌ Описание слишком длинное или пустое. Исправьте это.',
         'processing': '🔄 Обработка изображения...'
     }
