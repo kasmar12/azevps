@@ -10,3 +10,25 @@ nohup: ignoring input
 2025-08-15 09:37:13,678 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/deleteWebhook "HTTP/1.1 200 OK"
 2025-08-15 09:37:13,679 - telegram.ext.Application - INFO - Application started
 2025-08-15 09:37:23,934 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:34,015 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:41,928 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:42,313 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:37:46,481 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:46,608 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:37:47,846 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:48,008 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:37:48,008 - __main__ - INFO - Button callback received: style_realistic from user 1143980741
+2025-08-15 09:37:48,008 - __main__ - INFO - Button callback handled: style_realistic from user 1143980741
+2025-08-15 09:37:50,181 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:50,331 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:37:50,331 - __main__ - INFO - Button callback received: style_artistic from user 1143980741
+2025-08-15 09:37:50,331 - __main__ - INFO - Button callback handled: style_artistic from user 1143980741
+2025-08-15 09:37:51,450 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:51,758 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:37:51,758 - __main__ - INFO - Button callback received: style_anime from user 1143980741
+2025-08-15 09:37:51,758 - __main__ - INFO - Button callback handled: style_anime from user 1143980741
+2025-08-15 09:37:52,695 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:37:52,795 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:37:52,795 - __main__ - INFO - Button callback received: style_oil_painting from user 1143980741
+2025-08-15 09:37:52,795 - __main__ - INFO - Button callback handled: style_oil_painting from user 1143980741
+2025-08-15 09:38:02,777 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
