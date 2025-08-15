@@ -7,7 +7,7 @@ from typing import Optional, Dict, Any
 from PIL import Image
 import io
 import base64
-from config import STABLE_DIFFUSION_API, API_KEY, FREE_APIS, IMAGE_STYLES
+from config import STABLE_DIFFUSION_API, API_KEY, FREE_APIS, IMAGE_STYLES, IMAGE_SETTINGS
 
 class ImageGenerator:
     def __init__(self):
@@ -149,12 +149,7 @@ class ImageGenerator:
             }
             
             data = {
-                "inputs": enhanced_prompt,
-                "parameters": {
-                    "width": 512,  # Free tier limitation
-                    "height": 512,
-                    "num_inference_steps": 20
-                }
+                "inputs": enhanced_prompt
             }
             
             start_time = time.time()
@@ -170,32 +165,42 @@ class ImageGenerator:
                     # Get image bytes
                     image_bytes = await response.read()
                     
-                    # Convert to PIL Image
-                    image = Image.open(io.BytesIO(image_bytes))
+                    # Check if response is actually an image
+                    if len(image_bytes) < 1000:  # Too small to be an image
+                        error_text = image_bytes.decode('utf-8', errors='ignore')
+                        self.logger.error(f"Hugging Face API returned error: {error_text}")
+                        return None
                     
-                    # Save image
-                    timestamp = int(time.time())
-                    filename = f"generated_hf_{timestamp}.png"
-                    filepath = os.path.join("generated_images", filename)
-                    
-                    # Create directory if not exists
-                    os.makedirs("generated_images", exist_ok=True)
-                    
-                    # Save image
-                    image.save(filepath, "PNG")
-                    
-                    generation_time = int(time.time() - start_time)
-                    file_size = os.path.getsize(filepath)
-                    
-                    return {
-                        'file_path': filepath,
-                        'file_size': file_size,
-                        'generation_time': generation_time,
-                        'prompt': prompt,
-                        'style': style,
-                        'size': size,
-                        'enhanced_prompt': enhanced_prompt
-                    }
+                    try:
+                        # Convert to PIL Image
+                        image = Image.open(io.BytesIO(image_bytes))
+                        
+                        # Save image
+                        timestamp = int(time.time())
+                        filename = f"generated_hf_{timestamp}.png"
+                        filepath = os.path.join("generated_images", filename)
+                        
+                        # Create directory if not exists
+                        os.makedirs("generated_images", exist_ok=True)
+                        
+                        # Save image
+                        image.save(filepath, "PNG")
+                        
+                        generation_time = int(time.time() - start_time)
+                        file_size = os.path.getsize(filepath)
+                        
+                        return {
+                            'file_path': filepath,
+                            'file_size': file_size,
+                            'generation_time': generation_time,
+                            'prompt': prompt,
+                            'style': style,
+                            'size': size,
+                            'enhanced_prompt': enhanced_prompt
+                        }
+                    except Exception as e:
+                        self.logger.error(f"Error processing Hugging Face response: {e}")
+                        return None
                 else:
                     error_text = await response.text()
                     self.logger.error(f"Hugging Face API error: {response.status} - {error_text}")

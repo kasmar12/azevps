@@ -13,7 +13,7 @@ API_KEY = os.getenv('STABILITY_API_KEY', 'your_api_key_here')
 
 # Alternative Free APIs
 FREE_APIS = {
-    'huggingface': 'https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5',
+    'huggingface': 'https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4',
     'replicate': 'https://api.replicate.com/v1/predictions'
 }
 
