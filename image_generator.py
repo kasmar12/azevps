@@ -210,23 +210,153 @@ class ImageGenerator:
             self.logger.error(f"Hugging Face generation error: {e}")
             return None
     
+    async def generate_with_stable_horde(self, prompt: str, style: str, size: str) -> Optional[Dict[str, Any]]:
+        """Stable Horde API ilə şəkil yarat (tamamilə pulsuz)"""
+        try:
+            await self.create_session()
+            
+            enhanced_prompt = self.enhance_prompt(prompt, style)
+            
+            # Stable Horde API (tamamilə pulsuz)
+            api_url = "https://stablehorde.net/api/v2/generate/async"
+            
+            # No authentication needed
+            headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+            
+            # Parse size
+            width, height = self.parse_size(size)
+            
+            data = {
+                "prompt": enhanced_prompt,
+                "params": {
+                    "width": width,
+                    "height": height,
+                    "steps": 20,
+                    "cfg_scale": 7.5,
+                    "sampler_name": "k_euler"
+                },
+                "nsfw": False,
+                "trusted_workers": False,
+                "models": ["stable_diffusion"]
+            }
+            
+            start_time = time.time()
+            
+            async with self.session.post(
+                api_url,
+                json=data,
+                headers=headers,
+                timeout=300
+            ) as response:
+                
+                if response.status == 202:  # Accepted
+                    result = await response.json()
+                    generation_id = result.get('id')
+                    
+                    if generation_id:
+                        # Wait for generation to complete
+                        await asyncio.sleep(10)  # Wait a bit
+                        
+                        # Check status
+                        status_url = f"https://stablehorde.net/api/v2/generate/check/{generation_id}"
+                        
+                        for _ in range(30):  # Wait up to 5 minutes
+                            async with self.session.get(status_url, headers=headers) as status_response:
+                                if status_response.status == 200:
+                                    status_data = await status_response.json()
+                                    
+                                    if status_data.get('done', False):
+                                        # Get the result
+                                        result_url = f"https://stablehorde.net/api/v2/generate/status/{generation_id}"
+                                        
+                                        async with self.session.get(result_url, headers=headers) as result_response:
+                                            if result_response.status == 200:
+                                                result_data = await result_response.json()
+                                                generations = result_data.get('generations', [])
+                                                
+                                                if generations:
+                                                    image_data = generations[0]
+                                                    image_url = image_data.get('img')
+                                                    
+                                                    if image_url:
+                                                        # Download image
+                                                        async with self.session.get(image_url) as img_response:
+                                                            if img_response.status == 200:
+                                                                image_bytes = await img_response.read()
+                                                                
+                                                                # Save image
+                                                                timestamp = int(time.time())
+                                                                filename = f"generated_horde_{timestamp}.png"
+                                                                filepath = os.path.join("generated_images", filename)
+                                                                
+                                                                # Create directory if not exists
+                                                                os.makedirs("generated_images", exist_ok=True)
+                                                                
+                                                                # Save image
+                                                                with open(filepath, 'wb') as f:
+                                                                    f.write(image_bytes)
+                                                                
+                                                                generation_time = int(time.time() - start_time)
+                                                                file_size = os.path.getsize(filepath)
+                                                                
+                                                                return {
+                                                                    'file_path': filepath,
+                                                                    'file_size': file_size,
+                                                                    'generation_time': generation_time,
+                                                                    'prompt': prompt,
+                                                                    'style': style,
+                                                                    'size': size,
+                                                                    'enhanced_prompt': enhanced_prompt
+                                                                }
+                                    
+                            await asyncio.sleep(10)  # Wait before checking again
+                        
+                        self.logger.error("Stable Horde generation timeout")
+                        return None
+                    else:
+                        self.logger.error("No generation ID from Stable Horde")
+                        return None
+                else:
+                    error_text = await response.text()
+                    self.logger.error(f"Stable Horde API error: {response.status} - {error_text}")
+                    return None
+                    
+        except Exception as e:
+            self.logger.error(f"Stable Horde generation error: {e}")
+            return None
+    
     async def generate_image(self, prompt: str, style: str = 'realistic', size: str = '1024x1024') -> Optional[Dict[str, Any]]:
         """Şəkil yarat - əsas funksiya"""
         try:
+            # Validate inputs
+            if not self.validate_prompt(prompt):
+                return None
+            if not self.validate_style(style):
+                return None
+            if not self.validate_size(size):
+                return None
+            
             self.logger.info(f"Generating image: {prompt} | Style: {style} | Size: {size}")
             
-            # Try Stability AI first (if API key available)
-            if self.api_key and self.api_key != 'your_api_key_here':
-                result = await self.generate_with_stability_ai(prompt, style, size)
-                if result:
-                    return result
+            # Try Stable Horde first (completely free)
+            result = await self.generate_with_stable_horde(prompt, style, size)
+            if result:
+                return result
             
-            # Fallback to Hugging Face (free)
+            # Fallback to Hugging Face
             result = await self.generate_with_huggingface(prompt, style, size)
             if result:
                 return result
             
-            # If both failed
+            # Last resort: Stability AI (if API key is provided)
+            if API_KEY and API_KEY != "your_stability_api_key_here":
+                result = await self.generate_with_stability_ai(prompt, style, size)
+                if result:
+                    return result
+            
             self.logger.error("All image generation methods failed")
             return None
             
