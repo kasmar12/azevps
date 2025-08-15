@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView android:layout_width="fill_parent" android:layout_height="wrap_content" android:minHeight="56.0dip" app:cardBackgroundColor="@color/bkc_color_background_secondary" app:cardCornerRadius="8.0dip" app:cardElevation="0.0dip"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.constraintlayout.widget.ConstraintLayout android:padding="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <com.google.android.material.textview.MaterialTextView android:textAppearance="@style/TextAppearance.Bakcell.Medium.SubHeadline" android:textColor="@color/bkc_color_text_primary" android:id="@id/titleTxt" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginEnd="16.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@id/nextImg" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-        <androidx.appcompat.widget.AppCompatImageView android:id="@id/nextImg" android:layout_width="16.0dip" android:layout_height="16.0dip" android:src="@drawable/ic_next" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" app:tint="@color/bkc_color_icon_secondary" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:tag="layout/item_view_pager_account_vat_refund_no_login_0" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginStart="16.0dip" android:layout_marginEnd="120.0dip"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <include android:id="@id/itemVatRefund" android:layout_width="fill_parent" android:layout_height="fill_parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" layout="@layout/viewgroup_sign_up_vat_refund" />
-</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="true" android:color="@color/bkc_color_button_secondary" />
-    <item android:color="@color/bkc_color_text_primary" />
-</selector>

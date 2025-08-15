@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:tag="layout/fragment_bakcell_card_delivery_branch_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerView" android:tag="binding_1" android:padding="16.0dip" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_marginBottom="4.0dip" android:splitMotionEvents="false" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" app:layout_constraintBottom_toTopOf="@id/confirmBtn" app:layout_constraintTop_toTopOf="parent" />
-    <com.google.android.material.button.MaterialButton android:id="@id/confirmBtn" android:tag="binding_2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="16.0dip" android:text="@string/in_bakcell_card_delivery_branch_choose" android:layout_marginHorizontal="16.0dip" app:layout_constraintBottom_toBottomOf="parent" style="@style/Widget.Bakcell.Button" />
-</androidx.constraintlayout.widget.ConstraintLayout>
