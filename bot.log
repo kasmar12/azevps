@@ -12,3 +12,52 @@ nohup: ignoring input
 2025-08-15 09:41:29,357 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
 2025-08-15 09:41:39,054 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
 2025-08-15 09:41:39,361 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:41:46,250 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:41:46,600 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:41:47,985 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:41:48,089 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:41:48,089 - __main__ - INFO - === STYLE SELECTION CALLBACK ===
+2025-08-15 09:41:48,089 - __main__ - INFO - User ID: 1143980741
+2025-08-15 09:41:48,089 - __main__ - INFO - Callback data: style_realistic
+2025-08-15 09:41:48,089 - __main__ - INFO - User data: {'prompt': 'Azərbaycan bayrağı ilə qədim qala'}
+2025-08-15 09:41:48,089 - __main__ - INFO - Selected style: realistic
+2025-08-15 09:41:48,089 - __main__ - INFO - Style saved to context: realistic
+2025-08-15 09:41:48,089 - __main__ - INFO - Showing size selection menu for style: Realistic
+2025-08-15 09:41:48,198 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 09:41:51,435 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:41:51,567 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:41:51,567 - __main__ - INFO - Size selection callback: size_1024x1024 from user 1143980741
+2025-08-15 09:41:51,567 - __main__ - INFO - Size selected: 1024x1024 for user 1143980741
+2025-08-15 09:41:51,681 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 09:41:51,681 - image_generator - INFO - Generating image: Azərbaycan bayrağı ilə qədim qala | Style: realistic | Size: 1024x1024
+2025-08-15 09:41:51,682 - image_generator - ERROR - Stability AI generation error: name 'IMAGE_SETTINGS' is not defined
+2025-08-15 09:41:51,714 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 09:41:51,724 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 09:41:51,725 - image_generator - ERROR - All image generation methods failed
+2025-08-15 09:41:51,876 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:41:55,478 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:41:55,625 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:41:58,621 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:41:58,745 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:42:00,103 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:42:00,214 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:42:00,214 - __main__ - INFO - === STYLE SELECTION CALLBACK ===
+2025-08-15 09:42:00,214 - __main__ - INFO - User ID: 1143980741
+2025-08-15 09:42:00,214 - __main__ - INFO - Callback data: style_realistic
+2025-08-15 09:42:00,214 - __main__ - INFO - User data: {'prompt': 'Azərbaycan bayrağı ilə qədim qala', 'style': 'realistic', 'size': '1024x1024'}
+2025-08-15 09:42:00,214 - __main__ - INFO - Selected style: realistic
+2025-08-15 09:42:00,214 - __main__ - INFO - Style saved to context: realistic
+2025-08-15 09:42:00,215 - __main__ - INFO - Showing size selection menu for style: Realistic
+2025-08-15 09:42:00,326 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 09:42:04,458 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 09:42:04,628 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-08-15 09:42:04,628 - __main__ - INFO - Size selection callback: size_640x1536 from user 1143980741
+2025-08-15 09:42:04,628 - __main__ - INFO - Size selected: 640x1536 for user 1143980741
+2025-08-15 09:42:04,757 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/editMessageText "HTTP/1.1 200 OK"
+2025-08-15 09:42:04,758 - image_generator - INFO - Generating image: Azərbaycan bayrağı ilə qədim qala | Style: realistic | Size: 640x1536
+2025-08-15 09:42:04,758 - image_generator - ERROR - Stability AI generation error: name 'IMAGE_SETTINGS' is not defined
+2025-08-15 09:42:04,768 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 09:42:04,779 - image_generator - ERROR - Hugging Face API error: 401 - {"error":"Invalid username or password."}
+2025-08-15 09:42:04,779 - image_generator - ERROR - All image generation methods failed
+2025-08-15 09:42:04,920 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 09:42:14,546 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAH1UJBjja5fsPd-UGo_CSzLbhcaRrsNBLE/getUpdates "HTTP/1.1 200 OK"
