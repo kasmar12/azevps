@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:icon="@drawable/ic_search" android:id="@id/action_search" android:title="@string/in_roaming_package_search" app:actionViewClass="androidx.appcompat.widget.SearchView" app:iconTint="@color/bkc_color_icon_primary" app:showAsAction="always|collapseActionView" />
-</menu>

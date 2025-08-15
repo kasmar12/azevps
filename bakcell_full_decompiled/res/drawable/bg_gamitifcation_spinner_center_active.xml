@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector android:height="138.0dip" android:width="138.0dip" android:viewportWidth="138.0" android:viewportHeight="138.0"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
-    <path android:fillColor="#ffff0037" android:pathData="M69 1.06A68 68 0 1 0 69 137.06 68 68 0 1 0 69 1.06z" android:strokeColor="@drawable/$bg_gamitifcation_spinner_center_active__0" android:strokeWidth="1.0" />
-</vector>

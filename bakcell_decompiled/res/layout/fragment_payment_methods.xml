@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<az.azerconnect.bakcell.utils.widgets.StateView android:tag="layout/fragment_payment_methods_0" android:layout_width="fill_parent" android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.google.android.material.card.MaterialCardView android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="16.0dip" app:cardBackgroundColor="?colorSurface" app:cardCornerRadius="24.0dip" app:cardElevation="0.0dip" app:layout_constrainedHeight="true" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.0" app:strokeColor="?strokeColor" app:strokeWidth="1.0dip">
-        <androidx.recyclerview.widget.RecyclerView android:id="@id/recyclerView" android:tag="binding_1" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="wrap_content" android:overScrollMode="never" android:paddingVertical="8.0dip" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </com.google.android.material.card.MaterialCardView>
-    <include layout="@layout/layout_loading" />
-    <include layout="@layout/layout_error" />
-</az.azerconnect.bakcell.utils.widgets.StateView>
