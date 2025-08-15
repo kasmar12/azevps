@@ -3,12 +3,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Bot Configuration
-BOT_TOKEN = os.getenv('BOT_TOKEN', 'your_bot_token_here')
+# Fake Email Bot Configuration
+BOT_TOKEN = os.getenv('BOT_TOKEN', '6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI')
 
-# 10MinuteMail API Configuration
-TEN_MINUTE_MAIL_API = "https://10minutemail.com/api"
-API_BASE_URL = "https://10minuteemail.com"
+# GuerrillaMail API Configuration
+GUERRILLA_MAIL_API = "https://api.guerrillamail.com/ajax"
+API_BASE_URL = "https://guerrillamail.com"
 
 # Bot Settings
 BOT_SETTINGS = {
