@@ -16,9 +16,9 @@
 .method protected attachBaseContext(Landroid/content/Context;)V
     .locals 0
 
-    invoke-static {p1}, Lcom/pairip/VMRunner;->setContext(Landroid/content/Context;)V
+    # invoke-static {p1}, Lcom/pairip/VMRunner;->setContext(Landroid/content/Context;)V
 
-    invoke-static {p1}, Lcom/pairip/SignatureCheck;->verifyIntegrity(Landroid/content/Context;)V
+    # invoke-static {p1}, Lcom/pairip/SignatureCheck;->verifyIntegrity(Landroid/content/Context;)V
 
     invoke-super {p0, p1}, Lcom/pairip/application/Application;->attachBaseContext(Landroid/content/Context;)V
 
