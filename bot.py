@@ -643,9 +643,6 @@ def main():
     # Error handler
     application.add_error_handler(error_handler)
     
-    # Start background tasks
-    asyncio.create_task(cleanup_expired_emails())
-    
     # Start bot
     logging.info("Fake Email Bot başladıldı...")
     application.run_polling(drop_pending_updates=True)

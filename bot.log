@@ -1,0 +1,10 @@
+nohup: ignoring input
+2025-08-15 14:18:13,590 - database - INFO - Database initialized successfully
+2025-08-15 14:18:13,627 - root - INFO - Fake Email Bot başladıldı...
+2025-08-15 14:18:16,694 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getMe "HTTP/1.1 200 OK"
+2025-08-15 14:18:16,786 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/deleteWebhook "HTTP/1.1 200 OK"
+2025-08-15 14:18:16,787 - telegram.ext.Application - INFO - Application started
+2025-08-15 14:18:27,043 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:18:30,329 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
+2025-08-15 14:18:30,687 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/sendMessage "HTTP/1.1 200 OK"
+2025-08-15 14:18:40,419 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot6939515424:AAHF9CCDytHevonpPX3ld1ntORpN6ICHrXI/getUpdates "HTTP/1.1 200 OK"
