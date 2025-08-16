@@ -1,180 +1,76 @@
-# 🎬 TikTok Video Downloader Bot
+# Facebook Account Creation Tool
 
-**Telegram bot for downloading TikTok videos without watermarks**
+This is a decrypted version of an obfuscated Python script that was originally designed for Facebook account creation automation.
 
-## 🌟 Features
+## ⚠️ **IMPORTANT SECURITY NOTICE**
 
-- ✅ **Watermark-free video downloads** from TikTok
-- 🌍 **Multi-language support**: Turkish, Azerbaijani, English, Russian
-- 👥 **Group functionality** - works in groups and tracks group statistics
-- 📊 **SQL database** for user management and statistics
-- 🔧 **Admin panel** with broadcast messaging capabilities
-- 📱 **Direct link support** - just send TikTok link to download
-- 🚫 **No captions** - clean video files
+**This tool is for educational and research purposes only.**
+- Automated account creation may violate Facebook's Terms of Service
+- Use of this tool could result in account bans or legal consequences
+- The original code was heavily obfuscated, which is often a sign of malicious intent
+- **Use at your own risk and responsibility**
 
-## 🚀 Quick Start
+## What This Script Does
 
-### 1. Requirements
-- Python 3.8+
-- SQLite3
-- Telegram Bot Token
+The original `facebook.py` file contained heavily obfuscated Python bytecode that was designed to:
+1. Automate Facebook account registration
+2. Use fake user agents to avoid detection
+3. Parse HTML forms using BeautifulSoup
+4. Submit registration data via HTTP requests
 
-### 2. Installation
+## Decryption Process
+
+The original file was obfuscated using:
+- Python bytecode compilation
+- `marshal.loads()` encoding
+- String obfuscation techniques
+
+The decrypted version (`facebook_decrypted.py`) reveals the actual functionality and makes the code readable and understandable.
+
+## Dependencies
+
 ```bash
-# Clone repository
-git clone https://github.com/kasmar12/azevps.git
-cd azevps
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate     # Windows
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Configuration
-1. Copy `.env.example` to `.env`
-2. Add your Telegram Bot Token:
-```
-BOT_TOKEN=your_bot_token_here
-```
+Required packages:
+- `requests` - HTTP requests
+- `beautifulsoup4` - HTML parsing
+- `fake-useragent` - User agent spoofing
+- `lxml` - XML/HTML parser backend
 
-### 4. Run Bot
+## Usage
+
 ```bash
-python bot.py
+python3 facebook_decrypted.py
 ```
 
-## 📁 Project Structure
+The script will prompt for:
+- Username
+- Password  
+- Email address
 
-```
-azevps/
-├── bot.py                 # Main bot file
-├── config.py              # Configuration and settings
-├── tiktok_downloader.py   # TikTok video downloader
-├── database.py            # Database manager
-├── database.sql           # Database schema
-├── requirements.txt       # Python dependencies
-├── admin_panel.php       # Web admin panel
-└── README.md             # This file
-```
+## Code Structure
 
-## 🔧 Configuration
+- `check_python_version()` - Ensures Python 3.9+ compatibility
+- `create_facebook_account()` - Main account creation logic
+- `main()` - User interface and input handling
 
-### Bot Settings (`config.py`)
-- **Supported Languages**: Turkish, Azerbaijani, English, Russian
-- **Max File Size**: 50MB
-- **Download Timeout**: 60 seconds
-- **Admin IDs**: Add your Telegram ID for admin access
+## Legal and Ethical Considerations
 
-### Database
-- **Type**: SQLite3
-- **Tables**: Users, Downloads, Groups, Statistics
-- **Auto-creation**: Database and tables are created automatically
+- **Facebook Terms of Service**: Automated account creation is prohibited
+- **Legal Issues**: May violate computer fraud laws in some jurisdictions
+- **Ethical Concerns**: Could be used for spam, fraud, or other malicious purposes
+- **Detection Risk**: Facebook actively detects and blocks automated registration
 
-## 📱 Usage
+## Educational Value
 
-### For Users
-1. **Start bot**: `/start`
-2. **Send TikTok link**: Just paste any TikTok video URL
-3. **Download**: Video will be downloaded automatically
-4. **Change language**: `/language`
+This decryption demonstrates:
+- Python bytecode obfuscation techniques
+- Web scraping and automation methods
+- Security implications of obfuscated code
+- Importance of code transparency and security
 
-### For Admins
-1. **Access admin panel**: `/admin`
-2. **View statistics**: SQL-based user and download statistics
-3. **Send broadcast messages**:
-   - 👥 To groups only
-   - 👤 To users only
-   - 🌐 To everyone
+## Disclaimer
 
-## 🌐 Admin Panel
-
-Web-based admin panel (`admin_panel.php`) for:
-- User management
-- Download statistics
-- Broadcast messaging
-- Group management
-
-**Setup**: Upload to web server and configure database credentials.
-
-## 🔒 Security
-
-- Admin ID-based access control
-- Rate limiting for downloads
-- Input validation for URLs
-- Secure file handling
-
-## 📊 Statistics
-
-The bot tracks:
-- Total users and active users
-- Daily downloads
-- Group activity
-- User language preferences
-- Download success/failure rates
-
-## 🛠️ API Integration
-
-- **TikTok API**: Uses `tikwm.com` for video extraction
-- **Headers**: Custom User-Agent and request headers
-- **Compression**: Handles Brotli compressed responses
-- **Fallbacks**: Multiple video quality options
-
-## 🚨 Troubleshooting
-
-### Common Issues
-1. **Video download fails**: Check API status and network
-2. **Bot not responding**: Verify bot token and permissions
-3. **Database errors**: Check SQLite permissions
-
-### Logs
-Bot provides detailed logging for debugging:
-- User interactions
-- Download attempts
-- API responses
-- Error details
-
-## 📈 Performance
-
-- **Async operations** for better performance
-- **Connection pooling** for HTTP requests
-- **Efficient database queries** with indexes
-- **Memory management** for large files
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch
-3. Make changes
-4. Test thoroughly
-5. Submit pull request
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 🆘 Support
-
-For issues and questions:
-- Create GitHub issue
-- Check existing issues
-- Review documentation
-
-## 🔄 Updates
-
-Bot automatically:
-- Handles TikTok API changes
-- Updates user statistics
-- Manages database maintenance
-- Provides error recovery
-
----
-
-
-
-**Made with ❤️ for the TikTok community**
-
-*Last updated: August 2024*
+This repository is provided for educational purposes only. The authors are not responsible for any misuse of this code or any consequences that may arise from its use. Users are advised to comply with all applicable laws and terms of service.
